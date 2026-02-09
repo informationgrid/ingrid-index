@@ -1,0 +1,14 @@
+{
+  "name": "ingrid-index",
+  "version": "1.0.0",
+  "private": true,
+  "description": "InGrid Index JSON Schema repository with pre-resolved distributions and generated documentation.",
+  "scripts": {
+    "build:schemas": "node scripts/build_schemas.js",
+    "build:docs": "python scripts/build_docs.py",
+    "build": "npm run build:schemas && npm run build:docs"
+  },
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^11.7.3"
+  }
+}

@@ -1,0 +1,83 @@
+# Builds resolved/bundled JSON schemas and HTML documentation on tag push.
+# Generated artifacts (dist/ and docs/) are committed back to the repository
+# so that consumers pulling a specific tag get pre-built, ready-to-use output.
+
+name: Build Schemas & Docs
+
+on:
+  push:
+    tags:
+      - "v*" # e.g. v1.0.0, v2.3.1
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ───────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so we can push back to the branch
+          fetch-depth: 0
+
+      # ── Node.js ────────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Node dependencies
+        run: npm install
+
+      # ── Python ─────────────────────────────────────────────────
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install json-schema-for-humans pyyaml
+
+      # ── Build ──────────────────────────────────────────────────
+      # Extract the tag name (e.g. "v1.2.0") from GITHUB_REF
+      - name: Extract version from tag
+        id: version
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+
+      # Resolve all $ref → dist/resolved/*.json
+      # Bundle with internal $ref → dist/bundled/*.json
+      - name: Build resolved & bundled schemas
+        run: node scripts/build_schemas.js --version ${{ steps.version.outputs.tag }}
+
+      # Generate HTML documentation → docs/*.html
+      - name: Build documentation
+        run: python scripts/build_docs.py
+
+      # ── Commit artifacts back ──────────────────────────────────
+      # Determine which branch the tag points to, then commit the
+      # generated dist/ and docs/ directories back to that branch.
+      - name: Commit generated artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Find the branch that contains this tag
+          BRANCH=$(git branch -r --contains "${{ steps.version.outputs.tag }}" | grep -v HEAD | head -n1 | sed 's|origin/||' | xargs)
+          git checkout "$BRANCH"
+
+          git add dist/ docs/
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "build: generate schemas and docs for ${{ steps.version.outputs.tag }}"
+          git push origin "$BRANCH"
+
+      # ── Update the tag to include artifacts ────────────────────
+      # Move the tag to the new commit so the tag itself contains
+      # the generated output. This makes the tag immutable for consumers.
+      - name: Update tag to include artifacts
+        run: |
+          git tag -f "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}" --force

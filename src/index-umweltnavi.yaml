@@ -489,25 +489,26 @@ allOf:
               description: z.B. Arten eines Naturschutzgebietes
               $comment: 'Ehemaliges Indexfeld: properties.collections'
             minItems: 0
-        if:
-          properties:
-            type:
-              const: object
-          required:
-            - type
-        then:
-          required:
-            - identifier
-        if:
-          properties:
-            type:
-              const: map
-          required:
-            - type
-        then:
-          required:
-            - origin
-            - classification
+        allOf:
+          - if:
+              properties:
+                type:
+                  const: object
+              required:
+                - type
+            then:
+              required:
+                - identifier
+          - if:
+              properties:
+                type:
+                  const: map
+              required:
+                - type
+            then:
+              required:
+                - origin
+                - classification
         required:
         - oid
         - part

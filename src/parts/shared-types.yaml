@@ -113,7 +113,6 @@ $defs:
         - url
         - base_url
         - type
-        description: Vorschlag ED
     required:
     - source
   website:
