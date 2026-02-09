@@ -4,6 +4,7 @@ type: object
 allOf:
   - $ref: './parts/core.yaml'
   - type: object
+    title: LVR
     properties:
       lvr:
         type: object

@@ -5,6 +5,7 @@ type: object
 allOf:
   - $ref: './parts/core.yaml'
   - type: object
+    title: DCAT-AP.de
     properties:
       dcat:
         type: object
