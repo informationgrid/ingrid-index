@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/schemas/v0.0.1/umweltnavi.yaml",
+  "$id": "https://example.com/schemas/v0.0.2/umweltnavi.yaml",
   "title": "Schema for InGrid Index \"Umweltnavi\"",
   "type": "object",
   "allOf": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
+      "title": "Root fields",
       "properties": {
         "id": {
           "type": "string",
@@ -233,6 +234,7 @@
     },
     {
       "type": "object",
+      "title": "UmweltNavi",
       "properties": {
         "umweltnavi": {
           "type": "object",
