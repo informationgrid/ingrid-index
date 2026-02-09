@@ -1,0 +1,67 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/schemas/1.0.0/dcat.yaml
+title: Schema for InGrid Index 'DCAT-AP.de'
+type: object
+allOf:
+  - $ref: './parts/core.yaml'
+  - type: object
+    properties:
+      dcat:
+        type: object
+        description: All fields for DCAT-AP.de
+        properties:
+          applicable_legislation:
+            type: string
+          accessService:
+            type: object
+            properties:
+              id:
+                type: string
+                description: UUID des Metdatensatzes des Dienstes
+              endpointURL:
+                type: string
+                description: URL zur Capabilities des Dienstes
+              conformsTo:
+                type: string
+                description: 'Conformance to a standard, i.e. http://www.opengis.net/def/serviceType/ogc/wms '
+                examples:
+                - http://www.opengis.net/def/serviceType/ogc/wms
+            description: Info über Dienst der den Datensatz nutzt, vgl. https://www.w3.org/TR/vocab-dcat-3/#Property:distribution_access_service
+          landing-page:
+            type: string
+          political-geocoding-level-uri:
+            type: string
+          temporal:
+            type: object
+            properties:
+              period-of-time:
+                type: string
+              accrual-periodicity:
+                type: string
+              type:
+                type: string
+          availability:
+            type: string
+          catalog:
+            type: object
+            properties:
+              title:
+                type: string
+              contributor-id:
+                type: string
+              url:
+                type: string
+                description: Homepage des Katalogs, falls vorhanden
+              description:
+                type: string
+          licenses:
+            type: object
+            properties:
+              name:
+                type: string
+              attribution-by-text:
+                type: string
+          access_url:
+            type: string
+          download_url:
+            type: string

@@ -1,0 +1,209 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+type: object
+$defs:
+  TypedPeriodOfTime:
+    type: object
+    properties:
+      date_range:
+        type: string
+      date_text:
+        type: string
+        description: Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist
+        examples:
+          - Sommer 2010
+      date_type:
+        type: string
+        enum:
+        - created
+    if:
+      not:
+        required:
+          - date_range
+    then:
+      required:
+        - date_text
+  UmweltNaviSourceAttributes:
+    type: object
+    properties:
+      temporal:
+        $ref: "#/$defs/TypedPeriodOfTime"
+        description: z.B. Aufnahmedatum eines Bildes
+        $comment: 'Ehemaliges Indexfeld: object_date'
+      source:
+        type: object
+        properties:
+          name:
+            type: string
+          url:
+            type: string
+        required:
+          - name
+      license:
+        type: object
+        properties:
+          name:
+            type: string
+          url:
+            type: string
+        required:
+          - name
+      author:
+        type: object
+        properties:
+          name:
+            type: string
+          url:
+            type: string
+        required:
+          - name
+    description: Wird verwendet, um die Herkunft eines Inhalts zu beschreiben
+  UmweltNaviImage:
+    $allOf:
+      - type: object
+        required:
+          - type
+        description: Liste der Inhalte
+        properties:
+          url:
+            type: string
+          title:
+            type: string
+          description:
+            type: string
+      - $ref: "#/$defs/UmweltNaviSourceAttributes"
+        description: Angaben zur Herkunft des Bildes
+    required:
+      - url
+  metadata:
+    type: object
+    properties:
+      document_type:
+        type: string
+      catalog:
+        type: object
+        properties:
+          title:
+            type: string
+          partner:
+            type: string
+          provider:
+            type: string
+          publisher:
+            type: string
+          url:
+            type: string
+      origin_data:
+        type: string
+      ref_date:
+        type: string
+      source:
+        type: object
+        description: Soll dieses Feld umbenannt werden in "legend"?
+        properties:
+          url:
+            type: string
+            description: Vorschlag ED
+          base_url:
+            type: string
+            description: Vorschlag ED
+          type:
+            type: string
+            description: Vorschlag ED
+        required:
+        - url
+        - base_url
+        - type
+        description: Vorschlag ED
+    required:
+    - source
+  website:
+    type: object
+    properties:
+      url:
+        type: string
+    required:
+      - url
+  ige:
+    type: object
+    description: Soll diese Feld unbenannt werden in "ingrid"?
+    properties:
+      idf:
+        type: string
+  measurements:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Anzeigename der Messreihe
+          examples:
+          - LuftqualitÃ¤tsindex
+        unit:
+          type: string
+          description: Einheit der Messreihe
+          examples:
+          - Index [1-6]
+        property:
+          type: string
+          description: technischer Name der Messreihe, wird in API zu einem Datastream
+            im STA server aufgelÃ¶st (entspricht datasources.id)
+          examples:
+          - LQI
+        resolutions:
+          type: object
+          properties:
+            '[resolution_name]':
+              type: array
+              items:
+                type: array
+                description: Zuordnung Messwerttypen zu zeitlicher AuflÃ¶sung
+                examples:
+                - 'P1M: [MEAN, MIN, MAX]'
+              minItems: 1
+          required:
+          - '[resolution_name]'
+          description: Zeitliche AuflÃ¶sungen der Messreihe zusammen mit Messwerttyp
+        interface:
+          type: string
+          description: Name des Interfaces Ã¼ber das die Messreihe abgerufen wird
+          examples:
+          - sta
+          $comment: 'Ehemaliges Indexfeld: properties._internal.interface'
+        url:
+          type: string
+          description: Sensor-URL (kann zukÃ¼nftig entfallen, wenn z.B. LQI als Datastream
+            vorliegt und nicht berechnet werden muss)
+          $comment: 'Ehemaliges Indexfeld: properties._internal.config.url'
+        datasource:
+          type: object
+          properties:
+            url:
+              type: string
+              description: Datastream-URL
+            type:
+              type: string
+              description: Messwerttyp
+              examples:
+              - MEAN
+            resolution:
+              type: string
+              description: Zeitliche AuflÃ¶sung
+              examples:
+              - P1M
+          required:
+          - url
+          - type
+          - resolution
+          description: Datenquelle
+          $comment: 'Ehemaliges Indexfeld: properties._internal.config.datastreams'
+      required:
+      - name
+      - unit
+      - property
+      - resolutions
+      - interface
+      - url
+      - datasource
+      description: Messwertequellen
+      $comment: 'Ehemaliges Indexfeld: properties.observations'

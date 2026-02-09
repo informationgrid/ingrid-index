@@ -1,0 +1,131 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Schema for InGrid Index "LVR"
+type: object
+allOf:
+  - $ref: './parts/core.yaml'
+  - type: object
+    properties:
+      lvr:
+        type: object
+        properties:
+          relations:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                score:
+                  type: string
+          media:
+            type: array
+            items:
+              type: object
+              properties:
+                url:
+                  type: string
+                type:
+                  type: string
+                description:
+                  type: string
+                thumbnail:
+                  type: string
+                  description: URL zu einem Thumbnail-Bild, falls vorhanden
+                dimensions:
+                  type: object
+                  properties:
+                    width:
+                      type: integer
+                      description: Breite in Pixeln
+                      examples:
+                      - '1600'
+                      enum:
+                      - '>= 1'
+                    height:
+                      type: integer
+                      description: HÃ¶he in Pixeln
+                      examples:
+                      - '900'
+                      enum:
+                      - '>= 1'
+                  required:
+                  - width
+                  - height
+                  description: "Dimensionen des Bildes, falls type = â\x80\x9Cimageâ\x80\
+                    \x9D"
+          persons:
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Ermitteln, welche Werte in den einzelnen Quellen auftreten
+                    kÃ¶nnen, und dann normalisieren
+                  examples:
+                  - personal, corporate
+                role:
+                  type: string
+                  description: Ermitteln, welche Werte in den einzelnen Quellen auftreten
+                    kÃ¶nnen, und dann normalisieren
+                  examples:
+                  - Redactor
+                name:
+                  type: object
+                  properties:
+                    first:
+                      type: string
+                      description: "In den Daten kÃ¶nnen mehrere Vornamen auftreten; Vorschlag:\
+                        \ .join(â\x80\x98 â\x80\x98)"
+                      examples:
+                      - Ludger J.
+                    last:
+                      type: string
+                      description: "In den Daten kÃ¶nnen mehrere Nachnamen auftreten;\
+                        \ Vorschlag: .join(â\x80\x98 â\x80\x98)"
+                      examples:
+                      - Sutthoff
+                    display:
+                      type: string
+                      examples:
+                      - Sutthoff, Ludger J.
+          licenses:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  examples:
+                  - dl-by-de/2.0
+                url:
+                  type: string
+                  examples:
+                  - https://www.govdata.de/dl-de/by-2-0
+                holder:
+                  type: string
+                  description: Rechteinhaber
+                  examples:
+                  - LVR-Institut fÃ¼r Landeskunde und Regionalgeschichte
+              required:
+              - name
+          genres:
+            type: array
+            items:
+              type: string
+              description: "Normalisieren; z.B. buch, ort, rede, artefakt, â\x80¦"
+              examples:
+              - book
+          vector:
+            type: object
+          original_id:
+            type: string
+          source:
+            type: object
+            properties:
+              id:
+                type: string
+              display_url:
+                type: string
