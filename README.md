@@ -1,5 +1,10 @@
-# InGrid Index Schemas
+# InGrid Index
 
+<img src="https://ingrid-oss.eu/8.2.0/assets/components/ingrid-plattform.png" alt="InformationGrid illustration" width="480" align="right">
+
+This repository is part of **[InGrid](https://ingrid-oss.eu)**, an open-source solution for building, managing, and exposing metadata-driven information systems.
+
+**About InGrid Index:**
 Modular YAML schemas for InGrid Index with pre-resolved JSON distributions and auto-generated HTML documentation.
 
 ## Repository Structure
