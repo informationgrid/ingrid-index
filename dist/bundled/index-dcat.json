@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/schemas/v0.0.3/dcat.yaml",
+  "$id": "https://example.com/schemas/1.0.0/dcat.yaml",
   "title": "Schema for InGrid Index 'DCAT-AP.de'",
   "type": "object",
   "allOf": [

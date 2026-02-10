@@ -2,7 +2,7 @@ $schema: https://json-schema.org/draft/2020-12/schema
 title: Schema for InGrid Index "LVR"
 type: object
 allOf:
-  - $ref: './parts/core.yaml'
+  - $ref: ./parts/core.yaml
   - type: object
     title: LVR
     properties:
@@ -46,7 +46,7 @@ allOf:
                       - '>= 1'
                     height:
                       type: integer
-                      description: HÃ¶he in Pixeln
+                      description: Höhe in Pixeln
                       examples:
                       - '900'
                       enum:
@@ -54,8 +54,7 @@ allOf:
                   required:
                   - width
                   - height
-                  description: "Dimensionen des Bildes, falls type = â\x80\x9Cimageâ\x80\
-                    \x9D"
+                  description: Dimensionen des Bildes, falls type = "image"
           persons:
             type: array
             items:
@@ -64,13 +63,13 @@ allOf:
                 type:
                   type: string
                   description: Ermitteln, welche Werte in den einzelnen Quellen auftreten
-                    kÃ¶nnen, und dann normalisieren
+                    können, und dann normalisieren
                   examples:
                   - personal, corporate
                 role:
                   type: string
                   description: Ermitteln, welche Werte in den einzelnen Quellen auftreten
-                    kÃ¶nnen, und dann normalisieren
+                    können, und dann normalisieren
                   examples:
                   - Redactor
                 name:
@@ -78,14 +77,12 @@ allOf:
                   properties:
                     first:
                       type: string
-                      description: "In den Daten kÃ¶nnen mehrere Vornamen auftreten; Vorschlag:\
-                        \ .join(â\x80\x98 â\x80\x98)"
+                      description: "In den Daten können mehrere Vornamen auftreten; Vorschlag: .join(' ')"
                       examples:
                       - Ludger J.
                     last:
                       type: string
-                      description: "In den Daten kÃ¶nnen mehrere Nachnamen auftreten;\
-                        \ Vorschlag: .join(â\x80\x98 â\x80\x98)"
+                      description: "In den Daten können mehrere Nachnamen auftreten; Vorschlag: .join(' ')"
                       examples:
                       - Sutthoff
                     display:
@@ -109,14 +106,14 @@ allOf:
                   type: string
                   description: Rechteinhaber
                   examples:
-                  - LVR-Institut fÃ¼r Landeskunde und Regionalgeschichte
+                  - LVR-Institut für Landeskunde und Regionalgeschichte
               required:
               - name
           genres:
             type: array
             items:
               type: string
-              description: "Normalisieren; z.B. buch, ort, rede, artefakt, â\x80¦"
+              description: "Normalisieren; z.B. buch, ort, rede, artefakt, ..."
               examples:
               - book
           vector:

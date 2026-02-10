@@ -3,7 +3,9 @@ $id: https://example.com/schemas/1.0.0/umweltnavi.yaml
 title: Schema for InGrid Index "Umweltnavi"
 type: object
 allOf:
-  - $ref: './parts/core.yaml'
+  - $ref: ./parts/core.yaml
+  - $ref: ./parts/shared-types.yaml#/$defs/metadata
+  - $ref: ./parts/shared-types.yaml#/$defs/website
   - type: object
     title: UmweltNavi
     properties:

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/schemas/v0.0.3/umweltnavi.yaml",
+  "$id": "https://example.com/schemas/1.0.0/umweltnavi.yaml",
   "title": "Schema for InGrid Index \"Umweltnavi\"",
   "type": "object",
   "allOf": [
@@ -230,6 +230,88 @@
         "created",
         "modified",
         "fulltext"
+      ]
+    },
+    {
+      "title": "Metadata",
+      "type": "object",
+      "properties": {
+        "document_type": {
+          "type": "string"
+        },
+        "catalog": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "partner": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "publisher": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "origin_data": {
+          "type": "string"
+        },
+        "ref_date": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "description": "Soll dieses Feld umbenannt werden in \"legend\"?",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Vorschlag ED"
+            },
+            "base_url": {
+              "type": "string",
+              "description": "Vorschlag ED"
+            },
+            "type": {
+              "type": "string",
+              "description": "Vorschlag ED"
+            }
+          },
+          "required": [
+            "url",
+            "base_url",
+            "type"
+          ]
+        },
+        "ingrid": {
+          "type": "object",
+          "description": "Soll diese Feld unbenannt werden in \"ingrid\"?",
+          "properties": {
+            "idf": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "source"
+      ]
+    },
+    {
+      "title": "Website",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
       ]
     },
     {

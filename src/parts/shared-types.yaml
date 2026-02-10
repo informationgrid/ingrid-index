@@ -75,6 +75,7 @@ $defs:
     required:
       - url
   metadata:
+    title: Metadata
     type: object
     properties:
       document_type:
@@ -113,22 +114,24 @@ $defs:
         - url
         - base_url
         - type
+      ingrid:
+        type: object
+        description: Soll diese Feld unbenannt werden in "ingrid"?
+        properties:
+          idf:
+            type: string
     required:
     - source
   website:
+    title: Website
     type: object
     properties:
       url:
         type: string
     required:
       - url
-  ige:
-    type: object
-    description: Soll diese Feld unbenannt werden in "ingrid"?
-    properties:
-      idf:
-        type: string
   measurements:
+    title: Sensor
     type: array
     items:
       type: object

@@ -288,7 +288,7 @@
                       },
                       "height": {
                         "type": "integer",
-                        "description": "HÃ¶he in Pixeln",
+                        "description": "Höhe in Pixeln",
                         "examples": [
                           "900"
                         ],
@@ -301,7 +301,7 @@
                       "width",
                       "height"
                     ],
-                    "description": "Dimensionen des Bildes, falls type = âimageâ"
+                    "description": "Dimensionen des Bildes, falls type = \"image\""
                   }
                 }
               }
@@ -313,14 +313,14 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten kÃ¶nnen, und dann normalisieren",
+                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
                     "examples": [
                       "personal, corporate"
                     ]
                   },
                   "role": {
                     "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten kÃ¶nnen, und dann normalisieren",
+                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
                     "examples": [
                       "Redactor"
                     ]
@@ -330,14 +330,14 @@
                     "properties": {
                       "first": {
                         "type": "string",
-                        "description": "In den Daten kÃ¶nnen mehrere Vornamen auftreten; Vorschlag: .join(â â)",
+                        "description": "In den Daten können mehrere Vornamen auftreten; Vorschlag: .join(' ')",
                         "examples": [
                           "Ludger J."
                         ]
                       },
                       "last": {
                         "type": "string",
-                        "description": "In den Daten kÃ¶nnen mehrere Nachnamen auftreten; Vorschlag: .join(â â)",
+                        "description": "In den Daten können mehrere Nachnamen auftreten; Vorschlag: .join(' ')",
                         "examples": [
                           "Sutthoff"
                         ]
@@ -374,7 +374,7 @@
                     "type": "string",
                     "description": "Rechteinhaber",
                     "examples": [
-                      "LVR-Institut fÃ¼r Landeskunde und Regionalgeschichte"
+                      "LVR-Institut für Landeskunde und Regionalgeschichte"
                     ]
                   }
                 },
@@ -387,7 +387,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "description": "Normalisieren; z.B. buch, ort, rede, artefakt, â¦",
+                "description": "Normalisieren; z.B. buch, ort, rede, artefakt, ...",
                 "examples": [
                   "book"
                 ]
