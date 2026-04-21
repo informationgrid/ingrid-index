@@ -10,5 +10,9 @@
   },
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.7.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "nodemon": "^3.1.14"
   }
 }
