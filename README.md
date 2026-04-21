@@ -42,19 +42,54 @@ The tag is the versioned snapshot. Consumers always get pre-built output.
 
 ## Local Development
 
+Typical development flow:
+
+1. Edit schemas in `src/` or shared fragments in `src/parts/`
+2. Rebuild the generated JSON and HTML docs
+3. Open `docs/index.html` or serve `docs/` locally to review the result
+
 ```bash
 # Install Node dependencies
 npm install
 
-# Build resolved & bundled schemas
+# Create and activate a Python virtual environment
+python -m venv .venv
+source .venv/bin/activate
+
+# Install Python dependencies for the docs build
+pip install json-schema-for-humans pyyaml
+
+# Build resolved & bundled schemas plus HTML docs
+npm run build
+
+# Or run the steps separately
 node scripts/build_schemas.js
+python scripts/build_docs.py
 
 # Optionally inject a version into $id
 node scripts/build_schemas.js --version v1.2.0
+```
 
-# Build HTML documentation
-pip install json-schema-for-humans pyyaml
-python scripts/build_docs.py
+### Live rebuild while editing
+
+To rebuild automatically whenever a YAML file changes:
+
+```bash
+# Rebuild schemas and docs when files under src/ change
+npx nodemon --watch src --ext yaml --exec "npm run build"
+```
+
+To preview the generated docs locally with automatic browser reloads:
+
+```bash
+# Serve docs/ and reload when generated HTML changes
+npx browser-sync start --server docs --files "docs/*.html"
+```
+
+If you only need a simple local preview server without live reload:
+
+```bash
+python -m http.server 8000 --directory docs
 ```
 
 ## Consuming as a Git Submodule
