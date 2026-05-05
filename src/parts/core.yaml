@@ -4,35 +4,108 @@ title: Root fields
 properties:
   id:
     type: string
-    description: Für UMWELTNAVI <oid>-<part>
+    description: | 
+      The ID of the Dataset. The ID **must** be unique in the index.
     examples:
-    - nlwkn-dsk-4922-21000-0
+    - Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'
+    - For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'
   schema_version:
     type: string
-    description: Version des Schemas des Indexes
+    description: | 
+      Die Version des Schemas des Indexes. 
+      Die Version richtet sich nach der Versionierung des InGrid Releases. 
+      Semantic Versioning soll verwendet werden.
+      Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1
+    examples:
+    - 1.0.0
+    - 1.1.0-1
+    - 1.2.0-1
   type:
     type: string
     deprecated: true
     enum:
     - UMWELTNAVI
     - UMWELTNAVI_SUB_GEOMETRY
+  metadata:  
+    type: object
+    properties:
+      data_type:
+        type: array
+        description: | 
+          Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.  
+          items:
+            type: string
+        examples:
+        - UmweltNAVI Datensatz ['UMWELTNAVI']
+        - Opendata Datensatz  ['DCAT-AP', 'DCAT-AP.DE']
+        - Geometadatensatz ['GEOMETADATA']
+        - LVR Datensatz ['LVR']
+        enum:
+        - DCAT-AP
+        - DCAT-AP.DE
+        - GEOMETADATA
+        - LVR
+        - UMWELTNAVI
+      created:
+        type: ["string", "null"]
+        format: date-time
+        description: | 
+          Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.
+        examples:
+        - '2026-04-22T12:00:00Z'
+        - '2026-04-22T12:00:00+01:00'
+      modified:
+        type: ["string", "null"]
+        format: date-time
+        description: | 
+          Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.
+        examples:
+        - '2026-04-22T12:00:00Z'
+        - '2026-04-22T12:00:00+01:00'
+    required:
+    - data_type
+    - created
+    - modified
   title:
     type: string
-    $comment: 'Ehemaliges Indexfeld: name'
+    description: | 
+      Der Titel des Datensatzes.
   description:
+    description: | 
+      Die Beschreibung des Datensatzes.
     type: string
   spatial:
     type: object
     properties:
       geometry:
-        type: array
-        items:
-          type: string
-          description: 'Wie in GeoJSON: https://de.wikipedia.org/wiki/GeoJSON'
-          $comment: 'Ehemaliges Indexfeld: location'
-        minItems: 0
+        type: object
+        description: 'Wie in GeoJSON: https://de.wikipedia.org/wiki/GeoJSON'
+        properties:
+          type: 
+            type: string
+            enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+          coordinates:
+            type: array
+            items:
+              type: array
+              minItems: 4
+              items:
+                type: array
+                minItems: 2
+                items:
+                  type: number
+            description : 'Koordinaten des Geometrieelements'
+            examples:
+
       geometries:
         type: array
+        deprecated: true
         items:
           type: string
           description: "ergänzt nach Besprechung mit jm und aw"
@@ -84,15 +157,6 @@ properties:
             type: string
         description: Administrative Zuordnung
     $comment: 'Ehemaliges Indexfeld: layer'
-  created:
-    type: string
-    description: 'Ergänzt. Erstellungsdatum. "issued" ist dafür nicht passend.
-      In DCAT-AP.de  gibt es die Eigenschaft der Erstellung, "created" nicht,
-      aber dort soll "isssued" das "Herausgabe/Emission (z.B. in Form einer
-      Veröffentlichung)" ausdrücken.'
-  modified:
-    type: string
-    description: Änderungsdatum des Metadatensatzes
   issued:
     type: string
   temporal:
@@ -143,7 +207,7 @@ properties:
 required:
 - id
 - schema_version
-- type
+- metadata
 - title
 - created
 - modified
