@@ -33,7 +33,7 @@ properties:
         type: array
         description: | 
           Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.  
-          items:
+        items:
             type: string
         examples:
         - UmweltNAVI Datensatz ['UMWELTNAVI']
@@ -102,6 +102,7 @@ properties:
                   type: number
             description : 'Koordinaten des Geometrieelements'
             examples:
+              - '...'
 
       geometries:
         type: array
