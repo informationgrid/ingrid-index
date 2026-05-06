@@ -26,13 +26,13 @@ properties:
     enum:
     - UMWELTNAVI
     - UMWELTNAVI_SUB_GEOMETRY
-  metadata:  
+  metadata:
     type: object
     properties:
       data_type:
         type: array
         description: | 
-          Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.  
+          Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.
         items:
             type: string
         examples:
@@ -62,6 +62,14 @@ properties:
         examples:
         - '2026-04-22T12:00:00Z'
         - '2026-04-22T12:00:00+01:00'
+      partner:
+        type: string
+        description: | 
+          Der Partner der Datenquelle.
+      provider:
+        type: string
+        description: | 
+          Der Anbieter der Datenquelle.
     required:
     - data_type
     - created
@@ -81,7 +89,7 @@ properties:
         type: object
         description: 'Wie in GeoJSON: https://de.wikipedia.org/wiki/GeoJSON'
         properties:
-          type: 
+          type:
             type: string
             enum:
             - Point
@@ -190,26 +198,63 @@ properties:
     type: string
     description: Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet
       werden.
+  content:
+    type: array
+    deprecated: true
+    $comment: Es sollte jetzt fulltext verwendet werden.
+    items:
+      type: string
   sort_uuid:
     type: string
   language:
     type: string
   format:
     type: string
-  contact:
-    type: object
-    properties:
-      role:
-        type: string
-      title:
-        type: string
-      email:
-        type: string
+  contacts:
+    type: array
+    items:
+      properties:
+        role:
+          type: string
+        name:
+          type: string
+        communications:
+          type: array
+          items:
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+        street:
+          type: string
+        code:
+          type: string
+        pocode:
+          type: string
+        pobox:
+          type: string
+        locality:
+          type: string
+        country:
+          type: string
+        administrative_area:
+          type: string
+  collection: {
+    type: "object",
+    title: "collection",
+    properties: {
+      id: {
+        type: "string"
+      },
+      name: {
+        type: "string"
+      }
+    }
+  }
 required:
 - id
 - schema_version
 - metadata
 - title
-- created
-- modified
 - fulltext
