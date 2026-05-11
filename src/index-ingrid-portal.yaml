@@ -14,29 +14,37 @@ allOf:
 
       # portal specific
 
+      # CORE
+
       # - Titel (c)
-      # - Typ
       # - Tags, wie OpenData (c)
-      # - downloads
-      # - nutzungsbedingungen
       # - ansprechpartner (c)
-      # - vorschaubilder (references)
-      # - Aktualität des Datensatzes
       #   - Erstellung (c)
       #   - Publikation (c)
       #   - Letzte Änderung (c)
-      #   - Status
-      #   - Pflegeintervall
-      #   - Benutzerdefinierter Pflegeintervall
       # - Raumbezug (c)
       # - Koordinatensystem (c)
-      # - Verweise und Downloads (references)
-      # - Identifikator des übergeordneten Datensatzes
-      # - Nutzungsbedingungen
-      # - Anwendungseinschränkungen
       # - Kontakte (c)
+      # - Schlagworte (c)
+      #   - UUID (c)
+      #   - Aktualität (c?)
+
+      # PROFILE
+
+      # - Typ (metadata.type)
+      # - downloads (references)
+      # - nutzungsbedingungen (licenses)
+      # - vorschaubilder (references)
+      # - Aktualität des Datensatzes
+      #   - Status (temportal.status)
+      #   - Pflegeintervall (temportal.maintenanceFrequency)
+      #   - Benutzerdefiniertes Pflegeintervall (temportal.userDefinedMaintenanceFrequency)
+      # - Verweise und Downloads (references)
+      # - Identifikator des übergeordneten Datensatzes (parentIdentifier)
+      # - Nutzungsbedingungen (licenses)
+      # - Anwendungseinschränkungen (licenses)
       # - Fachinformationen
-      #   - Identifikator der Datenquelle
+      #   - Identifikator der Datenquelle (datasourceIdentifier)
       #   - Digitale Repräsentation
       #   - ...
       # - Zusatzinformationen
@@ -45,10 +53,7 @@ allOf:
       #   - Sprache
       #   - Konformität
       #   - Bestellinformationen
-      # - Schlagworte (c)
       # - Informationen zum Metadatensatz
-      #   - UUID (c)
-      #   - Aktualität (c?)
       #   - Sprache
       #   - Datensatz/serie
       #   - ISO-XML - Link
@@ -56,12 +61,6 @@ allOf:
       #   - Quelle
 
 
-      # moved to core elements
-      # - title
-      # - description
-      # - pointOfContact
-      # - keywords & themes
-      # - spatial
 
       # access- and use-constraints and use limitations
       licenses:
