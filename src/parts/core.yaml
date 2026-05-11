@@ -41,11 +41,13 @@ properties:
         - Geometadatensatz ['GEOMETADATA']
         - LVR Datensatz ['LVR']
         enum:
-        - DCAT-AP
-        - DCAT-AP.DE
-        - GEOMETADATA
-        - LVR
+        - DCAT-AP?
+        - DCAT-AP.DE?
+        - GEOMETADATA?
+        - LVR?
         - UMWELTNAVI
+        - INGRID
+        - UVP
       created:
         type: ["string", "null"]
         format: date-time
@@ -62,6 +64,11 @@ properties:
         examples:
         - '2026-04-22T12:00:00Z'
         - '2026-04-22T12:00:00+01:00'
+      issued:
+        type: ["string", "null"]
+        format: date-time
+        description: | 
+          Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.
       partner:
         type: string
         description: | 
@@ -70,6 +77,14 @@ properties:
         type: string
         description: | 
           Der Anbieter der Datenquelle.
+      datasource:
+        properties:
+          id:
+            type: string
+            description: Die ID der Datenquelle.
+          name:
+            type: string
+            description: Der Name der Datenquelle.
     required:
     - data_type
     - created
