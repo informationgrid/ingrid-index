@@ -220,10 +220,13 @@ properties:
     items:
       type: string
   sort_uuid:
+    description: Sortier-UUID für die Sortierung von Objekten
     type: string
   language:
     type: string
+    description: Welches Format hat die Sprache, wo wird es verwendet.
   format:
+    description: Wo kommt das her???
     type: string
   contacts:
     type: array
