@@ -39,6 +39,7 @@ allOf:
           # Kurzbezeichnung
           alternate_title:
             type: string
+            description: "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes."
 
           # - Typ (metadata.type)
           # - Informationen zum Metadatensatz
@@ -48,9 +49,11 @@ allOf:
           #   - Ansprechpartner (Metadatum)
           #   - Quelle
           metadata:
+            description: "Informationen zum Metadatensatz"
             properties:
               type:
                 type: string
+                description: "Beschreibt den Typ des Metadatensatzes."
                 enum:
                   - InGridGeoDataset
                   - InGridDataCollection
@@ -59,50 +62,45 @@ allOf:
                   - InGridPublication
                   - InGridProject
                   - InGridSpecialisedTask
-              language:
-                title: language
-                properties:
-                  key:
-                    type: string
-                  value:
-                    type: string
               character_set:
                 description: "Aktuell nicht im Portal angezeigt?"
                 deprecated: true
-                properties:
-                  key:
-                    type: string
-                  value:
-                    type: string
-
+                $ref: ./parts/core.yaml#/definitions/KeyValue
 
           # - downloads (references)
           # - vorschaubilder (references)
           # - Verweise und Downloads (references)
           references:
             type: array
+            description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind."
             items:
               type: object
               title: item
               properties:
                 url:
                   type: string
+                  description: "Die URL zur externen Ressource oder Download."
+                uuidRef:
+                  type: string
+                  description: "Die UUID des internen Datensatzes."
                 type:
                   type: object
                   title: type
-                  properties:
-                    key:
-                      type: string
-                    value:
-                      type: string
-                    _codelistId:
-                      type: string
+                  description: "Gibt den Typ der externen Ressource oder Download an. Es wird die Codeliste 2000 verwendet."
+                  examples:
+                    - 3600 - Gekoppelte Daten
+                    - 5304 - Bestellung
+                    - 3535 - Schlüsselkatalog
+                  $ref: ./parts/core.yaml#/definitions/KeyValue
                 title:
                   type: string
+                  description: "Ein Titel der externen Ressource oder Download."
                 explanation:
                   type: string
-                reference_type:
-                  type: string
+                  description: "Eine Beschreibung der externen Ressource oder Download."
+                internal:
+                  type: boolean
+                  description: "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
           # - nutzungsbedingungen (licenses)
           # - Nutzungsbedingungen (licenses)
           # - Anwendungseinschränkungen (licenses)
@@ -122,11 +120,8 @@ allOf:
                 items:
                   type: array
                   items:
-                    properties:
-                      key:
-                        type: string
-                      value:
-                        type: string
+                    title: item
+                    $ref: ./parts/core.yaml#/definitions/KeyValue
           # - Aktualität des Datensatzes
           #   - Status (temporal.status)
           #   - Pflegeintervall (temporal.maintenanceFrequency)
@@ -222,11 +217,7 @@ allOf:
                     - not-conform
                     - not-evaluated
                 specification:
-                  properties:
-                    key:
-                      type: string
-                    value:
-                      type: string
+                  $ref: ./parts/core.yaml#/definitions/KeyValue
                 publicationDate:
                   type: string
                 explanation:
@@ -235,6 +226,43 @@ allOf:
           #   - Bestellinformationen
           order_info:
             type: string
+
+          # Datenqualität
+          data_quality:
+            properties:
+              completenessOmission:
+                type: number
+              positionalAccuracy:
+                properties:
+                  horizontal:
+                    type: number
+                  vertical:
+                    type: number
+              qualities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - completenessComission
+                      - conceptualConsistency
+                      - domainConsistency
+                      - formatConsistency
+                      - topologicalConsistency
+                      - temporalConsistency
+                      - thematicClassificationCorrectness
+                      - nonQuantitativeAttributeAccuracy
+                      - quantitativeAttributeAccuracy
+                      - relativeInternalPositionalAccuracy
+                    measure_type:
+                      type: object
+                      $ref: ./parts/core.yaml#/definitions/KeyValue
+                    value:
+                      type: number
+                    parameter:
+                      type: string
 
 
 
