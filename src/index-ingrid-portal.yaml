@@ -86,7 +86,7 @@ allOf:
                 type:
                   type: object
                   title: type
-                  description: "Gibt den Typ der externen Ressource oder Download an. Es wird die Codeliste 2000 verwendet."
+                  description: "Gibt den Typ der externen Ressource oder Download an. Es wird die Codeliste 2000 verwendet. Achtung: Vorschaugrafik nicht dabei als Typ. Zusatztyp?"
                   examples:
                     - 3600 - Gekoppelte Daten
                     - 5304 - Bestellung
@@ -107,18 +107,21 @@ allOf:
           # access- and use-constraints and use limitations
           licenses:
             type: array
+            description: "Liste der Nutzungsbedingungen oder Einschränkungen für die Verwendung der externen Ressource oder Download."
             items:
               type: object
               title: item
               properties:
                 type:
                   type: string
+                  description: "Typ der Nutzungsbedingung oder Einschränkung. Kann 'accessConstraints', 'useConstraints' oder 'useLimitations' sein."
                   enum:
                     - accessConstraints
                     - useConstraints
                     - useLimitations
                 items:
                   type: array
+                  description: "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet."
                   items:
                     title: item
                     $ref: ./parts/core.yaml#/definitions/KeyValue
@@ -127,27 +130,47 @@ allOf:
           #   - Pflegeintervall (temporal.maintenanceFrequency)
           #   - Benutzerdefiniertes Pflegeintervall (temporal.userDefinedMaintenanceFrequency)
           temporal:
+            description: "Enthält zusätzliche Informationen zur Aktualität des Datensatzes, einschließlich Status, Pflegeintervall und benutzerdefinierten Pflegeintervall."
             properties:
               status:
-                type: string
+                $ref: ./parts/core.yaml#/definitions/KeyValue
+                description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
+                examples:
+                  - 1 - abgeschlossen
+                  - 2 - historisches Archiv
               maintenance_frequency:
-                type: string
+                $ref: ./parts/core.yaml#/definitions/KeyValue
+                description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
+                examples:
+                  - 2 - täglich
+                  - 3 - wöchentlich
+                  - 5 - monatlich
               user_defined_maintenance_frequency:
                 type: string
+                description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes. Die Codeliste 1230 enthält die Einheit. Besser in Sekunden angeben, was dann umgerechnet werden kann mit eigener Logik?"
+                examples:
+                  - 60
           # - Identifikator des übergeordneten Datensatzes (parentIdentifier)
           parent_identifier:
             type: string
+            description: "UUID des übergeordneten Datensatzes. Kann für die Strukturierung von Datensätzen verwendet werden."
           # - Fachinformationen
           #   - Identifikator der Datenquelle (datasourceIdentifier)
           datasource_identifier:
             type: string
+            description: "Enthält den Identifikator der Datenquelle. Dieser muss eine auflösbare URL sein, die den Direktzugriff auf das XML des Daten-Metadatensatzes ermöglicht."
+            examples:
+              - https://registry.gdi-de.org/id/ingrid_cat/d848fd14-7a22-40ba-980a-3ea7e3fcbcae
           #   - Digitale Repräsentation
           spatial_representation:
             type: array
+            title: "Digitale Repräsentation"
             items:
               properties:
                 type:
                   type: string
+                  title: "Typ"
+                  description: "Beschreibt den Typ der Repräsentation"
                   enum:
                     - text
                     - vector
@@ -157,16 +180,22 @@ allOf:
                     - grid
                 vector:
                   type: array
+                  title: "Vector"
+                  description: "Beschreibt die digitale Repräsentation als eine Liste von Vektor-Daten."
                   items:
                     properties:
                       topology:
                         type: string
+                        description: "Beschreibt die Topologie des Vektor-Datensatzes"
                       geometry_type:
                         type: string
+                        description: "Beschreibt den Typ der Geometrie"
                       number:
                         type: integer
+                        description: "Beschreibt die Anzahl der Punkt- oder Vektortypelemente im Datensatz"
                 grid:
-                  description: "Aktuell nicht im Portal angezeigt?"
+                  title: "Raster/Gitter"
+                  description: "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?"
                   properties:
                     axes:
                       type: array
@@ -174,26 +203,57 @@ allOf:
                         properties:
                           label:
                             type: string
+                            description: "Beschreibt den Namen der Achse"
                           number:
                             type: integer
+                            description: "Beschreibt die Anzahl der Achsen im Raster"
                           resolution:
                             type: integer
+                            description: "Beschreibt die Auflösung der Achsen im Raster in Metern"
                     available_parameters:
                       type: boolean
+                      description: "Beschreibt, ob Parameter für das Raster verfügbar sind"
                     number_dimensions:
                       type: integer
+                      description: "Beschreibt die Anzahl der unabhängigen räumlich-zeitlichen Achsen"
                     cell_geometry:
-                      type: string
+                      $ref: ./parts/core.yaml#/definitions/KeyValue
+                      description: "Angabe, ob die Rasterdatenzelle einen Punkt oder eine Fläche beschreibt. Hier wird die Codeliste 509 verwendet."
                     rectified:
+                      title: "Georektifiziertes Raster"
                       properties:
-                        TODO:
+                        checkPointAvailability:
                           type: boolean
+                          description: "Beschreibt, ob die Punkte für die Rasterdatenzelle geprüft werden."
+                        checkPointDescription:
+                          type: string
+                          description: "Beschreibt die Beschreibung der Punkte, die für die Rasterdatenzelle verwendet werden. Hier wird die Codeliste 510 verwendet."
+                        cornerPoints:
+                          type: string
+                        pointInPixel:
+                          $ref: ./parts/core.yaml#/definitions/KeyValue
+                          description: "Enthält den Punkt im Pixel, an welchem der Bezug zur Erde besteht. Hier wird die Codeliste 2100 verwendet."
                     referenced:
+                      title: "Georeferenzierbares Raster"
                       properties:
-                        TODO:
+                        orientationParameterAvailability:
                           type: boolean
+                          description: "Angabe, ob Orientierungsparameter verfügbar sind."
+                        controlPointAvaliability:
+                          type: boolean
+                          description: "Angabe, ob Passpunkte existieren."
+                        parameters:
+                          type: string
+                          description: "Parameter, die die Georeferenzierung der Rasterdaten ermöglichen"
 
-          #   - ...
+          #   - Erstellungsmaßstab
+          #   - Darstellender Dienst (als Referenz!)
+          #   - Datengrundlage/Herkunft
+          #   - Herstellungsprozess
+          #   - Symbolkatalog
+          #   - Schlüsselkatalog
+          #   - Sachdaten/Attributinformation
+
           # - Zusatzinformationen
           #   - Eignung
           specific_usage:
