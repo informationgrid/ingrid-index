@@ -30,11 +30,9 @@ properties:
     type: object
     properties:
       data_type:
-        type: array
+        type: string
         description: | 
           Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.
-        items:
-            type: string
         examples:
         - UmweltNAVI Datensatz ['UMWELTNAVI']
         - Opendata Datensatz  ['DCAT-AP', 'DCAT-AP.DE']
@@ -72,11 +70,21 @@ properties:
       partner:
         type: string
         description: | 
-          Der Partner der Datenquelle.
+          Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.
+        examples:
+          - bb
+          - st
       provider:
         type: string
         description: | 
-          Der Anbieter der Datenquelle.
+          Der Anbieter der Datenquelle als Kürzel. Siehe auch Codeliste 111.
+        examples:
+          - ni_gll
+          - bw_mj
+      language:
+        title: language
+        description: "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet."
+        $ref: ./shared-types.yaml#/$defs/KeyValue
       datasource:
         properties:
           id:
@@ -99,10 +107,11 @@ properties:
     type: string
   spatial:
     type: object
+    description: "Dieser Bereich enthält Informationen über den Raumbezug."
     properties:
       geometry:
         type: object
-        description: 'Wie in GeoJSON: https://de.wikipedia.org/wiki/GeoJSON'
+        description: 'Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON'
         properties:
           type:
             type: string
@@ -177,12 +186,10 @@ properties:
               type: string
               description: Land (z.B. ni, sh, rp)
             minItems: 0
-          regional-key:
+          regional_key:
             type: string
         description: Administrative Zuordnung
     $comment: 'Ehemaliges Indexfeld: layer'
-  issued:
-    type: string
   temporal:
     type: object
     properties:
@@ -212,15 +219,10 @@ properties:
   fulltext:
     type: string
     description: Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet
-      werden.
-  content:
-    type: array
-    deprecated: true
-    $comment: Es sollte jetzt fulltext verwendet werden.
-    items:
-      type: string
+      werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.
+    $comment: Früher content-Feld
   sort_uuid:
-    description: Sortier-UUID für die Sortierung von Objekten
+    description: Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen.
     type: string
   language:
     type: string
@@ -242,6 +244,7 @@ properties:
             properties:
               type:
                 type: string
+                enum: [email, phone, fax, website, social, other]
               value:
                 type: string
         street:
@@ -258,18 +261,6 @@ properties:
           type: string
         administrative_area:
           type: string
-  collection: {
-    type: "object",
-    title: "collection",
-    properties: {
-      id: {
-        type: "string"
-      },
-      name: {
-        type: "string"
-      }
-    }
-  }
 required:
 - id
 - schema_version
