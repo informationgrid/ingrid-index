@@ -13,6 +13,8 @@ $defs:
     properties:
       date_range:
         type: string
+        title: Zeitabschnitt
+        description: Zeitabschnitt der Messreihe
       date_text:
         type: string
         description: Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist
@@ -20,15 +22,16 @@ $defs:
           - Sommer 2010
       date_type:
         type: string
+        description: Typ der Zeitangabe
         enum:
-        - created
-    if:
-      not:
-        required:
-          - date_range
-    then:
-      required:
-        - date_text
+          - created
+          - last_updated
+          - first_published
+    oneOf:
+      - required: [ "date_range" ]
+      - required: [ "date_text" ]
+    required:
+      - date_type
   UmweltNaviSourceAttributes:
     type: object
     properties:
@@ -118,9 +121,9 @@ $defs:
             type: string
             description: Vorschlag ED
         required:
-        - url
-        - base_url
-        - type
+          - url
+          - base_url
+          - type
       ingrid:
         type: object
         description: Soll diese Feld unbenannt werden in "ingrid"?
@@ -128,7 +131,7 @@ $defs:
           idf:
             type: string
     required:
-    - source
+      - source
   website:
     title: Website
     type: object
@@ -147,18 +150,18 @@ $defs:
           type: string
           description: Anzeigename der Messreihe
           examples:
-          - LuftqualitÃ¤tsindex
+            - Luftqualitätsindex
         unit:
           type: string
           description: Einheit der Messreihe
           examples:
-          - Index [1-6]
+            - Index [1-6]
         property:
           type: string
           description: technischer Name der Messreihe, wird in API zu einem Datastream
-            im STA server aufgelÃ¶st (entspricht datasources.id)
+            im STA server aufgelöst (entspricht datasources.id)
           examples:
-          - LQI
+            - LQI
         resolutions:
           type: object
           properties:
@@ -166,22 +169,22 @@ $defs:
               type: array
               items:
                 type: array
-                description: Zuordnung Messwerttypen zu zeitlicher AuflÃ¶sung
+                description: Zuordnung Messwerttypen zu zeitlicher Auflösung
                 examples:
-                - 'P1M: [MEAN, MIN, MAX]'
+                  - 'P1M: [MEAN, MIN, MAX]'
               minItems: 1
           required:
-          - '[resolution_name]'
-          description: Zeitliche AuflÃ¶sungen der Messreihe zusammen mit Messwerttyp
+            - '[resolution_name]'
+          description: Zeitliche Auflösungen der Messreihe zusammen mit Messwerttyp
         interface:
           type: string
-          description: Name des Interfaces Ã¼ber das die Messreihe abgerufen wird
+          description: Name des Interfaces über das die Messreihe abgerufen wird
           examples:
-          - sta
+            - sta
           $comment: 'Ehemaliges Indexfeld: properties._internal.interface'
         url:
           type: string
-          description: Sensor-URL (kann zukÃ¼nftig entfallen, wenn z.B. LQI als Datastream
+          description: Sensor-URL (kann zukünftig entfallen, wenn z.B. LQI als Datastream
             vorliegt und nicht berechnet werden muss)
           $comment: 'Ehemaliges Indexfeld: properties._internal.config.url'
         datasource:
@@ -194,25 +197,25 @@ $defs:
               type: string
               description: Messwerttyp
               examples:
-              - MEAN
+                - MEAN
             resolution:
               type: string
-              description: Zeitliche AuflÃ¶sung
+              description: Zeitliche Auflösung
               examples:
-              - P1M
+                - P1M
           required:
-          - url
-          - type
-          - resolution
+            - url
+            - type
+            - resolution
           description: Datenquelle
           $comment: 'Ehemaliges Indexfeld: properties._internal.config.datastreams'
       required:
-      - name
-      - unit
-      - property
-      - resolutions
-      - interface
-      - url
-      - datasource
+        - name
+        - unit
+        - property
+        - resolutions
+        - interface
+        - url
+        - datasource
       description: Messwertequellen
       $comment: 'Ehemaliges Indexfeld: properties.observations'

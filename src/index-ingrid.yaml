@@ -14,6 +14,37 @@ allOf:
           data_type:
             type: string
             const: 'INGRID'
+        required:
+          - data_type
+
+      # - Aktualität des Datensatzes
+      #   - Status (temporal.status)
+      #   - Pflegeintervall (temporal.maintenanceFrequency)
+      #   - Benutzerdefiniertes Pflegeintervall (temporal.userDefinedMaintenanceFrequency)
+      temporal:
+#        allOf:
+#          -
+        description: "Enthält zusätzliche Informationen zur Aktualität des Datensatzes, einschließlich Status, Pflegeintervall und benutzerdefinierten Pflegeintervall."
+        properties:
+          status:
+            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+            description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
+            examples:
+              - 1 - abgeschlossen
+              - 2 - historisches Archiv
+          maintenance_frequency:
+            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+            description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
+            examples:
+              - 2 - täglich
+              - 3 - wöchentlich
+              - 5 - monatlich
+          user_defined_maintenance_frequency:
+            type: string
+            description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes. Die Codeliste 1230 enthält die Einheit. Besser in Sekunden angeben, was dann umgerechnet werden kann mit eigener Logik?"
+            examples:
+              - 60
+
 
       exports:
         properties:
@@ -143,31 +174,6 @@ allOf:
                   items:
                     title: item
                     $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-          # - Aktualität des Datensatzes
-          #   - Status (temporal.status)
-          #   - Pflegeintervall (temporal.maintenanceFrequency)
-          #   - Benutzerdefiniertes Pflegeintervall (temporal.userDefinedMaintenanceFrequency)
-          temporal:
-            description: "Enthält zusätzliche Informationen zur Aktualität des Datensatzes, einschließlich Status, Pflegeintervall und benutzerdefinierten Pflegeintervall."
-            properties:
-              status:
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-                description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
-                examples:
-                  - 1 - abgeschlossen
-                  - 2 - historisches Archiv
-              maintenance_frequency:
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-                description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
-                examples:
-                  - 2 - täglich
-                  - 3 - wöchentlich
-                  - 5 - monatlich
-              user_defined_maintenance_frequency:
-                type: string
-                description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes. Die Codeliste 1230 enthält die Einheit. Besser in Sekunden angeben, was dann umgerechnet werden kann mit eigener Logik?"
-                examples:
-                  - 60
           # - Identifikator des übergeordneten Datensatzes (parentIdentifier)
           parent_identifier:
             type: string
@@ -342,8 +348,6 @@ allOf:
                       type: number
                     parameter:
                       type: string
-
-
 
 
           # TODO: merge references and fileReferences
