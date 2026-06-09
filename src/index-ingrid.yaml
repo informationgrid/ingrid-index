@@ -2,12 +2,12 @@ $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://example.com/schemas/1.0.0/dcat.yaml
 title: Schema for InGrid Index 'InGrid'
 type: object
+unevaluatedProperties: false
 allOf:
   - $ref: ./parts/core.yaml
   - type: object
     title: InGrid
     properties:
-
       metadata:
         type: object
         properties:
@@ -22,31 +22,33 @@ allOf:
       #   - Pflegeintervall (temporal.maintenanceFrequency)
       #   - Benutzerdefiniertes Pflegeintervall (temporal.userDefinedMaintenanceFrequency)
       temporal:
-#        allOf:
-#          -
+        type: object
         description: "Enthält zusätzliche Informationen zur Aktualität des Datensatzes, einschließlich Status, Pflegeintervall und benutzerdefinierten Pflegeintervall."
-        properties:
-          status:
-            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-            description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
-            examples:
-              - 1 - abgeschlossen
-              - 2 - historisches Archiv
-          maintenance_frequency:
-            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-            description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
-            examples:
-              - 2 - täglich
-              - 3 - wöchentlich
-              - 5 - monatlich
-          user_defined_maintenance_frequency:
-            type: string
-            description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes. Die Codeliste 1230 enthält die Einheit. Besser in Sekunden angeben, was dann umgerechnet werden kann mit eigener Logik?"
-            examples:
-              - 60
-
-
+        unevaluatedProperties: false
+        allOf:
+          - $ref: ./parts/shared-types.yaml#/$defs/Temporal
+          - type: object
+            properties:
+              status:
+                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
+                examples:
+                  - 1 - abgeschlossen
+                  - 2 - historisches Archiv
+              maintenance_frequency:
+                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
+                examples:
+                  - 2 - täglich
+                  - 3 - wöchentlich
+                  - 5 - monatlich
+              user_defined_maintenance_frequency_in_sec:
+                type: string
+                description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes in Sekunden."
+                examples:
+                  - 60
       exports:
+        unevaluatedProperties: false
         properties:
           iso:
             type: string

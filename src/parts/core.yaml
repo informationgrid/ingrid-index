@@ -135,11 +135,8 @@ properties:
       $ref: "#/$defs/SpatialItem"
     $comment: 'Ehemaliges Indexfeld: layer'
   temporal:
-    type: object
-    properties:
-      data-temporal:
-        $ref: "./shared-types.yaml#/$defs/TypedPeriodOfTime"
     description: Gültigkeitsdatumsbereich der beschriebenen Daten
+    $ref: ./shared-types.yaml#/$defs/Temporal
     $comment: 'Ehemaliges Indexfeld: object_date'
   keywords:
     type: array
@@ -168,12 +165,15 @@ properties:
     $comment: Früher content-Feld
     items:
       type: string
+  exports:
+    type: object
+    description: Hier werden die zusätzlichen Export-Formate gehalten, die mit dem Datensatz ausgeliefert
+      werden. Die Export-Formate können z.B. CSV, JSON oder andere Formate sein.
 required:
 - id
 - schema_version
 - metadata
 - title
-- fulltext
 $defs:
   SpatialItem:
     title: Spatial Core
@@ -211,9 +211,15 @@ $defs:
             examples:
               - '...'
       bbox:
-        type: string
+        type: array
         title: Bounding Box
         description: Umschließende BBOX der Geometrie
+        items:
+          type: number
+          minimum: -180
+          maximum: 180
+          minItems: 4
+          maxItems: 4
       wkt:
         type: string
         title: Well-known text
