@@ -21,67 +21,8 @@ properties:
     - 1.1.0-1
     - 1.2.0-1
   metadata:
-    type: object
-    properties:
-      data_type:
-        type: string
-        description: | 
-          Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.
-        examples:
-        - UmweltNAVI Datensatz ['UMWELTNAVI']
-        - InGrid Datensatz ['INGRID']
-        - UVP Datensatz ['UVP']
-      created:
-        type: ["string", "null"]
-        format: date-time
-        description: | 
-          Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.
-        examples:
-        - '2026-04-22T12:00:00Z'
-        - '2026-04-22T12:00:00+01:00'
-      modified:
-        type: ["string", "null"]
-        format: date-time
-        description: | 
-          Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.
-        examples:
-        - '2026-04-22T12:00:00Z'
-        - '2026-04-22T12:00:00+01:00'
-      issued:
-        type: ["string", "null"]
-        format: date-time
-        description: | 
-          Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.
-      partner:
-        type: string
-        description: | 
-          Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.
-        examples:
-          - bb
-          - st
-      provider:
-        type: string
-        description: | 
-          Der Anbieter der Datenquelle als Kürzel. Siehe auch Codeliste 111.
-        examples:
-          - ni_gll
-          - bw_mj
-      language:
-        title: language
-        description: "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet."
-        $ref: ./shared-types.yaml#/$defs/KeyValue
-      datasource:
-        properties:
-          id:
-            type: string
-            description: Die ID der Datenquelle.
-          name:
-            type: string
-            description: Der Name der Datenquelle.
-    required:
-    - data_type
-    - created
-    - modified
+    description: Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.
+    $ref: "#/$defs/Metadata"
   sort_uuid:
     description: Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen.
     type: string
@@ -255,3 +196,65 @@ $defs:
       - required: [ "bbox" ]
       - required: [ "wkt" ]
       - required: [ "toponym" ]
+  Metadata:
+    type: object
+    properties:
+      data_type:
+        type: string
+        description: |
+          Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.
+        examples:
+          - UmweltNAVI Datensatz ['UMWELTNAVI']
+          - InGrid Datensatz ['INGRID']
+          - UVP Datensatz ['UVP']
+      created:
+        type: [ "string", "null" ]
+        format: date-time
+        description: |
+          Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.
+        examples:
+          - '2026-04-22T12:00:00Z'
+          - '2026-04-22T12:00:00+01:00'
+      modified:
+        type: [ "string", "null" ]
+        format: date-time
+        description: |
+          Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.
+        examples:
+          - '2026-04-22T12:00:00Z'
+          - '2026-04-22T12:00:00+01:00'
+      issued:
+        type: [ "string", "null" ]
+        format: date-time
+        description: |
+          Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.
+      partner:
+        type: string
+        description: |
+          Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.
+        examples:
+          - bb
+          - st
+      provider:
+        type: string
+        description: |
+          Der Anbieter der Datenquelle als Kürzel. Siehe auch Codeliste 111.
+        examples:
+          - ni_gll
+          - bw_mj
+      language:
+        title: language
+        description: "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet."
+        $ref: ./shared-types.yaml#/$defs/KeyValue
+      datasource:
+        properties:
+          id:
+            type: string
+            description: Die ID der Datenquelle.
+          name:
+            type: string
+            description: Der Name der Datenquelle.
+    required:
+      - data_type
+      - created
+      - modified

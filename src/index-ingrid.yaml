@@ -10,12 +10,18 @@ allOf:
     properties:
       metadata:
         type: object
-        properties:
-          data_type:
-            type: string
-            const: 'INGRID'
-        required:
-          - data_type
+        description: "Enthält zusätzliche Metadaten zum Datensatz."
+        unevaluatedProperties: false
+        allOf:
+          - $ref: ./parts/core.yaml#/$defs/Metadata
+          - type: object
+            title: InGrid Metadata
+            properties:
+              data_type:
+                type: string
+                const: 'INGRID'
+            required:
+              - data_type
 
       # - Aktualität des Datensatzes
       #   - Status (temporal.status)
@@ -28,6 +34,7 @@ allOf:
         allOf:
           - $ref: ./parts/shared-types.yaml#/$defs/Temporal
           - type: object
+            title: InGrid Temporal
             properties:
               status:
                 $ref: ./parts/shared-types.yaml#/$defs/KeyValue
@@ -112,7 +119,7 @@ allOf:
           # - Verweise und Downloads (references)
           references:
             type: array
-            description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind."
+            description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden."
             items:
               type: object
               title: item
@@ -148,10 +155,10 @@ allOf:
                     const: true
               then:
                 required:
-                  - url
+                  - uuidRef
               else:
                 required:
-                  - uuidRef
+                  - url
           # - nutzungsbedingungen (licenses)
           # - Nutzungsbedingungen (licenses)
           # - Anwendungseinschränkungen (licenses)
