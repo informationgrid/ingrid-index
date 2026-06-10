@@ -146,15 +146,20 @@ properties:
       properties:
         term:
           type: string
-          description: 'Keyword '
+          description: 'Name des Keywords'
         id:
           type: string
           description: Eindeutiger Identifier des Keywords bezüglich der Quelle oder
             auch  URL-freundliche Form des Keywords (Slug)
           examples:
-          - 'wk000680 '
+          - 'wk000680'
         source:
           type: string
+          description: Quelle des Keywords
+          examples:
+            - gemet
+            - umthes
+            - iso_topic
       required:
       - term
       - source
