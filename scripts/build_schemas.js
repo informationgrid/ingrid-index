@@ -2,14 +2,17 @@ const fs = require("fs");
 const path = require("path");
 const $RefParser = require("@apidevtools/json-schema-ref-parser");
 
-const SRC_DIR = path.resolve(__dirname, "..", "src");
-const RESOLVED_DIR = path.resolve(__dirname, "..", "dist", "resolved");
-const BUNDLED_DIR = path.resolve(__dirname, "..", "dist", "bundled");
+const ROOT_DIR = path.resolve(__dirname, "..");
+const SRC_DIR = path.join(ROOT_DIR, "src");
+const PKG = require(path.join(ROOT_DIR, "package.json"));
 
-// Optional: --version v1.2.0  →  patches $id URLs with the version string
+// Version defaults to "draft", but is overridden by CI with the release
+// tag: --version 8.4.0
 const versionFlag = process.argv.indexOf("--version");
 const version =
-  versionFlag !== -1 ? process.argv[versionFlag + 1] : undefined;
+  versionFlag !== -1 ? process.argv[versionFlag + 1] : "draft";
+
+const DIST_DIR = path.join(ROOT_DIR, "dist", version, "schema");
 
 function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
@@ -22,18 +25,26 @@ function discoverSchemas() {
     .filter((f) => f.endsWith(".yaml") && fs.statSync(path.join(SRC_DIR, f)).isFile());
 }
 
-// If a version tag was provided, replace the version segment in $id
-// e.g. "https://example.com/schemas/1.0.0/dcat.yaml" → ".../v1.2.0/..."
-function patchVersion(schema, ver) {
-  if (schema.$id && ver) {
-    schema.$id = schema.$id.replace(/\/\d+\.\d+\.\d+\//, `/${ver}/`);
+// Set $id from package.json's "homepage", e.g.
+// "https://schema.ingrid-oss.eu/index/8.4.0/schema/index-dcat.json"
+// Placed right after "title" so it's visible near the top of the file.
+function setId(schema, ver, baseName) {
+  const id = `${PKG.homepage}/${ver}/schema/${baseName}.json`;
+  const ordered = {};
+  for (const [key, value] of Object.entries(schema)) {
+    ordered[key] = value;
+    if (key === "title") {
+      ordered.$id = id;
+    }
   }
-  return schema;
+  if (!("$id" in ordered)) {
+    ordered.$id = id;
+  }
+  return ordered;
 }
 
 async function build() {
-  ensureDir(RESOLVED_DIR);
-  ensureDir(BUNDLED_DIR);
+  ensureDir(DIST_DIR);
 
   const files = discoverSchemas();
   console.log(`Found ${files.length} schema(s): ${files.join(", ")}`);
@@ -44,17 +55,10 @@ async function build() {
 
     // --- Fully resolved (no $ref) ---
     const resolved = await $RefParser.dereference(srcPath);
-    patchVersion(resolved, version);
-    const resolvedOut = path.join(RESOLVED_DIR, `${baseName}.json`);
-    fs.writeFileSync(resolvedOut, JSON.stringify(resolved, null, 2));
+    const ordered = setId(resolved, version, baseName);
+    const resolvedOut = path.join(DIST_DIR, `${baseName}.json`);
+    fs.writeFileSync(resolvedOut, JSON.stringify(ordered, null, 2));
     console.log(`  resolved → ${path.relative(process.cwd(), resolvedOut)}`);
-
-    // --- Bundled (internal $ref only) ---
-    const bundled = await $RefParser.bundle(srcPath);
-    patchVersion(bundled, version);
-    const bundledOut = path.join(BUNDLED_DIR, `${baseName}.json`);
-    fs.writeFileSync(bundledOut, JSON.stringify(bundled, null, 2));
-    console.log(`  bundled  → ${path.relative(process.cwd(), bundledOut)}`);
   }
 
   console.log("Done.");

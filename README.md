@@ -17,28 +17,62 @@ src/                     ← Source of truth (editable YAML with $ref)
   parts/                 ← Shared schema fragments referenced via $ref
     core.yaml
     shared-types.yaml
-dist/                    ← Generated (do not edit)
-  resolved/              ← Fully dereferenced JSON (no $ref) — use these
-  bundled/               ← Bundled JSON (internal $ref only)
-docs/                    ← Generated HTML documentation
+dist/                    ← Local build output (gitignored, do not commit)
+  <version>/
+    schema/              ← Fully dereferenced JSON (no $ref)
+    *.html               ← Generated HTML documentation
 scripts/
-  build_schemas.js       ← Resolves and bundles schemas
+  build_schemas.js       ← Resolves schemas
   build_docs.py          ← Generates HTML docs
 .github/workflows/
-  build.yml              ← CI: builds on tag push, commits artifacts back
+  build.yml              ← CI: builds on tag push, publishes to "releases" branch
 ```
+
+## Branches
+
+- **`draft`** — the working branch. Every push rebuilds and publishes
+  `releases:draft/`.
+- **`releases`** — contains only generated output, one folder per version
+  (e.g. `draft/`, `8.4.0/`, `8.5.0/`), plus a root `index.html` linking to
+  each version's `index.html`. Consumers use this branch.
+- **`version/<x.y.z>`** — support branches for patching an already-released
+  version (created on demand).
+
+### GitHub Pages
+
+If `releases` is published via GitHub Pages with a custom domain, add a
+`CNAME` file (containing the domain) to the root of the `releases` branch
+manually. The build workflow only adds/updates `<version>/` folders and
+`index.html`, so `CNAME` is left untouched on subsequent builds. If the
+`releases` branch is ever recreated from scratch, re-add `CNAME` manually.
 
 ## How It Works
 
-1. **Edit** schemas in `src/`. Use `$ref` freely to keep things modular.
-2. **Tag** a release: `git tag v1.2.0 && git push origin v1.2.0`
-3. **CI** runs automatically:
-   - Resolves all `$ref` → `dist/resolved/*.json`
-   - Bundles schemas → `dist/bundled/*.json`
-   - Generates HTML docs → `docs/*.html`
-   - Commits artifacts and updates the tag
+1. **Edit** schemas in `src/` on the `draft` branch. Use `$ref` freely to keep
+   things modular.
+2. **CI** runs automatically on every push to `draft`:
+   - Resolves all `$ref` → `dist/draft/schema/*.json`
+   - Generates HTML docs → `dist/draft/*.html`
+   - Publishes both into the `releases` branch under `draft/`
+3. **Release**: tag the commit on `draft` as `v<version>` (e.g. `v8.4.0`) and
+   push the tag:
+   ```bash
+   git checkout draft
+   git tag v8.4.0 && git push origin v8.4.0
+   ```
+   This triggers the same build/publish steps using the version from the
+   tag, producing `releases:8.4.0/` instead of `releases:draft/`.
 
-The tag is the versioned snapshot. Consumers always get pre-built output.
+### Patching a released version
+
+1. Create (or check out) `version/<x.y.z>` from the `v<x.y.z>` tag and commit
+   the fix there.
+2. Force-move the `v<x.y.z>` tag to the branch tip and push it:
+   ```bash
+   git tag -f v8.4.0
+   git push origin v8.4.0 --force
+   ```
+3. CI rebuilds and overwrites the `8.4.0/` folder on the `releases` branch.
 
 ## Local Development
 
@@ -46,7 +80,12 @@ Typical development flow:
 
 1. Edit schemas in `src/` or shared fragments in `src/parts/`
 2. Rebuild the generated JSON and HTML docs
-3. Open `docs/index.html` or serve `docs/` locally to review the result
+3. Open `dist/draft/index.html` or serve `dist/draft/` locally to
+   review the result
+
+The build output is written to `dist/<version>/`, where `<version>` is
+`"draft"` by default, or whatever `--version` is passed (see below). `dist/`
+is gitignored — it's local build output, not committed.
 
 ```bash
 # Install Node dependencies
@@ -59,15 +98,16 @@ source .venv/bin/activate
 # Install Python dependencies for the docs build
 pip install json-schema-for-humans pyyaml
 
-# Build resolved & bundled schemas plus HTML docs
+# Build resolved schemas plus HTML docs
 npm run build
 
 # Or run the steps separately
 node scripts/build_schemas.js
 python scripts/build_docs.py
 
-# Optionally inject a version into $id
-node scripts/build_schemas.js --version v1.2.0
+# Optionally build under a specific version (this is what CI does for releases)
+node scripts/build_schemas.js --version 8.4.0
+python scripts/build_docs.py --version 8.4.0
 ```
 
 ### Live rebuild while editing
@@ -82,37 +122,36 @@ npx nodemon --watch src --ext yaml --exec "npm run build"
 To preview the generated docs locally with automatic browser reloads:
 
 ```bash
-# Serve docs/ and reload when generated HTML changes
-npx browser-sync start --server docs --files "docs/*.html"
+# Serve dist/draft/ and reload when generated HTML changes
+npx browser-sync start --server dist/draft --files "dist/draft/*.html"
 ```
 
 If you only need a simple local preview server without live reload:
 
 ```bash
-python -m http.server 8000 --directory docs
+python -m http.server 8000 --directory dist/draft
 ```
 
 ## Consuming as a Git Submodule
 
-Add this repo as a submodule pinned to a specific tag:
+Add this repo as a submodule tracking the `releases` branch, which contains
+only generated output (one folder per version):
 
 ```bash
-git submodule add <repo-url> schemas
-cd schemas
-git checkout v1.2.0
+git submodule add -b releases <repo-url> schemas
 cd ..
 git add schemas
-git commit -m "Add ingrid-index schemas v1.2.0"
+git commit -m "Add ingrid-index schemas"
 ```
 
 ### Java
 
-Point your JSON Schema validator at the resolved files:
+Point your JSON Schema validator at the resolved files for the version you need:
 
 ```
-schemas/dist/resolved/index-dcat.json
-schemas/dist/resolved/index-lvr.json
-schemas/dist/resolved/index-umweltnavi.json
+schemas/8.4.0/schema/index-dcat.json
+schemas/8.4.0/schema/index-lvr.json
+schemas/8.4.0/schema/index-umweltnavi.json
 ```
 
 No `$ref` resolution required — these are fully self-contained.
@@ -120,7 +159,7 @@ No `$ref` resolution required — these are fully self-contained.
 ### JavaScript / Node.js
 
 ```js
-const schema = require('./schemas/dist/resolved/index-dcat.json');
+const schema = require('./schemas/8.4.0/schema/index-dcat.json');
 // Use directly with ajv or any JSON Schema validator
 ```
 
@@ -128,15 +167,24 @@ const schema = require('./schemas/dist/resolved/index-dcat.json');
 
 ```bash
 cd schemas
-git fetch --tags
-git checkout v1.3.0
+git pull origin releases
 cd ..
 git add schemas
-git commit -m "Update ingrid-index schemas to v1.3.0"
+git commit -m "Update ingrid-index schemas"
 ```
+
+Then point your validator/imports at the new version's folder.
 
 ## Versioning
 
-- Git tags (`v1.0.0`, `v1.1.0`, ...) are the version identifiers
-- The `$id` field in each schema reflects the version when built by CI
-- `dist/` and `docs/` are generated — only `src/` should be edited
+- The git tag is the source of truth for a release's version. There is no
+  version field in `package.json`.
+- A release is created by tagging `v<version>` and pushing the tag (see
+  [How It Works](#how-it-works)). CI builds `dist/<version>/` using the
+  version from the tag and publishes it to the `releases` branch under
+  `<version>/`.
+- The `$id` field of each schema is generated from `homepage` in
+  `package.json` plus the build version, e.g.
+  `https://schema.ingrid-oss.eu/index/8.4.0/schema/index-dcat.json`. This is
+  an identifier only — it doesn't need to be a resolvable URL.
+- `dist/` is generated locally and gitignored — only `src/` should be edited.

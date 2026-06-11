@@ -1,16 +1,48 @@
-# Builds resolved/bundled JSON schemas and HTML documentation on tag push.
-# Generated artifacts (dist/ and docs/) are committed back to the repository
-# so that consumers pulling a specific tag get pre-built, ready-to-use output.
+# Builds resolved JSON schemas and HTML documentation and publishes them to
+# the "releases" branch under a folder named after the version
+# (e.g. releases:8.4.0/schemas/*.json, releases:8.4.0/*.html).
+#
+# Two triggers:
+#   - Push to "draft" that touches src/ or scripts/: rebuilds the "draft"
+#     version, overwriting releases:draft/.
+#   - Push (or force-push) of a "v*" tag (e.g. v8.4.0): builds that specific
+#     version, overwriting releases:8.4.0/. Path filters don't apply to tag
+#     pushes, so this always runs.
+#
+# Runs are serialized (concurrency group) so overlapping pushes don't race
+# when publishing to "releases".
+#
+# Release flow:
+#   1. On the "draft" branch, tag the commit as "v<version>" (e.g. v8.4.0)
+#      and push the tag. This triggers a build for that version.
+#
+# To rebuild an older version (e.g. to fix a published schema):
+#   1. Create a support branch for that version (if it doesn't exist yet)
+#      and commit the fix there.
+#   2. Force-move the existing tag to the tip of the support branch and
+#      push it. This re-triggers the workflow, which overwrites that
+#      version's folder on the "releases" branch.
 
 name: Build Schemas & Docs
 
 on:
   push:
+    branches:
+      - draft
+    paths:
+      - "src/**"
+      - "scripts/**"
     tags:
-      - "v*" # e.g. v1.0.0, v2.3.1
+      - "v*" # e.g. v1.0.0, v8.4.0
 
 permissions:
   contents: write
+
+# Serialize runs so concurrent pushes (e.g. a "draft" push and a tag push)
+# don't race when pushing to the "releases" branch.
+concurrency:
+  group: releases-publish
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -21,7 +53,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Fetch full history so we can push back to the branch
           fetch-depth: 0
 
       # ── Node.js ────────────────────────────────────────────────
@@ -42,42 +73,95 @@ jobs:
       - name: Install Python dependencies
         run: pip install json-schema-for-humans pyyaml
 
-      # ── Build ──────────────────────────────────────────────────
-      # Extract the tag name (e.g. "v1.2.0") from GITHUB_REF
-      - name: Extract version from tag
+      # ── Determine version ──────────────────────────────────────
+      # A "v*" tag (e.g. v8.4.0) builds that version; a push to "draft"
+      # builds the "draft" version.
+      - name: Determine version
         id: version
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=draft" >> "$GITHUB_OUTPUT"
+          fi
 
-      # Resolve all $ref → dist/resolved/*.json
-      # Bundle with internal $ref → dist/bundled/*.json
-      - name: Build resolved & bundled schemas
-        run: node scripts/build_schemas.js --version ${{ steps.version.outputs.tag }}
+      # ── Build ──────────────────────────────────────────────────
+      # Resolve all $ref → dist/<version>/schemas/*.json
+      - name: Build resolved schemas
+        run: node scripts/build_schemas.js --version ${{ steps.version.outputs.version }}
 
-      # Generate HTML documentation → docs/*.html
+      # Generate HTML documentation → dist/<version>/*.html
       - name: Build documentation
-        run: python scripts/build_docs.py
+        run: python scripts/build_docs.py --version ${{ steps.version.outputs.version }}
 
-      # ── Commit artifacts back ──────────────────────────────────
-      # Determine which branch the tag points to, then commit the
-      # generated dist/ and docs/ directories back to that branch.
-      - name: Commit generated artifacts
+      # ── Publish to the "releases" branch ──────────────────────
+      # The "releases" branch contains only one folder per version
+      # (e.g. 8.4.0/, 8.5.0/). Rebuilding a version overwrites its folder.
+      - name: Publish to releases branch
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Find the branch that contains this tag
-          BRANCH=$(git branch -r --contains "${{ steps.version.outputs.tag }}" | grep -v HEAD | head -n1 | sed 's|origin/||' | xargs)
-          git checkout "$BRANCH"
+          if git ls-remote --exit-code --heads origin releases > /dev/null; then
+            git fetch origin releases
+            git worktree add ../releases-branch origin/releases
+            cd ../releases-branch
+            git switch -c releases
+          else
+            git worktree add --detach ../releases-branch
+            cd ../releases-branch
+            git checkout --orphan releases
+            git rm -rf . > /dev/null
+          fi
 
-          git add dist/ docs/
+          rm -rf "$VERSION"
+          mkdir -p "$VERSION"
+          cp -r "$GITHUB_WORKSPACE/dist/$VERSION/." "$VERSION/"
+
+          # Regenerate the root index.html, linking to each version's
+          # index.html. "draft" is listed first, then released versions
+          # newest-first.
+          VERSIONS=()
+          for d in */; do
+            d="${d%/}"
+            [ "$d" = "draft" ] && continue
+            VERSIONS+=("$d")
+          done
+          SORTED=()
+          if [ "${#VERSIONS[@]}" -gt 0 ]; then
+            mapfile -t SORTED < <(printf '%s\n' "${VERSIONS[@]}" | sort -rV)
+          fi
+          ORDERED=()
+          [ -d draft ] && ORDERED+=("draft")
+          ORDERED+=("${SORTED[@]}")
+
+          {
+            echo "<!DOCTYPE html>"
+            echo "<html lang=\"en\">"
+            echo "<head>"
+            echo "  <meta charset=\"utf-8\">"
+            echo "  <title>InGrid Index &ndash; Releases</title>"
+            echo "  <style>"
+            echo "    body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; }"
+            echo "    ul { padding-left: 1.2rem; }"
+            echo "    a { color: #0366d6; text-decoration: none; }"
+            echo "    a:hover { text-decoration: underline; }"
+            echo "  </style>"
+            echo "</head>"
+            echo "<body>"
+            echo "  <h1>InGrid Index &ndash; Releases</h1>"
+            echo "  <ul>"
+            for v in "${ORDERED[@]}"; do
+              echo "    <li><a href=\"$v/index.html\">$v</a></li>"
+            done
+            echo "  </ul>"
+            echo "</body>"
+            echo "</html>"
+          } > index.html
+
+          git add "$VERSION" index.html
           git diff --cached --quiet && echo "No changes to commit" && exit 0
-          git commit -m "build: generate schemas and docs for ${{ steps.version.outputs.tag }}"
-          git push origin "$BRANCH"
-
-      # ── Update the tag to include artifacts ────────────────────
-      # Move the tag to the new commit so the tag itself contains
-      # the generated output. This makes the tag immutable for consumers.
-      - name: Update tag to include artifacts
-        run: |
-          git tag -f "${{ steps.version.outputs.tag }}"
-          git push origin "${{ steps.version.outputs.tag }}" --force
+          git commit -m "release: $VERSION"
+          git push origin releases

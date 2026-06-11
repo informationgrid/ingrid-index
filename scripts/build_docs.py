@@ -1,5 +1,6 @@
 """Generate HTML documentation for each YAML schema in src/."""
 
+import argparse
 from html import escape
 from pathlib import Path
 
@@ -7,8 +8,20 @@ import yaml
 from json_schema_for_humans.generate import generate_from_filename
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
 
-SRC_DIR = Path(__file__).resolve().parent.parent / "src"
-DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+
+
+def get_version():
+    """Version defaults to "draft", but is overridden by CI with the
+    release tag: --version 8.4.0"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", default="draft")
+    return parser.parse_args().version
+
+
+VERSION = get_version()
+DOCS_DIR = ROOT_DIR / "dist" / VERSION
 
 
 def discover_schemas():
@@ -27,8 +40,9 @@ def generate_index(entries):
     """Write docs/index.html listing all generated schema docs."""
     rows = "\n".join(
         f'        <tr><td><a href="{escape(filename)}">{escape(title)}</a></td>'
+        f'<td><a href="{escape(json_filename)}">{escape(json_filename)}</a></td>'
         f"<td><code>{escape(source)}</code></td></tr>"
-        for title, filename, source in entries
+        for title, filename, source, json_filename in entries
     )
     html = f"""\
 <!DOCTYPE html>
@@ -45,9 +59,9 @@ def generate_index(entries):
   </style>
 </head>
 <body>
-  <h1>InGrid Index &ndash; Schema Documentation</h1>
+  <h1>InGrid Index &ndash; Schema Documentation ({escape(VERSION)})</h1>
   <table>
-    <thead><tr><th>Schema</th><th>Source</th></tr></thead>
+    <thead><tr><th>Schema</th><th>JSON Schema</th><th>Source</th></tr></thead>
     <tbody>
 {rows}
     </tbody>
@@ -76,7 +90,8 @@ def build():
         out_file = DOCS_DIR / f"{schema_path.stem}.html"
         generate_from_filename(str(schema_path), str(out_file), config=config)
         print(f"  docs -> {out_file.relative_to(SRC_DIR.parent)}")
-        entries.append((read_title(schema_path), out_file.name, schema_path.name))
+        json_filename = f"schema/{schema_path.stem}.json"
+        entries.append((read_title(schema_path), out_file.name, schema_path.name, json_filename))
 
     generate_index(entries)
     print("Done.")
