@@ -61,7 +61,7 @@ def generate_index(entries):
 <body>
   <h1>InGrid Index &ndash; Schema Documentation ({escape(VERSION)})</h1>
   <table>
-    <thead><tr><th>Schema</th><th>JSON Schema</th><th>Source</th></tr></thead>
+    <thead><tr><th>Documentation</th><th>JSON Schema</th><th>Source</th></tr></thead>
     <tbody>
 {rows}
     </tbody>

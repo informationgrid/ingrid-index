@@ -1,13 +1,15 @@
 # Builds resolved JSON schemas and HTML documentation and publishes them to
 # the "releases" branch under a folder named after the version
-# (e.g. releases:8.4.0/schemas/*.json, releases:8.4.0/*.html).
+# (e.g. releases:8.4.0/schema/*.json, releases:8.4.0/*.html).
 #
-# Two triggers:
+# Three triggers:
 #   - Push to "draft" that touches src/ or scripts/: rebuilds the "draft"
 #     version, overwriting releases:draft/.
 #   - Push (or force-push) of a "v*" tag (e.g. v8.4.0): builds that specific
 #     version, overwriting releases:8.4.0/. Path filters don't apply to tag
 #     pushes, so this always runs.
+#   - Deletion of a "v*" tag (e.g. v8.4.0): removes that version's folder
+#     from the "releases" branch.
 #
 # Runs are serialized (concurrency group) so overlapping pushes don't race
 # when publishing to "releases".
@@ -22,6 +24,12 @@
 #   2. Force-move the existing tag to the tip of the support branch and
 #      push it. This re-triggers the workflow, which overwrites that
 #      version's folder on the "releases" branch.
+#
+# To remove a published version:
+#   1. Delete the "v<version>" tag (locally and on origin), e.g.:
+#      git tag -d v8.4.0 && git push origin :refs/tags/v8.4.0
+#   2. This triggers the "remove" job, which deletes the "8.4.0/" folder
+#      from the "releases" branch and regenerates the root index.html.
 
 name: Build Schemas & Docs
 
@@ -34,18 +42,20 @@ on:
       - "scripts/**"
     tags:
       - "v*" # e.g. v1.0.0, v8.4.0
+  delete:
 
 permissions:
   contents: write
 
 # Serialize runs so concurrent pushes (e.g. a "draft" push and a tag push)
-# don't race when pushing to the "releases" branch.
+# don't race when publishing to "releases".
 concurrency:
   group: releases-publish
   cancel-in-progress: false
 
 jobs:
   build:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
@@ -86,7 +96,7 @@ jobs:
           fi
 
       # ── Build ──────────────────────────────────────────────────
-      # Resolve all $ref → dist/<version>/schemas/*.json
+      # Resolve all $ref → dist/<version>/schema/*.json
       - name: Build resolved schemas
         run: node scripts/build_schemas.js --version ${{ steps.version.outputs.version }}
 
@@ -121,47 +131,56 @@ jobs:
           cp -r "$GITHUB_WORKSPACE/dist/$VERSION/." "$VERSION/"
 
           # Regenerate the root index.html, linking to each version's
-          # index.html. "draft" is listed first, then released versions
-          # newest-first.
-          VERSIONS=()
-          for d in */; do
-            d="${d%/}"
-            [ "$d" = "draft" ] && continue
-            VERSIONS+=("$d")
-          done
-          SORTED=()
-          if [ "${#VERSIONS[@]}" -gt 0 ]; then
-            mapfile -t SORTED < <(printf '%s\n' "${VERSIONS[@]}" | sort -rV)
-          fi
-          ORDERED=()
-          [ -d draft ] && ORDERED+=("draft")
-          ORDERED+=("${SORTED[@]}")
-
-          {
-            echo "<!DOCTYPE html>"
-            echo "<html lang=\"en\">"
-            echo "<head>"
-            echo "  <meta charset=\"utf-8\">"
-            echo "  <title>InGrid Index &ndash; Releases</title>"
-            echo "  <style>"
-            echo "    body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; }"
-            echo "    ul { padding-left: 1.2rem; }"
-            echo "    a { color: #0366d6; text-decoration: none; }"
-            echo "    a:hover { text-decoration: underline; }"
-            echo "  </style>"
-            echo "</head>"
-            echo "<body>"
-            echo "  <h1>InGrid Index &ndash; Releases</h1>"
-            echo "  <ul>"
-            for v in "${ORDERED[@]}"; do
-              echo "    <li><a href=\"$v/index.html\">$v</a></li>"
-            done
-            echo "  </ul>"
-            echo "</body>"
-            echo "</html>"
-          } > index.html
+          # index.html.
+          python "$GITHUB_WORKSPACE/scripts/build_releases_index.py" .
 
           git add "$VERSION" index.html
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "release: $VERSION"
+          git push origin releases
+
+  remove:
+    if: github.event_name == 'delete' && github.event.ref_type == 'tag' && startsWith(github.event.ref, 'v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # ── Remove the version from the "releases" branch ──────────
+      - name: Remove version from releases branch
+        env:
+          TAG: ${{ github.event.ref }}
+        run: |
+          VERSION="${TAG#v}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin releases
+          git worktree add ../releases-branch origin/releases
+          cd ../releases-branch
+          git switch -c releases
+
+          if [ ! -d "$VERSION" ]; then
+            echo "No '$VERSION' folder on releases branch, nothing to remove"
+            exit 0
+          fi
+
+          git rm -rf "$VERSION" > /dev/null
+
+          # Regenerate the root index.html, linking to each version's
+          # index.html.
+          python "$GITHUB_WORKSPACE/scripts/build_releases_index.py" .
+
+          git add index.html
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "release: remove $VERSION"
           git push origin releases

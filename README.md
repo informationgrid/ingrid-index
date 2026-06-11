@@ -74,6 +74,15 @@ manually. The build workflow only adds/updates `<version>/` folders and
    ```
 3. CI rebuilds and overwrites the `8.4.0/` folder on the `releases` branch.
 
+### Removing a published version
+
+1. Delete the `v<x.y.z>` tag locally and on `origin`:
+   ```bash
+   git tag -d v8.4.0
+   git push origin :refs/tags/v8.4.0
+   ```
+2. CI removes the `8.4.0/` folder from the `releases` branch and regenerates the root `index.html`.
+
 ## Local Development
 
 Typical development flow:
