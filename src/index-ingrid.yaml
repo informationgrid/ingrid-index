@@ -131,7 +131,7 @@ allOf:
                   $comment: "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?"
                   type: string
                   description: "Die URL zur externen Ressource oder Download."
-                uuidRef:
+                uuid_ref:
                   type: string
                   description: "Die UUID des internen Datensatzes."
                 type:
@@ -155,7 +155,7 @@ allOf:
                     const: true
               then:
                 required:
-                  - uuidRef
+                  - uuid_ref
               else:
                 required:
                   - url

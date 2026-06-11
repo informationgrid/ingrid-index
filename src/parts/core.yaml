@@ -196,6 +196,7 @@ $defs:
       - required: [ "bbox" ]
       - required: [ "wkt" ]
       - required: [ "toponym" ]
+      - required: [ "administrative" ]
   Metadata:
     type: object
     properties:
