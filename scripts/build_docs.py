@@ -49,7 +49,7 @@ def generate_index(entries):
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>InGrid Index &ndash; Schema Documentation</title>
+  <title>InGrid Index Documentation & Schemas</title>
   <style>
     body {{ font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; }}
     table {{ border-collapse: collapse; width: 100%; }}
