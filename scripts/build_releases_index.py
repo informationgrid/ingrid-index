@@ -32,7 +32,7 @@ def discover_versions(directory):
 
 def generate_index(directory, versions):
     items = "\n".join(
-        f'    <li><a href="index/{escape(v)}/index.html">{escape(v)}</a></li>' for v in versions
+        f'    <li><a href="/index/{escape(v)}/index.html">{escape(v)}</a></li>' for v in versions
     )
     html = f"""\
 <!DOCTYPE html>
