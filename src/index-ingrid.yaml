@@ -306,8 +306,8 @@ allOf:
                 pass:
                   type: string
                   enum:
-                    - conform
-                    - not-conform
+                    - conformant
+                    - not-conformant
                     - not-evaluated
                 specification:
                   type: object
