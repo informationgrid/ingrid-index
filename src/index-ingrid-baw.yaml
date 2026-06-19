@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/schemas/1.0.0/dcat.yaml
+title: Schema for InGrid Index 'InGrid-BAW'
+type: object
+allOf:
+  - $ref: ./index-ingrid.yaml
+  - type: object
+    title: InGrid-BAW
+    properties:
+
+      baw:
+        properties:
+          test:
+            type: string
+            description: "Dies ist ein Test"

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="Build HTML" type="PythonConfigurationType" factoryName="Python">
     <module name="ingrid-index" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />

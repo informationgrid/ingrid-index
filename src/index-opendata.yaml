@@ -1,0 +1,49 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/schemas/1.0.0/dcat.yaml
+title: Schema for InGrid Index 'OpenData'
+type: object
+allOf:
+  - $ref: ./parts/core.yaml
+  - type: object
+    title: OpenData
+    properties:
+      exports:
+        unevaluatedProperties: false
+        properties:
+          rdf:
+            type: string
+            description: Enthält das vollständige RDF-Dokument im XML-Format.
+      dcat:
+        type: object
+        properties:
+          landing_page:
+            type: string
+      legal_basis:
+        type: string
+      distributions:
+        properties:
+          format:
+            type: string
+          access_url:
+            type: string
+          modified:
+            type: string
+          title:
+            type: string
+          description:
+            type: string
+          license:
+            url:
+              type: string
+            name:
+              type: string
+            attribution_by_text:
+              type: string
+            languages:
+              type: array
+              items:
+                type: string
+          availability:
+            type: string
+      political_geocoding_level_uri:
+        type: string
