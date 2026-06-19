@@ -17,6 +17,13 @@
             "For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'"
           ]
         },
+        "$schema": {
+          "type": "string",
+          "description": "Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.",
+          "examples": [
+            "https://example.com/schemas/order/v2.1.0/schema.json"
+          ]
+        },
         "schema_version": {
           "type": "string",
           "description": "Die Version des Schemas des Indexes. \nDie Version richtet sich nach der Versionierung des InGrid Releases. \nSemantic Versioning soll verwendet werden.\nZusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1\n",
@@ -26,35 +33,25 @@
             "1.2.0-1"
           ]
         },
-        "type": {
-          "type": "string",
-          "deprecated": true,
-          "enum": [
-            "UMWELTNAVI",
-            "UMWELTNAVI_SUB_GEOMETRY"
-          ]
-        },
         "metadata": {
+          "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
           "type": "object",
           "properties": {
             "data_type": {
-              "type": "array",
-              "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des DatenMetadatensatzessatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern.\n",
-              "items": {
-                "type": "string"
-              },
+              "type": "string",
+              "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
               "examples": [
                 "UmweltNAVI Datensatz ['UMWELTNAVI']",
-                "Opendata Datensatz  ['DCAT-AP', 'DCAT-AP.DE']",
-                "Geometadatensatz ['GEOMETADATA']",
-                "LVR Datensatz ['LVR']"
-              ],
-              "enum": [
-                "DCAT-AP",
-                "DCAT-AP.DE",
-                "GEOMETADATA",
-                "LVR",
-                "UMWELTNAVI"
+                "InGrid Datensatz ['INGRID']",
+                "UVP Datensatz ['UVP']"
+              ]
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+              "examples": [
+                "InGridGeoDataset",
+                "InGridGeoService"
               ]
             },
             "created": {
@@ -81,13 +78,60 @@
                 "2026-04-22T12:00:00+01:00"
               ]
             },
+            "issued": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n"
+            },
             "partner": {
               "type": "string",
-              "description": "Der Partner der Datenquelle.\n"
+              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "examples": [
+                "bb",
+                "st"
+              ]
             },
             "provider": {
               "type": "string",
-              "description": "Der Anbieter der Datenquelle.\n"
+              "description": "Der Anbieter der Datenquelle.",
+              "examples": [
+                "ni_gll",
+                "bw_mj"
+              ]
+            },
+            "language": {
+              "title": "language",
+              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "datasource": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Die ID der Datenquelle."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Der Name der Datenquelle."
+                }
+              }
             }
           },
           "required": [
@@ -95,6 +139,10 @@
             "created",
             "modified"
           ]
+        },
+        "sort_uuid": {
+          "description": "Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.",
+          "type": "string"
         },
         "title": {
           "type": "string",
@@ -104,12 +152,327 @@
           "description": "Die Beschreibung des Datensatzes.\n",
           "type": "string"
         },
-        "spatial": {
+        "language": {
+          "type": "string",
+          "description": "Welches Format hat die Sprache, wo wird es verwendet."
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "role": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "communications": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "email",
+                        "phone",
+                        "fax",
+                        "website",
+                        "social",
+                        "other"
+                      ]
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "street": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "pocode": {
+                "type": "string"
+              },
+              "pobox": {
+                "type": "string"
+              },
+              "locality": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "administrative_area": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "spatials": {
+          "type": "array",
+          "description": "Dieser Bereich enthält Informationen über den Raumbezug.",
+          "items": {
+            "type": "object",
+            "title": "Spatial Core",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
+                "examples": [
+                  "<oid>-<geometrie-id> (für UMWELTNAVI)"
+                ]
+              },
+              "geometry": {
+                "type": "object",
+                "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "Point",
+                      "LineString",
+                      "Polygon",
+                      "MultiPoint",
+                      "MultiLineString",
+                      "MultiPolygon"
+                    ]
+                  },
+                  "coordinates": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "description": "Koordinaten des Geometrieelements",
+                    "examples": [
+                      "..."
+                    ]
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "title": "Bounding Box",
+                "description": "Umschließende BBOX der Geometrie",
+                "items": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "minItems": 4,
+                  "maxItems": 4
+                }
+              },
+              "wkt": {
+                "type": "string",
+                "title": "Well-known text",
+                "description": "Angabe eines Well-known text-Formats."
+              },
+              "toponym": {
+                "type": "array",
+                "title": "Toponym",
+                "items": {
+                  "type": "string",
+                  "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
+                  "examples": [
+                    "Frankfurt am Main",
+                    "Hamburg"
+                  ]
+                },
+                "minItems": 0
+              },
+              "administrative": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Land (z.B. ni, sh, rp)"
+                    },
+                    "minItems": 0
+                  },
+                  "regional_key": {
+                    "type": "string"
+                  }
+                },
+                "description": "Administrative Zuordnung"
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "bbox"
+                ]
+              },
+              {
+                "required": [
+                  "wkt"
+                ]
+              },
+              {
+                "required": [
+                  "toponym"
+                ]
+              },
+              {
+                "required": [
+                  "administrative"
+                ]
+              }
+            ]
+          },
+          "$comment": "Ehemaliges Indexfeld: layer"
+        },
+        "temporal": {
+          "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
+          "$comment": "Ehemaliges Indexfeld: object_date",
           "type": "object",
           "properties": {
+            "data_temporal": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Datum der Messreihe"
+                  },
+                  "date_range": {
+                    "type": "object",
+                    "title": "Zeitabschnitt",
+                    "description": "Zeitabschnitt der Messreihe",
+                    "properties": {
+                      "start": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Startdatum der Zeitangabe"
+                      },
+                      "end": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Enddatum der Zeitangabe"
+                      }
+                    }
+                  },
+                  "date_text": {
+                    "type": "string",
+                    "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                    "examples": [
+                      "Sommer 2010"
+                    ]
+                  },
+                  "date_type": {
+                    "type": "string",
+                    "description": "Typ der Zeitangabe",
+                    "enum": [
+                      "created",
+                      "last_updated",
+                      "first_published"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "required": [
+                      "date"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "date_range"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "date_text"
+                    ]
+                  }
+                ],
+                "required": [
+                  "date_type"
+                ]
+              }
+            }
+          }
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "item",
+            "properties": {
+              "term": {
+                "type": "string",
+                "description": "Name des Keywords"
+              },
+              "id": {
+                "type": "string",
+                "description": "Eindeutiger Identifier des Keywords bezüglich der Quelle oder auch  URL-freundliche Form des Keywords (Slug)",
+                "examples": [
+                  "wk000680"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "description": "Quelle des Keywords",
+                "examples": [
+                  "gemet",
+                  "umthes",
+                  "iso_topic"
+                ]
+              }
+            },
+            "required": [
+              "term",
+              "source"
+            ]
+          }
+        },
+        "fulltext": {
+          "type": "array",
+          "description": "Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.",
+          "$comment": "Früher content-Feld",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exports": {
+          "type": "object",
+          "description": "Hier werden die zusätzlichen Export-Formate gehalten, die mit dem Datensatz ausgeliefert werden. Die Export-Formate können z.B. CSV, JSON oder andere Formate sein."
+        }
+      },
+      "required": [
+        "id",
+        "$schema",
+        "metadata",
+        "title"
+      ],
+      "$defs": {
+        "SpatialItem": {
+          "title": "Spatial Core",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
+              "examples": [
+                "<oid>-<geometrie-id> (für UMWELTNAVI)"
+              ]
+            },
             "geometry": {
               "type": "object",
-              "description": "Wie in GeoJSON: https://de.wikipedia.org/wiki/GeoJSON",
+              "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
               "properties": {
                 "type": {
                   "type": "string",
@@ -142,47 +505,26 @@
                 }
               }
             },
-            "geometries": {
-              "type": "array",
-              "deprecated": true,
-              "items": {
-                "type": "string",
-                "description": "ergänzt nach Besprechung mit jm und aw",
-                "$comment": "Ehemaliges Indexfeld: location"
-              },
-              "minItems": 0
-            },
             "bbox": {
-              "type": "string",
-              "description": "Umschließende BBOX der Geometrie"
-            },
-            "centroid": {
-              "type": "string",
-              "description": "Schwerpunkt der Geometrie"
-            },
-            "inside_point": {
-              "type": "string",
-              "description": "Punkt innerhalb der Geometrie, der dem Schwerpunkt am nächsten liegt."
-            },
-            "geometry_points": {
-              "type": "string",
-              "description": "Geometrie als Punkte, wird für Distanz Berechnung verwendet (geo_distance Sortierung funktioniert nicht mit geo_shape)",
-              "$comment": "Ehemaliges Indexfeld: location_points"
-            },
-            "outline": {
               "type": "array",
+              "title": "Bounding Box",
+              "description": "Umschließende BBOX der Geometrie",
               "items": {
-                "type": "string",
-                "description": "Outline für die Darstellung, ggf. reduzierte Geometrie"
-              },
-              "minItems": 0
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "minItems": 4,
+                "maxItems": 4
+              }
             },
-            "title": {
+            "wkt": {
               "type": "string",
-              "description": "Für UMWELTNAVI <oid>-<geometrie-id>"
+              "title": "Well-known text",
+              "description": "Angabe eines Well-known text-Formats."
             },
             "toponym": {
               "type": "array",
+              "title": "Toponym",
               "items": {
                 "type": "string",
                 "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
@@ -204,172 +546,143 @@
                   },
                   "minItems": 0
                 },
-                "regional-key": {
+                "regional_key": {
                   "type": "string"
                 }
               },
               "description": "Administrative Zuordnung"
             }
           },
-          "$comment": "Ehemaliges Indexfeld: layer"
+          "anyOf": [
+            {
+              "required": [
+                "bbox"
+              ]
+            },
+            {
+              "required": [
+                "wkt"
+              ]
+            },
+            {
+              "required": [
+                "toponym"
+              ]
+            },
+            {
+              "required": [
+                "administrative"
+              ]
+            }
+          ]
         },
-        "issued": {
-          "type": "string"
-        },
-        "temporal": {
+        "Metadata": {
           "type": "object",
           "properties": {
-            "data-temporal": {
-              "type": "object",
+            "data_type": {
+              "type": "string",
+              "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
+              "examples": [
+                "UmweltNAVI Datensatz ['UMWELTNAVI']",
+                "InGrid Datensatz ['INGRID']",
+                "UVP Datensatz ['UVP']"
+              ]
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+              "examples": [
+                "InGridGeoDataset",
+                "InGridGeoService"
+              ]
+            },
+            "created": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "modified": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "issued": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n"
+            },
+            "partner": {
+              "type": "string",
+              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "examples": [
+                "bb",
+                "st"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "description": "Der Anbieter der Datenquelle.",
+              "examples": [
+                "ni_gll",
+                "bw_mj"
+              ]
+            },
+            "language": {
+              "title": "language",
+              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "additionalProperties": false,
               "properties": {
-                "date_range": {
-                  "type": "string"
-                },
-                "date_text": {
-                  "type": "string",
-                  "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
-                  "examples": [
-                    "Sommer 2010"
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
                   ]
                 },
-                "date_type": {
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "datasource": {
+              "properties": {
+                "id": {
                   "type": "string",
-                  "enum": [
-                    "created"
-                  ]
+                  "description": "Die ID der Datenquelle."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Der Name der Datenquelle."
                 }
-              },
-              "if": {
-                "not": {
-                  "required": [
-                    "date_range"
-                  ]
-                }
-              },
-              "then": {
-                "required": [
-                  "date_text"
-                ]
               }
             }
           },
-          "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
-          "$comment": "Ehemaliges Indexfeld: object_date"
-        },
-        "keywords": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "term": {
-                "type": "string",
-                "description": "Keyword "
-              },
-              "id": {
-                "type": "string",
-                "description": "Eindeutiger Identifier des Keywords bezüglich der Quelle oder auch  URL-freundliche Form des Keywords (Slug)",
-                "examples": [
-                  "wk000680 "
-                ]
-              },
-              "source": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "term"
-            ]
-          },
-          "minItems": 0
-        },
-        "fulltext": {
-          "type": "string",
-          "description": "Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden."
-        },
-        "content": {
-          "type": "array",
-          "deprecated": true,
-          "$comment": "Es sollte jetzt fulltext verwendet werden.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "sort_uuid": {
-          "type": "string"
-        },
-        "language": {
-          "type": "string"
-        },
-        "format": {
-          "type": "string"
-        },
-        "contacts": {
-          "type": "array",
-          "items": {
-            "properties": {
-              "role": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "communications": {
-                "type": "array",
-                "items": {
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "value": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "street": {
-                "type": "string"
-              },
-              "code": {
-                "type": "string"
-              },
-              "pocode": {
-                "type": "string"
-              },
-              "pobox": {
-                "type": "string"
-              },
-              "locality": {
-                "type": "string"
-              },
-              "country": {
-                "type": "string"
-              },
-              "administrative_area": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "collection": {
-          "type": "object",
-          "title": "collection",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          }
+          "required": [
+            "data_type",
+            "created",
+            "modified"
+          ]
         }
-      },
-      "required": [
-        "id",
-        "schema_version",
-        "metadata",
-        "title",
-        "fulltext"
-      ]
+      }
     },
     {
       "type": "object",

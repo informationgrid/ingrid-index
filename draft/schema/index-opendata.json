@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Schema for InGrid Index \"LVR\"",
-  "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-lvr.json",
+  "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-opendata.json",
+  "title": "Schema for InGrid Index 'OpenData'",
   "type": "object",
   "allOf": [
     {
@@ -686,184 +686,69 @@
     },
     {
       "type": "object",
-      "title": "LVR",
+      "title": "OpenData",
       "properties": {
-        "lvr": {
-          "type": "object",
+        "exports": {
+          "unevaluatedProperties": false,
           "properties": {
-            "relations": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string"
-                  },
-                  "score": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "media": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "url": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "thumbnail": {
-                    "type": "string",
-                    "description": "URL zu einem Thumbnail-Bild, falls vorhanden"
-                  },
-                  "dimensions": {
-                    "type": "object",
-                    "properties": {
-                      "width": {
-                        "type": "integer",
-                        "description": "Breite in Pixeln",
-                        "examples": [
-                          "1600"
-                        ],
-                        "enum": [
-                          ">= 1"
-                        ]
-                      },
-                      "height": {
-                        "type": "integer",
-                        "description": "Höhe in Pixeln",
-                        "examples": [
-                          "900"
-                        ],
-                        "enum": [
-                          ">= 1"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "width",
-                      "height"
-                    ],
-                    "description": "Dimensionen des Bildes, falls type = \"image\""
-                  }
-                }
-              }
-            },
-            "persons": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
-                    "examples": [
-                      "personal, corporate"
-                    ]
-                  },
-                  "role": {
-                    "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
-                    "examples": [
-                      "Redactor"
-                    ]
-                  },
-                  "name": {
-                    "type": "object",
-                    "properties": {
-                      "first": {
-                        "type": "string",
-                        "description": "In den Daten können mehrere Vornamen auftreten; Vorschlag: .join(' ')",
-                        "examples": [
-                          "Ludger J."
-                        ]
-                      },
-                      "last": {
-                        "type": "string",
-                        "description": "In den Daten können mehrere Nachnamen auftreten; Vorschlag: .join(' ')",
-                        "examples": [
-                          "Sutthoff"
-                        ]
-                      },
-                      "display": {
-                        "type": "string",
-                        "examples": [
-                          "Sutthoff, Ludger J."
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "licenses": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "examples": [
-                      "dl-by-de/2.0"
-                    ]
-                  },
-                  "url": {
-                    "type": "string",
-                    "examples": [
-                      "https://www.govdata.de/dl-de/by-2-0"
-                    ]
-                  },
-                  "holder": {
-                    "type": "string",
-                    "description": "Rechteinhaber",
-                    "examples": [
-                      "LVR-Institut für Landeskunde und Regionalgeschichte"
-                    ]
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            },
-            "genres": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "description": "Normalisieren; z.B. buch, ort, rede, artefakt, ...",
-                "examples": [
-                  "book"
-                ]
-              }
-            },
-            "vector": {
-              "type": "object"
-            },
-            "original_id": {
-              "type": "string"
-            },
-            "source": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "display_url": {
-                  "type": "string"
-                }
-              }
+            "rdf": {
+              "type": "string",
+              "description": "Enthält das vollständige RDF-Dokument im XML-Format."
             }
           }
+        },
+        "dcat": {
+          "type": "object",
+          "properties": {
+            "landing_page": {
+              "type": "string"
+            }
+          }
+        },
+        "legal_basis": {
+          "type": "string"
+        },
+        "distributions": {
+          "properties": {
+            "format": {
+              "type": "string"
+            },
+            "access_url": {
+              "type": "string"
+            },
+            "modified": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "license": {
+              "url": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "attribution_by_text": {
+                "type": "string"
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "availability": {
+              "type": "string"
+            }
+          }
+        },
+        "political_geocoding_level_uri": {
+          "type": "string"
         }
       }
     }
