@@ -5,7 +5,10 @@ type: object
 unevaluatedProperties: false
 allOf:
   - $ref: ./parts/core.yaml
-  - type: object
+  - $ref: "#/$defs/InGrid"
+$defs:
+  InGrid:
+    type: object
     title: InGrid
     properties:
       metadata:
@@ -20,6 +23,21 @@ allOf:
               data_type:
                 type: string
                 const: 'INGRID'
+              document_type:
+                type: string
+                description: "Beschreibt den Typ des Metadatensatzes."
+                enum:
+                  - InGridGeoDataset
+                  - InGridDataCollection
+                  - InGridGeoService
+                  - InGridInformationSystem
+                  - InGridPublication
+                  - InGridProject
+                  - InGridSpecialisedTask
+              character_set:
+                description: "Aktuell nicht im Portal angezeigt?"
+                deprecated: true
+                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
               provider:
                 type: string
                 description: Der Anbieter der Datenquelle als Kürzel. Dieser wird aus der Codeliste 111 genommen.
@@ -100,24 +118,7 @@ allOf:
           #   - ISO-XML - Link (im Portal generiert - CSW-Schnittstelle)
           #   - Ansprechpartner (Metadatum)
           #   - Quelle
-          metadata:
-            description: "Informationen zum Metadatensatz"
-            properties:
-              document_type:
-                type: string
-                description: "Beschreibt den Typ des Metadatensatzes."
-                enum:
-                  - InGridGeoDataset
-                  - InGridDataCollection
-                  - InGridGeoService
-                  - InGridInformationSystem
-                  - InGridPublication
-                  - InGridProject
-                  - InGridSpecialisedTask
-              character_set:
-                description: "Aktuell nicht im Portal angezeigt?"
-                deprecated: true
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+
 
           # - downloads (references)
           # - vorschaubilder (references)

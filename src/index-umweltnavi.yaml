@@ -3,8 +3,8 @@ title: Schema for InGrid Index "Umweltnavi"
 type: object
 allOf:
   - $ref: ./parts/core.yaml
-  - $ref: ./index-ingrid.yaml#allOf/1
-    title: InGrid Schema
+  - $ref: ./index-ingrid.yaml#/$defs/InGrid
+    title: InGrid
   - type: object
     title: UmweltNavi
     properties:
@@ -16,6 +16,11 @@ allOf:
             enum:
               - object
               - map
+          datasource:
+            $ref: "./parts/core.yaml#/$defs/Metadata/properties/datasource"
+            description: Beschreibt Datenkatalog (Herkunft)
+            examples:
+              - NLWKN_DSK
         required:
           - document_type
           - datasource
@@ -65,8 +70,7 @@ allOf:
               BIPU Index Modell
               In UMWELTNAVI immer 0; in UMWELTNAVI_SUB_GEOMETRY immer > 0
               Wenn > 0 dann wird nur das Feld "geometrie" verwendet.
-            enum:
-            - In UMWELTNAVI immer 0; in UMWELTNAVI_SUB_GEOMETRY immer > 0
+            minimum: 0
             $comment: 'Ehemaliges Indexfeld: doc_index'
           category:
             type: object
@@ -87,11 +91,6 @@ allOf:
             type: number
             description: Level of Detail für das Einblenden von Objekten, wenn weiter raus
             $comment: 'Ehemaliges Indexfeld: lod_sort_weight'
-          source:
-            type: string
-            description: Beschreibt Datenkatalog (Herkunft)
-            examples:
-            - NLWKN_DSK
           identifier:
             type: string
             description: 'ID des Objektes innerhalb des Datenkataloges, Teil der OID, Nicht für "Status-Layer"'
@@ -203,7 +202,6 @@ allOf:
                       type:
                         type: string
                         enum:
-                          - image
                           - text
                           - link
                       url:
@@ -376,11 +374,6 @@ allOf:
                 import_ref:
                   type: number
                   description: entkält Datenbank ID der Statistik
-                importer_id:
-                  type: string
-                  description: Welcher Import (DAG, Importer Instanz, iPlug)
-                  examples:
-                  - csv
               required:
               - oid
               - name
@@ -390,8 +383,7 @@ allOf:
               - values
               - import_date
               - import_ref
-              - importer_id
-              description: Statistiken, die einem Objekt zugeordnet sind.
+              description: Statistiken, die einem Objekt zugeordnet sind. Z.B. Einwohnerzahlen, Flächenversiegelung über mehrere Jahre
               $comment: 'Ehemaliges Indexfeld: properties.statistics'
             minItems: 0
           collections:
@@ -494,19 +486,13 @@ allOf:
                 import_ref:
                   type: number
                   description: entkält Datenbank ID der collection
-                importer_id:
-                  type: string
-                  description: Welcher Import (DAG, Importer Instanz, iPlug)
-                  examples:
-                  - observation_org
               required:
               - oid
               - name
               - category
               - import_date
               - import_ref
-              - importer_id
-              description: z.B. Arten eines Naturschutzgebietes
+              description: z.B. Beobachtete Arten in einem Naturschutzgebiet
               $comment: 'Ehemaliges Indexfeld: properties.collections'
             minItems: 0
         allOf:
@@ -536,8 +522,8 @@ allOf:
         required:
         - oid
         - part
-        - type
         - category
         - import_date
         - import_ref
-        - importer_id
+    required:
+      - metadata
