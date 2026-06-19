@@ -7,6 +7,12 @@ allOf:
   - type: object
     title: OpenData
     properties:
+      exports:
+        unevaluatedProperties: false
+        properties:
+          rdf:
+            type: string
+            description: Enthält das vollständige RDF-Dokument im XML-Format.
       dcat:
         type: object
         properties:
@@ -41,6 +47,3 @@ allOf:
             type: string
       political_geocoding_level_uri:
         type: string
-      rdf:
-        type: string
-        description: Enthält das vollständige RDF-Dokument im XML-Format.

@@ -20,6 +20,11 @@ allOf:
               data_type:
                 type: string
                 const: 'INGRID'
+              provider:
+                type: string
+                description: Der Anbieter der Datenquelle als Kürzel. Dieser wird aus der Codeliste 111 genommen.
+                examples:
+                  - ni_gll
             required:
               - data_type
 
@@ -98,7 +103,7 @@ allOf:
           metadata:
             description: "Informationen zum Metadatensatz"
             properties:
-              type:
+              document_type:
                 type: string
                 description: "Beschreibt den Typ des Metadatensatzes."
                 enum:

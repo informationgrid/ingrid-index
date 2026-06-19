@@ -1,14 +1,27 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://example.com/schemas/1.0.0/umweltnavi.yaml
+version: 1.0.0
 title: Schema for InGrid Index "Umweltnavi"
 type: object
 allOf:
   - $ref: ./parts/core.yaml
-  - $ref: ./parts/shared-types.yaml#/$defs/metadata
-  - $ref: ./parts/shared-types.yaml#/$defs/website
+  - $ref: ./index-ingrid.yaml#allOf/1
+    title: InGrid Schema
   - type: object
     title: UmweltNavi
     properties:
+      metadata:
+        properties:
+          document_type:
+            description: Definiert den Statuslayer des Dokuments
+            type: string
+            enum:
+              - object
+              - map
+        required:
+          - document_type
+          - datasource
+          - provider
       spatials:
         type: array
         items:
@@ -57,12 +70,6 @@ allOf:
             enum:
             - In UMWELTNAVI immer 0; in UMWELTNAVI_SUB_GEOMETRY immer > 0
             $comment: 'Ehemaliges Indexfeld: doc_index'
-          type:
-            type: string
-            description: 'Statuslayer: "map"'
-            enum:
-            - object
-            - map
           category:
             type: object
             properties:
@@ -82,15 +89,6 @@ allOf:
             type: number
             description: Level of Detail für das Einblenden von Objekten, wenn weiter raus
             $comment: 'Ehemaliges Indexfeld: lod_sort_weight'
-          geometry_type:
-            type: string
-            description: Wird pro Datenquelle gesetzt, gilt für alle Daten einer Datenquelle.
-              Wird für Outlineberechnung benötigt (PostGIS SQL Queries). z.B. Fluss als Linie,
-              LSG als Fläche
-            enum:
-            - polygon
-            - line
-            - point
           source:
             type: string
             description: Beschreibt Datenkatalog (Herkunft)
@@ -178,14 +176,6 @@ allOf:
                 type: string
             required:
             - name
-          provider:
-            type: object
-            properties:
-              name:
-                type: string
-            required:
-            - name
-            description: Normalisierter Anbieter zur Bildung von Facetten
           contact:
             type: string
             description: Adresse des Objekts
@@ -267,15 +257,17 @@ allOf:
             $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
             description: Datum des Imports in die Datenbank
           import_ref:
-            type: string
+            type: object
             description: 'Enthält Datenbank ID des Objekts (Attribut "original") und ggf. des überschreibenden Objekts (Attribut: "override")'
+            properties:
+              original:
+                type: integer
+                description: Datenbank ID des Objekts
+              override:
+                type: integer
+                description: Datenbank ID des überschreibenden Objekts
             examples:
-            - '{ "original": 27900, "override": 1 }'
-          importer_id:
-            type: string
-            description: Welcher Import (DAG, Importer Instanz, iPlug)
-            examples:
-            - data_catalog_import_db
+            - { "original": 27900, "override": 1 }
           target_platform:
             type: string
             description: Target des Datesatzes (App oder Portal)
@@ -522,8 +514,10 @@ allOf:
         allOf:
           - if:
               properties:
-                type:
-                  const: object
+                metadata:
+                  properties:
+                    document_type:
+                      const: object
               required:
                 - type
             then:
@@ -531,8 +525,10 @@ allOf:
                 - identifier
           - if:
               properties:
-                type:
-                  const: map
+                metadata:
+                  properties:
+                    document_type:
+                      const: map
               required:
                 - type
             then:
@@ -544,8 +540,6 @@ allOf:
         - part
         - type
         - category
-        - source
-        - provider
         - import_date
         - import_ref
         - importer_id

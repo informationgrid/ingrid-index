@@ -9,6 +9,11 @@ properties:
     examples:
     - Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'
     - For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'
+  $schema:
+    type: string
+    description: Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.
+    examples:
+      - https://example.com/schemas/order/v2.1.0/schema.json
   schema_version:
     type: string
     description: | 
@@ -24,7 +29,7 @@ properties:
     description: Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.
     $ref: "#/$defs/Metadata"
   sort_uuid:
-    description: Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen.
+    description: Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.
     type: string
   title:
     type: string
@@ -117,7 +122,7 @@ properties:
       werden. Die Export-Formate können z.B. CSV, JSON oder andere Formate sein.
 required:
 - id
-- schema_version
+- $schema
 - metadata
 - title
 $defs:
@@ -208,6 +213,12 @@ $defs:
           - UmweltNAVI Datensatz ['UMWELTNAVI']
           - InGrid Datensatz ['INGRID']
           - UVP Datensatz ['UVP']
+      document_type:
+        type: string
+        description: Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.
+        examples:
+          - InGridGeoDataset
+          - InGridGeoService
       created:
         type: [ "string", "null" ]
         format: date-time
@@ -238,8 +249,7 @@ $defs:
           - st
       provider:
         type: string
-        description: |
-          Der Anbieter der Datenquelle als Kürzel. Siehe auch Codeliste 111.
+        description: Der Anbieter der Datenquelle.
         examples:
           - ni_gll
           - bw_mj
