@@ -51,10 +51,9 @@ $defs:
       - required: [ "date" ]
       - required: [ "date_range" ]
       - required: [ "date_text" ]
-    required:
-      - date_type
   UmweltNaviSourceAttributes:
     type: object
+    title: Zusätzliche Informationen
     properties:
       temporal:
         $ref: "#/$defs/TypedPeriodOfTime"
@@ -89,10 +88,11 @@ $defs:
           - name
     description: Wird verwendet, um die Herkunft eines Inhalts zu beschreiben
   UmweltNaviImage:
-    $allOf:
+    allOf:
       - type: object
+        title: Basisinformationen
         required:
-          - type
+          - url
         description: Liste der Inhalte
         properties:
           url:
