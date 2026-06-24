@@ -1,12 +1,16 @@
 """Generate HTML documentation for each YAML schema in src/."""
 
 import argparse
+import sys
 from html import escape
 from pathlib import Path
 
 import yaml
 from json_schema_for_humans.generate import generate_from_filename
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
+
+sys.path.insert(0, str(Path(__file__).parent))
+from html_common import render_page
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT_DIR / "src"
@@ -54,31 +58,17 @@ def generate_index(entries):
         f"<td><code>{escape(source)}</code></td></tr>"
         for title, filename, source, json_filename in entries
     )
-    html = f"""\
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>InGrid Index Documentation & Schemas</title>
-  <style>
-    body {{ font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; }}
-    table {{ border-collapse: collapse; width: 100%; }}
-    th, td {{ text-align: left; padding: .5rem .75rem; border-bottom: 1px solid #ddd; }}
-    a {{ color: #0366d6; text-decoration: none; }}
-    a:hover {{ text-decoration: underline; }}
-  </style>
-</head>
-<body>
-  <h1>InGrid Index &ndash; Schema Documentation ({escape(VERSION)})</h1>
-  <table>
-    <thead><tr><th>Documentation</th><th>JSON Schema</th><th>Source</th></tr></thead>
-    <tbody>
-{rows}
-    </tbody>
-  </table>
-</body>
-</html>
-"""
+    table = (
+        f"<table>\n"
+        f"    <thead><tr><th>Documentation</th><th>JSON Schema</th><th>Source</th></tr></thead>\n"
+        f"    <tbody>\n{rows}\n    </tbody>\n  </table>"
+    )
+    html = render_page(
+        title=f"InGrid Index {escape(VERSION)}",
+        h1=f"InGrid Index {escape(VERSION)}",
+        h2="Schemas",
+        body_content=table,
+    )
     index_path = DOCS_DIR / "index.html"
     index_path.write_text(html, encoding="utf-8")
     print(f"  index -> {index_path.relative_to(SRC_DIR.parent)}")

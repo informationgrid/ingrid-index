@@ -5,8 +5,12 @@ index.html. "draft" is listed first, then released versions newest-first.
 """
 
 import argparse
+import sys
 from html import escape
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from html_common import render_page
 
 
 def version_key(name):
@@ -34,27 +38,12 @@ def generate_index(directory, versions):
     items = "\n".join(
         f'    <li><a href="/index/{escape(v)}/index.html">{escape(v)}</a></li>' for v in versions
     )
-    html = f"""\
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>InGrid Index &ndash; Releases</title>
-  <style>
-    body {{ font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; }}
-    ul {{ padding-left: 1.2rem; }}
-    a {{ color: #0366d6; text-decoration: none; }}
-    a:hover {{ text-decoration: underline; }}
-  </style>
-</head>
-<body>
-  <h1>InGrid Index &ndash; Releases</h1>
-  <ul>
-{items}
-  </ul>
-</body>
-</html>
-"""
+    html = render_page(
+        title="InGrid Index",
+        h1="InGrid Index",
+        h2="Versions",
+        body_content=f"<ul>\n{items}\n  </ul>",
+    )
     index_path = directory / "index.html"
     index_path.write_text(html, encoding="utf-8")
     print(f"  index -> {index_path}")
@@ -62,7 +51,7 @@ def generate_index(directory, versions):
 
 def build():
     parser = argparse.ArgumentParser()
-    parser.add_argument("directory", nargs="?", default=".")
+    parser.add_argument("directory", nargs="?", default="dist")
     directory = Path(parser.parse_args().directory)
 
     versions = discover_versions(directory)
