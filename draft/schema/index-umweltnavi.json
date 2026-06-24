@@ -11,7 +11,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "The ID of the Dataset. The ID **must** be unique in the index.\n",
+          "description": "Die ID des Datensatzes. Die ID **muss** eindeutig im Index sein.",
           "examples": [
             "Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'",
             "For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'"
@@ -88,7 +88,7 @@
             },
             "partner": {
               "type": "string",
-              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
               "examples": [
                 "bb",
                 "st"
@@ -104,7 +104,7 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "description": "Enthält die Sprache des Metadatensatzes.",
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -398,9 +398,6 @@
                       "date_text"
                     ]
                   }
-                ],
-                "required": [
-                  "date_type"
                 ]
               }
             }
@@ -437,6 +434,79 @@
               "term",
               "source"
             ]
+          }
+        },
+        "references": {
+          "type": "array",
+          "description": "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.",
+          "items": {
+            "type": "object",
+            "title": "item",
+            "if": {
+              "properties": {
+                "internal": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "uuid_ref"
+              ]
+            },
+            "else": {
+              "required": [
+                "url"
+              ]
+            },
+            "properties": {
+              "internal": {
+                "type": "boolean",
+                "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
+              },
+              "url": {
+                "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
+                "type": "string",
+                "description": "Die URL zur externen Ressource oder Download."
+              },
+              "uuid_ref": {
+                "type": "string",
+                "description": "Die UUID des internen Datensatzes."
+              },
+              "type": {
+                "type": "object",
+                "title": "type",
+                "description": "Gibt den Typ der externen Ressource oder Download an.",
+                "examples": [
+                  "3600 - Gekoppelte Daten",
+                  "5304 - Bestellung",
+                  "3535 - Schlüsselkatalog"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "key": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "title": {
+                "type": "string",
+                "description": "Ein Titel der externen Ressource oder Download."
+              },
+              "explanation": {
+                "type": "string",
+                "description": "Eine Beschreibung der externen Ressource oder Download."
+              }
+            }
           }
         },
         "fulltext": {
@@ -630,7 +700,7 @@
             },
             "partner": {
               "type": "string",
-              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
               "examples": [
                 "bb",
                 "st"
@@ -646,7 +716,7 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "description": "Enthält die Sprache des Metadatensatzes.",
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -681,6 +751,57 @@
             "created",
             "modified"
           ]
+        },
+        "ReferenceItem": {
+          "type": "object",
+          "properties": {
+            "internal": {
+              "type": "boolean",
+              "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
+            },
+            "url": {
+              "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
+              "type": "string",
+              "description": "Die URL zur externen Ressource oder Download."
+            },
+            "uuid_ref": {
+              "type": "string",
+              "description": "Die UUID des internen Datensatzes."
+            },
+            "type": {
+              "type": "object",
+              "title": "type",
+              "description": "Gibt den Typ der externen Ressource oder Download an.",
+              "examples": [
+                "3600 - Gekoppelte Daten",
+                "5304 - Bestellung",
+                "3535 - Schlüsselkatalog"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "title": {
+              "type": "string",
+              "description": "Ein Titel der externen Ressource oder Download."
+            },
+            "explanation": {
+              "type": "string",
+              "description": "Eine Beschreibung der externen Ressource oder Download."
+            }
+          }
         }
       }
     },
@@ -747,7 +868,7 @@
                 },
                 "partner": {
                   "type": "string",
-                  "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+                  "description": "Der Partner der Datenquelle als Kürzel.\n",
                   "examples": [
                     "bb",
                     "st"
@@ -763,7 +884,7 @@
                 },
                 "language": {
                   "title": "language",
-                  "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+                  "description": "Enthält die Sprache des Metadatensatzes.",
                   "additionalProperties": false,
                   "properties": {
                     "key": {
@@ -820,24 +941,13 @@
                     "InGridSpecialisedTask"
                   ]
                 },
-                "character_set": {
-                  "description": "Aktuell nicht im Portal angezeigt?",
-                  "deprecated": true,
-                  "additionalProperties": false,
-                  "properties": {
-                    "key": {
-                      "type": [
-                        "string",
-                        "null"
-                      ]
-                    },
-                    "value": {
-                      "type": [
-                        "string",
-                        "null"
-                      ]
-                    }
-                  }
+                "language": {
+                  "type": "string",
+                  "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet."
+                },
+                "partner": {
+                  "type": "string",
+                  "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110."
                 },
                 "provider": {
                   "type": "string",
@@ -921,9 +1031,6 @@
                           "date_text"
                         ]
                       }
-                    ],
-                    "required": [
-                      "date_type"
                     ]
                   }
                 }
@@ -1003,79 +1110,6 @@
             "alternate_title": {
               "type": "string",
               "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes."
-            },
-            "references": {
-              "type": "array",
-              "description": "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.",
-              "items": {
-                "type": "object",
-                "title": "item",
-                "properties": {
-                  "internal": {
-                    "type": "boolean",
-                    "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
-                  },
-                  "url": {
-                    "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
-                    "type": "string",
-                    "description": "Die URL zur externen Ressource oder Download."
-                  },
-                  "uuid_ref": {
-                    "type": "string",
-                    "description": "Die UUID des internen Datensatzes."
-                  },
-                  "type": {
-                    "type": "object",
-                    "title": "type",
-                    "description": "Gibt den Typ der externen Ressource oder Download an. Es wird die Codeliste 2000 verwendet. Achtung: Vorschaugrafik nicht dabei als Typ. Zusatztyp?",
-                    "examples": [
-                      "3600 - Gekoppelte Daten",
-                      "5304 - Bestellung",
-                      "3535 - Schlüsselkatalog"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "value": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
-                  },
-                  "title": {
-                    "type": "string",
-                    "description": "Ein Titel der externen Ressource oder Download."
-                  },
-                  "explanation": {
-                    "type": "string",
-                    "description": "Eine Beschreibung der externen Ressource oder Download."
-                  }
-                },
-                "if": {
-                  "properties": {
-                    "internal": {
-                      "const": true
-                    }
-                  }
-                },
-                "then": {
-                  "required": [
-                    "uuid_ref"
-                  ]
-                },
-                "else": {
-                  "required": [
-                    "url"
-                  ]
-                }
-              }
             },
             "licenses": {
               "type": "array",
@@ -1385,6 +1419,25 @@
                   }
                 }
               }
+            },
+            "character_set": {
+              "type": "object",
+              "description": "Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz.",
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
             }
           }
         }
@@ -1585,7 +1638,7 @@
           "properties": {
             "oid": {
               "type": "string",
-              "description": "Objekt ID (eindeutig über alle Datenkataloge). Setzt sich aus  \"source\" und \"identifier\" (bzw. \"source\" und \"origin\" und \"classification\") zusammen und wird für Eigenschaft \"id\" verwendet.",
+              "description": "Objekt ID (eindeutig über alle Datenkataloge). Setzt sich aus  \"source\" und \"source_id\" (bzw. \"source\" und \"origin\" und \"classification\") zusammen und wird für Eigenschaft \"id\" verwendet.",
               "examples": [
                 "nlwkn-dsk-4922-21000"
               ]
@@ -1623,7 +1676,7 @@
               "description": "Level of Detail für das Einblenden von Objekten, wenn weiter raus",
               "$comment": "Ehemaliges Indexfeld: lod_sort_weight"
             },
-            "identifier": {
+            "source_id": {
               "type": "string",
               "description": "ID des Objektes innerhalb des Datenkataloges, Teil der OID, Nicht für \"Status-Layer\"",
               "$comment": "Ehemaliges Indexfeld: code"
@@ -1705,12 +1758,14 @@
             "images": {
               "type": "array",
               "items": {
+                "type": "object",
                 "description": "Liste der Bilder zum Objekt (extrahiert aus content_items)",
-                "$allOf": [
+                "allOf": [
                   {
                     "type": "object",
+                    "title": "Basisinformationen",
                     "required": [
-                      "type"
+                      "url"
                     ],
                     "description": "Liste der Inhalte",
                     "properties": {
@@ -1728,6 +1783,7 @@
                   {
                     "description": "Angaben zur Herkunft des Bildes",
                     "type": "object",
+                    "title": "Zusätzliche Informationen",
                     "properties": {
                       "temporal": {
                         "type": "object",
@@ -1788,9 +1844,6 @@
                             ]
                           }
                         ],
-                        "required": [
-                          "date_type"
-                        ],
                         "description": "z.B. Aufnahmedatum eines Bildes",
                         "$comment": "Ehemaliges Indexfeld: object_date"
                       },
@@ -1842,8 +1895,7 @@
                 "required": [
                   "url"
                 ]
-              },
-              "minItems": 0
+              }
             },
             "license": {
               "type": "object",
@@ -1901,6 +1953,7 @@
                   "allOf": [
                     {
                       "type": "object",
+                      "title": "Basisinformationen",
                       "required": [
                         "type"
                       ],
@@ -1939,6 +1992,7 @@
                     },
                     {
                       "type": "object",
+                      "title": "Zusätzliche Informationen",
                       "properties": {
                         "temporal": {
                           "type": "object",
@@ -1998,9 +2052,6 @@
                                 "date_text"
                               ]
                             }
-                          ],
-                          "required": [
-                            "date_type"
                           ],
                           "description": "z.B. Aufnahmedatum eines Bildes",
                           "$comment": "Ehemaliges Indexfeld: object_date"
@@ -2149,9 +2200,6 @@
                     "date_text"
                   ]
                 }
-              ],
-              "required": [
-                "date_type"
               ],
               "description": "Datum des Imports in die Datenbank"
             },
@@ -2375,9 +2423,6 @@
                         ]
                       }
                     ],
-                    "required": [
-                      "date_type"
-                    ],
                     "description": "Datum der Erhebung der Statistik",
                     "$comment": "Ehemaliges Indexfeld: object_date"
                   },
@@ -2540,18 +2585,16 @@
                                     ]
                                   }
                                 ],
-                                "required": [
-                                  "date_type"
-                                ],
                                 "description": "Fund, Beobachtung in Observation.org",
                                 "$comment": "Ehemaliges Indexfeld: object_date"
                               },
                               "image": {
-                                "$allOf": [
+                                "allOf": [
                                   {
                                     "type": "object",
+                                    "title": "Basisinformationen",
                                     "required": [
-                                      "type"
+                                      "url"
                                     ],
                                     "description": "Liste der Inhalte",
                                     "properties": {
@@ -2569,6 +2612,7 @@
                                   {
                                     "description": "Angaben zur Herkunft des Bildes",
                                     "type": "object",
+                                    "title": "Zusätzliche Informationen",
                                     "properties": {
                                       "temporal": {
                                         "type": "object",
@@ -2628,9 +2672,6 @@
                                               "date_text"
                                             ]
                                           }
-                                        ],
-                                        "required": [
-                                          "date_type"
                                         ],
                                         "description": "z.B. Aufnahmedatum eines Bildes",
                                         "$comment": "Ehemaliges Indexfeld: object_date"
@@ -2752,6 +2793,92 @@
                 "$comment": "Ehemaliges Indexfeld: properties.collections"
               },
               "minItems": 0
+            },
+            "sensor": {
+              "type": "object",
+              "properties": {
+                "measurements": {
+                  "type": "array",
+                  "title": "Messwertequellen",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Anzeigename der Messreihe",
+                        "examples": [
+                          "Luftqualitätsindex"
+                        ]
+                      },
+                      "unit": {
+                        "type": "string",
+                        "description": "Einheit der Messreihe",
+                        "examples": [
+                          "Index [1-6]"
+                        ]
+                      },
+                      "property": {
+                        "type": "string",
+                        "description": "technischer Name der Messreihe, wird in API zu einem Datastream im STA server aufgelöst (entspricht datasources.id)",
+                        "examples": [
+                          "LQI"
+                        ]
+                      },
+                      "resolutions": {
+                        "type": "object",
+                        "description": "Zeitliche Auflösungen der Messreihe zusammen mit Messwerttyp. Hier werden die unterschiedlichen Messwerttypen als dynamische Properties eingetragen. Jeder Messwerttyp hat dabei eine Liste von Auflösungen.",
+                        "examples": [
+                          {
+                            "P1M": [
+                              "MEAN",
+                              "MIN",
+                              "MAX"
+                            ]
+                          }
+                        ]
+                      },
+                      "interface": {
+                        "type": "string",
+                        "description": "Name des Interfaces über das die Messreihe abgerufen wird",
+                        "examples": [
+                          "sta"
+                        ]
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "Sensor-URL (kann zukünftig entfallen, wenn z.B. LQI als Datastream vorliegt und nicht berechnet werden muss)"
+                      },
+                      "datasource": {
+                        "type": "array",
+                        "title": "Datenquelle",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "title": "Datastream-URL"
+                            },
+                            "type": {
+                              "type": "string",
+                              "title": "Messwerttyp",
+                              "examples": [
+                                "MEAN"
+                              ]
+                            },
+                            "resolution": {
+                              "type": "string",
+                              "title": "Messwerttyp",
+                              "examples": [
+                                "P1M"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "allOf": [
@@ -2772,7 +2899,7 @@
               },
               "then": {
                 "required": [
-                  "identifier"
+                  "source_id"
                 ]
               }
             },

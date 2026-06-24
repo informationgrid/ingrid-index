@@ -11,7 +11,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "The ID of the Dataset. The ID **must** be unique in the index.\n",
+          "description": "Die ID des Datensatzes. Die ID **muss** eindeutig im Index sein.",
           "examples": [
             "Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'",
             "For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'"
@@ -88,7 +88,7 @@
             },
             "partner": {
               "type": "string",
-              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
               "examples": [
                 "bb",
                 "st"
@@ -104,7 +104,7 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "description": "Enthält die Sprache des Metadatensatzes.",
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -398,9 +398,6 @@
                       "date_text"
                     ]
                   }
-                ],
-                "required": [
-                  "date_type"
                 ]
               }
             }
@@ -437,6 +434,79 @@
               "term",
               "source"
             ]
+          }
+        },
+        "references": {
+          "type": "array",
+          "description": "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.",
+          "items": {
+            "type": "object",
+            "title": "item",
+            "if": {
+              "properties": {
+                "internal": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "uuid_ref"
+              ]
+            },
+            "else": {
+              "required": [
+                "url"
+              ]
+            },
+            "properties": {
+              "internal": {
+                "type": "boolean",
+                "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
+              },
+              "url": {
+                "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
+                "type": "string",
+                "description": "Die URL zur externen Ressource oder Download."
+              },
+              "uuid_ref": {
+                "type": "string",
+                "description": "Die UUID des internen Datensatzes."
+              },
+              "type": {
+                "type": "object",
+                "title": "type",
+                "description": "Gibt den Typ der externen Ressource oder Download an.",
+                "examples": [
+                  "3600 - Gekoppelte Daten",
+                  "5304 - Bestellung",
+                  "3535 - Schlüsselkatalog"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "key": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "title": {
+                "type": "string",
+                "description": "Ein Titel der externen Ressource oder Download."
+              },
+              "explanation": {
+                "type": "string",
+                "description": "Eine Beschreibung der externen Ressource oder Download."
+              }
+            }
           }
         },
         "fulltext": {
@@ -630,7 +700,7 @@
             },
             "partner": {
               "type": "string",
-              "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.\n",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
               "examples": [
                 "bb",
                 "st"
@@ -646,7 +716,7 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.",
+              "description": "Enthält die Sprache des Metadatensatzes.",
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -681,6 +751,57 @@
             "created",
             "modified"
           ]
+        },
+        "ReferenceItem": {
+          "type": "object",
+          "properties": {
+            "internal": {
+              "type": "boolean",
+              "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
+            },
+            "url": {
+              "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
+              "type": "string",
+              "description": "Die URL zur externen Ressource oder Download."
+            },
+            "uuid_ref": {
+              "type": "string",
+              "description": "Die UUID des internen Datensatzes."
+            },
+            "type": {
+              "type": "object",
+              "title": "type",
+              "description": "Gibt den Typ der externen Ressource oder Download an.",
+              "examples": [
+                "3600 - Gekoppelte Daten",
+                "5304 - Bestellung",
+                "3535 - Schlüsselkatalog"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "title": {
+              "type": "string",
+              "description": "Ein Titel der externen Ressource oder Download."
+            },
+            "explanation": {
+              "type": "string",
+              "description": "Eine Beschreibung der externen Ressource oder Download."
+            }
+          }
         }
       }
     },
