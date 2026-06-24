@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-title: Schema for InGrid Index "LVR"
+title: InGrid Index - LVR
 type: object
 allOf:
   - $ref: ./parts/core.yaml

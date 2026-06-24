@@ -93,7 +93,7 @@ def build():
         out_file = DOCS_DIR / f"{schema_path.stem}.html"
         generate_from_filename(str(schema_path), str(out_file), config=config)
         print(f"  docs -> {out_file.relative_to(SRC_DIR.parent)}")
-        json_filename = f"schema/{schema_path.stem}.json"
+        json_filename = f"{schema_path.stem}.json"
         entries.append((read_title(schema_path), out_file.name, schema_path.name, json_filename))
 
     generate_index(entries)
