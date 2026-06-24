@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Schema for InGrid Index \"LVR\"",
+  "title": "InGrid Index - LVR",
   "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-lvr.json",
   "type": "object",
   "allOf": [

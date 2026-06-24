@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Schema for InGrid Index \"Umweltnavi\"",
+  "title": "InGrid Index - Umweltnavi",
   "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-umweltnavi.json",
   "type": "object",
   "allOf": [

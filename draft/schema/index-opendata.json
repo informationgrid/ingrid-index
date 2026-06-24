@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-opendata.json",
-  "title": "Schema for InGrid Index 'OpenData'",
+  "title": "InGrid Index - OpenData",
   "type": "object",
   "allOf": [
     {

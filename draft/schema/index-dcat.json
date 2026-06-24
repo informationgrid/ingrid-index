@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Schema for InGrid Index 'DCAT-AP.de'",
+  "title": "InGrid Index - DCAT-AP.de",
   "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-dcat.json",
   "type": "object",
   "allOf": [
