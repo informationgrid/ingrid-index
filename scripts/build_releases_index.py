@@ -43,6 +43,7 @@ def generate_index(directory, versions):
         h1="InGrid Index",
         h2="Versions",
         body_content=f"<ul>\n{items}\n  </ul>",
+        version=None,
     )
     index_path = directory / "index.html"
     index_path.write_text(html, encoding="utf-8")

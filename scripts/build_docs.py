@@ -68,6 +68,7 @@ def generate_index(entries):
         h1=f"InGrid Index {escape(VERSION)}",
         h2="Schemas",
         body_content=table,
+        version=escape(VERSION),
     )
     index_path = DOCS_DIR / "index.html"
     index_path.write_text(html, encoding="utf-8")

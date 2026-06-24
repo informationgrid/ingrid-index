@@ -3,9 +3,21 @@
 LOGO_URL = "https://avatars.githubusercontent.com/u/9720479"
 GITHUB_URL = "https://github.com/informationgrid/ingrid-index"
 INGRID_URL = "https://ingrid-oss.eu/"
+SCHEMA_ROOT_URL = "https://schema.ingrid-oss.eu/"
+SCHEMA_INDEX_URL = f"{SCHEMA_ROOT_URL}index/"
 
 
-def render_page(title, h1, h2, body_content):
+def _breadcrumb(version=None):
+    crumbs = (
+        f'<a href="{SCHEMA_ROOT_URL}">schema</a> / '
+        f'<a href="{SCHEMA_INDEX_URL}">index</a>'
+    )
+    if version:
+        crumbs += f" / {version}"
+    return f'<nav style="font-size:.875rem; margin-bottom:1.5rem;">{crumbs}</nav>'
+
+
+def render_page(title, h1, h2, body_content, version=None):
     return f"""\
 <!DOCTYPE html>
 <html lang="en">
@@ -26,9 +38,10 @@ def render_page(title, h1, h2, body_content):
     <img src="{LOGO_URL}" alt="InGrid logo" width="64" height="64" style="border-radius:50%;">
     <h1 style="margin:0;">{h1}</h1>
   </div>
+  {_breadcrumb(version)}
   <p>
-    The InGrid Index is the central data format of <a href="{INGRID_URL}">InGrid</a>,
-    an open-source platform for building metadata-driven information systems.
+    The InGrid Index is a set of standardized, versioned JSON Schemas defining the structure of
+    metadata records exchanged within the <a href="{INGRID_URL}">InGrid</a> platform.
     This site provides fully resolved JSON schemas and HTML documentation for all index variants.
     Source code and issue tracking are available on
     <a href="{GITHUB_URL}">GitHub</a>.
