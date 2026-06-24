@@ -25,8 +25,18 @@ DOCS_DIR = ROOT_DIR / "dist" / VERSION
 
 
 def discover_schemas():
-    """Return top-level *.yaml files in src/ (skip subdirectories like parts/)."""
-    return sorted(p for p in SRC_DIR.iterdir() if p.suffix == ".yaml" and p.is_file())
+    """Return top-level *.yaml files in src/ (skip subdirectories like parts/).
+    When building a versioned release, files marked x-wip: true are excluded."""
+    files = sorted(p for p in SRC_DIR.iterdir() if p.suffix == ".yaml" and p.is_file())
+    if VERSION == "draft":
+        return files
+    return [p for p in files if not _is_wip(p)]
+
+
+def _is_wip(schema_path):
+    with open(schema_path, encoding="utf-8") as f:
+        doc = yaml.safe_load(f)
+    return doc.get("x-wip") is True
 
 
 def read_title(schema_path):
@@ -76,6 +86,8 @@ def generate_index(entries):
 
 def build():
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    for html_file in DOCS_DIR.glob("*.html"):
+        html_file.unlink()
 
     config = GenerationConfiguration(
         template_name="js",  # interactive HTML template

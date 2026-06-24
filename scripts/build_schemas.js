@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const yaml = require("js-yaml");
 const $RefParser = require("@apidevtools/json-schema-ref-parser");
 
 const ROOT_DIR = path.resolve(__dirname, "..");
@@ -15,14 +16,26 @@ const version =
 const DIST_DIR = path.join(ROOT_DIR, "dist", version, "schema");
 
 function ensureDir(dir) {
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
   fs.mkdirSync(dir, { recursive: true });
 }
 
-// Discover main schema files (top-level *.yaml in src/, ignore subdirs)
+// Discover main schema files (top-level *.yaml in src/, ignore subdirs).
+// When building a versioned release (version !== "draft"), files marked
+// x-wip: true are excluded.
 function discoverSchemas() {
-  return fs
+  const files = fs
     .readdirSync(SRC_DIR)
     .filter((f) => f.endsWith(".yaml") && fs.statSync(path.join(SRC_DIR, f)).isFile());
+
+  if (version === "draft") return files;
+
+  return files.filter((f) => {
+    const doc = yaml.load(fs.readFileSync(path.join(SRC_DIR, f), "utf8"));
+    return doc["x-wip"] !== true;
+  });
 }
 
 // Set $id from package.json's "homepage", e.g.
@@ -55,6 +68,7 @@ async function build() {
 
     // --- Fully resolved (no $ref) ---
     const resolved = await $RefParser.dereference(srcPath);
+    delete resolved["x-wip"];
     const ordered = setId(resolved, version, baseName);
     const resolvedOut = path.join(DIST_DIR, `${baseName}.json`);
     fs.writeFileSync(resolvedOut, JSON.stringify(ordered, null, 2));

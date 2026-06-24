@@ -63,6 +63,27 @@ manually. The build workflow only adds/updates `<version>/` folders and
    This triggers the same build/publish steps using the version from the
    tag, producing `releases:8.4.0/` instead of `releases:draft/`.
 
+### Work-in-progress schemas
+
+A schema can be marked as work-in-progress by adding `x-wip: true` at the top of the YAML file:
+
+```yaml
+x-wip: true
+$schema: https://json-schema.org/draft/2020-12/schema
+title: ...
+```
+
+| `x-wip` | `draft` build | versioned release build |
+|---|---|---|
+| absent or `false` | included | included |
+| `true` | included | **excluded** |
+
+WIP schemas are always included in `draft` builds so they can be reviewed and developed against `releases:draft/`. They are silently skipped when building a versioned release.
+
+> **Before tagging a release:** check that every schema that should be part of the release either has no `x-wip` field or has `x-wip: false`. Schemas with `x-wip: true` will not appear in the versioned output.
+
+The `x-wip` field is stripped from the generated JSON schemas — it is build metadata only and does not appear in the output.
+
 ### Patching a released version
 
 1. Create (or check out) `version/<x.y.z>` from the `v<x.y.z>` tag and commit
