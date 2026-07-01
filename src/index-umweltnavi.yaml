@@ -59,7 +59,7 @@ allOf:
           oid:
             type: string
             description: 'Objekt ID (eindeutig über alle Datenkataloge). Setzt sich aus 
-              "source" und "identifier" (bzw. "source" und "origin" und
+              "source" und "source_id" (bzw. "source" und "origin" und
               "classification") zusammen und wird für Eigenschaft "id" verwendet.'
             examples:
             - nlwkn-dsk-4922-21000
@@ -91,7 +91,7 @@ allOf:
             type: number
             description: Level of Detail für das Einblenden von Objekten, wenn weiter raus
             $comment: 'Ehemaliges Indexfeld: lod_sort_weight'
-          identifier:
+          source_id:
             type: string
             description: 'ID des Objektes innerhalb des Datenkataloges, Teil der OID, Nicht für "Status-Layer"'
             $comment: 'Ehemaliges Indexfeld: code'
@@ -152,9 +152,9 @@ allOf:
           images:
             type: array
             items:
+              type: object
               $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviImage"
               description: Liste der Bilder zum Objekt (extrahiert aus content_items)
-            minItems: 0
           license:
             type: object
             properties:
@@ -195,6 +195,7 @@ allOf:
               items:
                 allOf:
                   - type: object
+                    title: Basisinformationen
                     required:
                       - type
                     description: Liste der Inhalte
@@ -223,6 +224,7 @@ allOf:
                         - sh
                         - rp
                   - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
+                    type: object
             required:
             - name
             - items
@@ -495,6 +497,62 @@ allOf:
               description: z.B. Beobachtete Arten in einem Naturschutzgebiet
               $comment: 'Ehemaliges Indexfeld: properties.collections'
             minItems: 0
+          sensor:
+            type: object
+            properties:
+              measurements:
+                type: array
+                title: Messwertequellen
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Anzeigename der Messreihe
+                      examples:
+                        - Luftqualitätsindex
+                    unit:
+                      type: string
+                      description: Einheit der Messreihe
+                      examples:
+                        - Index [1-6]
+                    property:
+                      type: string
+                      description: technischer Name der Messreihe, wird in API zu einem Datastream im STA server aufgelöst (entspricht datasources.id)
+                      examples:
+                        - LQI
+                    resolutions:
+                      type: object
+                      description: Zeitliche Auflösungen der Messreihe zusammen mit Messwerttyp. Hier werden die unterschiedlichen Messwerttypen als dynamische Properties eingetragen. Jeder Messwerttyp hat dabei eine Liste von Auflösungen.
+                      examples:
+                        - P1M: [MEAN, MIN, MAX]
+                    interface:
+                      type: string
+                      description: Name des Interfaces über das die Messreihe abgerufen wird
+                      examples:
+                        - sta
+                    url:
+                      type: string
+                      description: Sensor-URL (kann zukünftig entfallen, wenn z.B. LQI als Datastream vorliegt und nicht berechnet werden muss)
+                    datasource:
+                      type: array
+                      title: Datenquelle
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                            title: Datastream-URL
+                          type:
+                            type: string
+                            title: Messwerttyp
+                            examples:
+                              - MEAN
+                          resolution:
+                            type: string
+                            title: Messwerttyp
+                            examples:
+                              - P1M
         allOf:
           - if:
               properties:
@@ -506,7 +564,7 @@ allOf:
                 - type
             then:
               required:
-                - identifier
+                - source_id
           - if:
               properties:
                 metadata:

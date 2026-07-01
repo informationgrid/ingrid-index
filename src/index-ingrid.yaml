@@ -1,6 +1,14 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://example.com/schemas/1.0.0/dcat.yaml
 title: InGrid Index - InGrid
+description: |
+  Dies ist das JSON-Schema für den InGrid-Index.
+  Folgende Anmerkungen zu den "Root fields":
+  
+  * references[].type kann die folgenden Werte enthalten
+    * Codeliste 2000
+    * previewGraphic
+
 type: object
 unevaluatedProperties: false
 allOf:
@@ -34,10 +42,12 @@ $defs:
                   - InGridPublication
                   - InGridProject
                   - InGridSpecialisedTask
-              character_set:
-                description: "Aktuell nicht im Portal angezeigt?"
-                deprecated: true
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+              language:
+                type: string
+                description: Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.
+              partner:
+                type: string
+                description: Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.
               provider:
                 type: string
                 description: Der Anbieter der Datenquelle als Kürzel. Dieser wird aus der Codeliste 111 genommen.
@@ -123,48 +133,7 @@ $defs:
           # - downloads (references)
           # - vorschaubilder (references)
           # - Verweise und Downloads (references)
-          references:
-            type: array
-            description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden."
-            items:
-              type: object
-              title: item
-              properties:
-                internal:
-                  type: boolean
-                  description: "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
-                url:
-                  $comment: "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?"
-                  type: string
-                  description: "Die URL zur externen Ressource oder Download."
-                uuid_ref:
-                  type: string
-                  description: "Die UUID des internen Datensatzes."
-                type:
-                  type: object
-                  title: type
-                  description: "Gibt den Typ der externen Ressource oder Download an. Es wird die Codeliste 2000 verwendet. Achtung: Vorschaugrafik nicht dabei als Typ. Zusatztyp?"
-                  examples:
-                    - 3600 - Gekoppelte Daten
-                    - 5304 - Bestellung
-                    - 3535 - Schlüsselkatalog
-                  $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-                title:
-                  type: string
-                  description: "Ein Titel der externen Ressource oder Download."
-                explanation:
-                  type: string
-                  description: "Eine Beschreibung der externen Ressource oder Download."
-              if:
-                properties:
-                  internal:
-                    const: true
-              then:
-                required:
-                  - uuid_ref
-              else:
-                required:
-                  - url
+
           # - nutzungsbedingungen (licenses)
           # - Nutzungsbedingungen (licenses)
           # - Anwendungseinschränkungen (licenses)
@@ -364,6 +333,10 @@ $defs:
                     parameter:
                       type: string
 
+          character_set:
+            type: object
+            description: "Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz."
+            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
 
           # TODO: merge references and fileReferences
           # TODO: properties to tags (core?)
