@@ -54,8 +54,11 @@ manually. The build workflow only adds/updates `<version>/` folders and
    - Resolves all `$ref` → `dist/draft/schema/*.json`
    - Generates HTML docs → `dist/draft/*.html`
    - Publishes both into the `releases` branch under `draft/`
-3. **Release**: tag the commit on `draft` as `v<version>` (e.g. `v8.4.0`) and
-   push the tag:
+3. **Release**: before tagging, rename the `[Unreleased]` section in
+   [`changelog.md`](changelog.md) to `[<version>] - <date>` and add a fresh
+   empty `[Unreleased]` section above it (see [Changelog](#changelog)).
+   Commit that change, then tag the commit on `draft` as `v<version>` (e.g.
+   `v8.4.0`) and push the tag:
    ```bash
    git checkout draft
    git tag v8.4.0 && git push origin v8.4.0
@@ -103,6 +106,20 @@ The `x-wip` field is stripped from the generated JSON schemas — it is build me
    git push origin :refs/tags/v8.4.0
    ```
 2. CI removes the `8.4.0/` folder from the `releases` branch and regenerates the root `index.html`.
+
+## Changelog
+
+[`changelog.md`](changelog.md) tracks notable changes to the schemas, following
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+- While working on `draft`, add an entry under the **`[Unreleased]`** section
+  in the same commit/PR as the schema change, under the matching subheading
+  (`Added`, `Changed`, `Fixed`, `Removed`). Mention the affected schema file,
+  e.g. `index-dcat.yaml: added sensor field`.
+- When tagging a release, rename `[Unreleased]` to `[<x.y.z>] - <date>` (see
+  step 3 in [How It Works](#how-it-works)).
+- Skip entries for pure tooling/CI/doc changes that don't affect the schemas
+  themselves.
 
 ## Local Development
 
