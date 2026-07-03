@@ -10,6 +10,9 @@ allOf:
     properties:
       metadata:
         properties:
+          data_type:
+            type: string
+            const: 'UMWELTNAVI'
           document_type:
             description: Definiert den Statuslayer des Dokuments
             type: string
@@ -22,6 +25,7 @@ allOf:
             examples:
               - NLWKN_DSK
         required:
+          - data_type
           - document_type
           - datasource
           - provider
@@ -149,12 +153,6 @@ allOf:
             $comment: 'Ehemaliges Indexfeld: info'
           icon:
             type: string
-          images:
-            type: array
-            items:
-              type: object
-              $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviImage"
-              description: Liste der Bilder zum Objekt (extrahiert aus content_items)
           license:
             type: object
             properties:
@@ -203,6 +201,7 @@ allOf:
                       type:
                         type: string
                         enum:
+                          - image
                           - text
                           - link
                       url:
