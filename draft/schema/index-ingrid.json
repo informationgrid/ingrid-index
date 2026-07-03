@@ -928,20 +928,14 @@
               "properties": {
                 "data_type": {
                   "type": "string",
-                  "const": "INGRID"
+                  "enum": [
+                    "INGRID",
+                    "UMWELTNAVI"
+                  ]
                 },
                 "document_type": {
                   "type": "string",
-                  "description": "Beschreibt den Typ des Metadatensatzes.",
-                  "enum": [
-                    "InGridGeoDataset",
-                    "InGridDataCollection",
-                    "InGridGeoService",
-                    "InGridInformationSystem",
-                    "InGridPublication",
-                    "InGridProject",
-                    "InGridSpecialisedTask"
-                  ]
+                  "description": "Beschreibt den Typ des Metadatensatzes."
                 },
                 "language": {
                   "type": "string",
@@ -957,6 +951,31 @@
                   "examples": [
                     "ni_gll"
                   ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "data_type": {
+                    "const": "INGRID"
+                  }
+                },
+                "required": [
+                  "data_type"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "document_type": {
+                    "enum": [
+                      "InGridGeoDataset",
+                      "InGridDataCollection",
+                      "InGridGeoService",
+                      "InGridInformationSystem",
+                      "InGridPublication",
+                      "InGridProject",
+                      "InGridSpecialisedTask"
+                    ]
+                  }
                 }
               },
               "required": [
@@ -1568,20 +1587,14 @@
               "properties": {
                 "data_type": {
                   "type": "string",
-                  "const": "INGRID"
+                  "enum": [
+                    "INGRID",
+                    "UMWELTNAVI"
+                  ]
                 },
                 "document_type": {
                   "type": "string",
-                  "description": "Beschreibt den Typ des Metadatensatzes.",
-                  "enum": [
-                    "InGridGeoDataset",
-                    "InGridDataCollection",
-                    "InGridGeoService",
-                    "InGridInformationSystem",
-                    "InGridPublication",
-                    "InGridProject",
-                    "InGridSpecialisedTask"
-                  ]
+                  "description": "Beschreibt den Typ des Metadatensatzes."
                 },
                 "language": {
                   "type": "string",
@@ -1597,6 +1610,31 @@
                   "examples": [
                     "ni_gll"
                   ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "data_type": {
+                    "const": "INGRID"
+                  }
+                },
+                "required": [
+                  "data_type"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "document_type": {
+                    "enum": [
+                      "InGridGeoDataset",
+                      "InGridDataCollection",
+                      "InGridGeoService",
+                      "InGridInformationSystem",
+                      "InGridPublication",
+                      "InGridProject",
+                      "InGridSpecialisedTask"
+                    ]
+                  }
                 }
               },
               "required": [
