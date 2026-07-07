@@ -19,6 +19,7 @@ allOf:
             enum:
               - object
               - map
+              - statistic
           datasource:
             $ref: "./parts/core.yaml#/$defs/Metadata/properties/datasource"
             description: Beschreibt Datenkatalog (Herkunft)
@@ -76,6 +77,22 @@ allOf:
               Wenn > 0 dann wird nur das Feld "geometrie" verwendet.
             minimum: 0
             $comment: 'Ehemaliges Indexfeld: doc_index'
+          provider:
+            type: object
+            description: Enthält Informationen über den Anbieter für die Facetten-Auswahl
+            properties:
+              id:
+                type: string
+                description: Der Slug für die Filterung nach dem Anbieter
+                examples:
+                - bundesanstalt-fuer-gewaesserkunde-bfg
+              name:
+                type: string
+                description: Name des Anbieters
+                examples:
+                - Bundesanstalt für Gewässerkunde (BfG)
+            required:
+              - id
           category:
             type: object
             properties:
@@ -183,76 +200,75 @@ allOf:
             description: Referenz zu externem Metadatensatz
             $comment: 'Ehemaliges Indexfeld: meta_data_url'
           content_items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Name des Inhaltsbereichs
-                examples:
-                - 'Bilder, Beschreibung, Wikipedia, Steckbrief'
-              items:
-                allOf:
-                  - type: object
-                    title: Basisinformationen
-                    required:
-                      - type
-                    description: Liste der Inhalte
-                    properties:
-                      type:
-                        type: string
-                        enum:
-                          - image
-                          - text
-                          - link
-                      url:
-                        type: string
-                        description: Für Link und Bild
-                      title:
-                        type: string
-                        description: Titel des Elementes
-                      content:
-                        type: string
-                        description: Angaben zur Herkunft des Inhalts
-                        $comment: 'Ehemaliges Indexfeld: object_date'
-                      assigned_to:
-                        type: string
-                        description: Partner für den das Detail spezifisch erstellt wurde. Leer
-                          bedeutet für alle Partner.
-                        enum:
-                        - ni
-                        - sh
-                        - rp
-                  - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
-                    type: object
-            required:
-            - name
-            - items
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                  description: Name des Inhaltsbereichs
+                  examples:
+                  - 'Bilder, Beschreibung, Wikipedia, Steckbrief'
+                items:
+                  allOf:
+                    - type: object
+                      title: Basisinformationen
+                      required:
+                        - type
+                      description: Liste der Inhalte
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                            - image
+                            - text
+                            - link
+                        url:
+                          type: string
+                          description: Für Link und Bild
+                        title:
+                          type: string
+                          description: Titel des Elementes
+                        content:
+                          type: string
+                          description: Angaben zur Herkunft des Inhalts
+                          $comment: 'Ehemaliges Indexfeld: object_date'
+                        assigned_to:
+                          type: string
+                          description: Partner für den das Detail spezifisch erstellt wurde. Leer
+                            bedeutet für alle Partner.
+                          enum:
+                          - ni
+                          - sh
+                          - rp
+                    - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
+                      type: object
+              required:
+              - name
+              - items
             description: Liste der Inhalte zum Objekt unterteilt in Bereiche
             $comment: 'Ehemaliges Indexfeld: data'
           relations:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Name der Relation
-                examples:
-                - enthält, gehört zu
-              items:
-                type: object
-                properties:
-                  oid:
-                    type: string
-                  name:
-                    type: string
-                required:
-                - oid
-                - name
-            required:
-            - name
-            - items
-          import_date:
-            $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
-            description: Datum des Imports in die Datenbank
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                  description: Name der Relation
+                  examples:
+                  - enthält, gehört zu
+                items:
+                  type: object
+                  properties:
+                    oid:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - oid
+                  - name
+              required:
+              - name
+              - items
           import_ref:
             type: object
             description: 'Enthält Datenbank ID des Objekts (Attribut "original") und ggf. des überschreibenden Objekts (Attribut: "override")'
@@ -267,10 +283,11 @@ allOf:
             - { "original": 27900, "override": 1 }
           target_platform:
             type: string
-            description: Target des Datesatzes (App oder Portal)
+            description: Target des Datensatzes (App oder Portal)
             enum:
             - web
             - app
+            - none
           assigned_to:
             type: string
             description: Partner für den der Datensatz spezifisch erstellt wurde. Leer bedeutet für alle Partner.
@@ -278,6 +295,7 @@ allOf:
             - ni
             - sh
             - rp
+            - none
           tags:
             type: array
             items:
@@ -335,18 +353,19 @@ allOf:
                   examples:
                   - '%'
                 values:
-                  type: object
-                  properties:
-                    display_date:
-                      type: string
-                      description: Zeitwert für die Anzeige im Diagramm
-                      $comment: 'Ehemaliges Indexfeld: time'
-                    value:
-                      type: string
-                      description: Wert pro Zeitwert
-                  required:
-                  - display_date
-                  - value
+                  type: array
+                  items:
+                    properties:
+                      display_date:
+                        type: string
+                        description: Zeitwert für die Anzeige im Diagramm
+                        $comment: 'Ehemaliges Indexfeld: time'
+                      value:
+                        type: string
+                        description: Wert pro Zeitwert
+                    required:
+                    - display_date
+                    - value
                 license:
                   type: object
                   properties:
@@ -369,20 +388,18 @@ allOf:
                   $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
                   description: Datum der Erhebung der Statistik
                   $comment: 'Ehemaliges Indexfeld: object_date'
-                import_date:
-                  type: string
-                  description: Datum des Imports in die Datenbank
                 import_ref:
-                  type: number
-                  description: entkält Datenbank ID der Statistik
+                  type: object
+                  properties:
+                    original:
+                      type: integer
+                      description: enthält Datenbank ID der Statistik
               required:
               - oid
               - name
-              - category
               - property
               - unit
               - values
-              - import_date
               - import_ref
               description: Statistiken, die einem Objekt zugeordnet sind. Z.B. Einwohnerzahlen, Flächenversiegelung über mehrere Jahre
               $comment: 'Ehemaliges Indexfeld: properties.statistics'
@@ -481,17 +498,15 @@ allOf:
                   type: string
                   description: Datum der Erhebung der Statistik
                   $comment: 'Ehemaliges Indexfeld: object_date'
-                import_date:
-                  type: string
-                  description: Datum des Imports in die Datenbank
                 import_ref:
-                  type: number
-                  description: entkält Datenbank ID der collection
+                  type: object
+                  properties:
+                    original:
+                      type: integer
+                      description: enthält Datenbank ID der collection
               required:
               - oid
               - name
-              - category
-              - import_date
               - import_ref
               description: z.B. Beobachtete Arten in einem Naturschutzgebiet
               $comment: 'Ehemaliges Indexfeld: properties.collections'
@@ -580,7 +595,6 @@ allOf:
         - oid
         - part
         - category
-        - import_date
         - import_ref
     required:
       - metadata
