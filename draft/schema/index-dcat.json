@@ -346,19 +346,19 @@
                   "date": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "Datum der Messreihe"
+                    "description": "Datum des Ereignisses"
                   },
                   "date_range": {
                     "type": "object",
                     "title": "Zeitabschnitt",
-                    "description": "Zeitabschnitt der Messreihe",
+                    "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                     "properties": {
-                      "start": {
+                      "gte": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Startdatum der Zeitangabe"
                       },
-                      "end": {
+                      "lte": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Enddatum der Zeitangabe"

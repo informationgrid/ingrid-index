@@ -346,19 +346,19 @@
                   "date": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "Datum der Messreihe"
+                    "description": "Datum des Ereignisses"
                   },
                   "date_range": {
                     "type": "object",
                     "title": "Zeitabschnitt",
-                    "description": "Zeitabschnitt der Messreihe",
+                    "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                     "properties": {
-                      "start": {
+                      "gte": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Startdatum der Zeitangabe"
                       },
-                      "end": {
+                      "lte": {
                         "type": "string",
                         "format": "date-time",
                         "description": "Enddatum der Zeitangabe"
@@ -998,19 +998,19 @@
                       "date": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Datum der Messreihe"
+                        "description": "Datum des Ereignisses"
                       },
                       "date_range": {
                         "type": "object",
                         "title": "Zeitabschnitt",
-                        "description": "Zeitabschnitt der Messreihe",
+                        "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                         "properties": {
-                          "start": {
+                          "gte": {
                             "type": "string",
                             "format": "date-time",
                             "description": "Startdatum der Zeitangabe"
                           },
-                          "end": {
+                          "lte": {
                             "type": "string",
                             "format": "date-time",
                             "description": "Enddatum der Zeitangabe"
@@ -1477,7 +1477,8 @@
               "type": "string",
               "enum": [
                 "object",
-                "map"
+                "map",
+                "statistic"
               ]
             },
             "datasource": {
@@ -1673,6 +1674,29 @@
               "minimum": 0,
               "$comment": "Ehemaliges Indexfeld: doc_index"
             },
+            "provider": {
+              "type": "object",
+              "description": "Enthält Informationen über den Anbieter für die Facetten-Auswahl",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Der Slug für die Filterung nach dem Anbieter",
+                  "examples": [
+                    "bundesanstalt-fuer-gewaesserkunde-bfg"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name des Anbieters",
+                  "examples": [
+                    "Bundesanstalt für Gewässerkunde (BfG)"
+                  ]
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
             "category": {
               "type": "object",
               "properties": {
@@ -1822,269 +1846,212 @@
               "$comment": "Ehemaliges Indexfeld: meta_data_url"
             },
             "content_items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Name des Inhaltsbereichs",
-                  "examples": [
-                    "Bilder, Beschreibung, Wikipedia, Steckbrief"
-                  ]
-                },
-                "items": {
-                  "allOf": [
-                    {
-                      "type": "object",
-                      "title": "Basisinformationen",
-                      "required": [
-                        "type"
-                      ],
-                      "description": "Liste der Inhalte",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "image",
-                            "text",
-                            "link"
-                          ]
-                        },
-                        "url": {
-                          "type": "string",
-                          "description": "Für Link und Bild"
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "Titel des Elementes"
-                        },
-                        "content": {
-                          "type": "string",
-                          "description": "Angaben zur Herkunft des Inhalts",
-                          "$comment": "Ehemaliges Indexfeld: object_date"
-                        },
-                        "assigned_to": {
-                          "type": "string",
-                          "description": "Partner für den das Detail spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
-                          "enum": [
-                            "ni",
-                            "sh",
-                            "rp"
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "type": "object",
-                      "title": "Zusätzliche Informationen",
-                      "properties": {
-                        "temporal": {
-                          "type": "object",
-                          "properties": {
-                            "date": {
-                              "type": "string",
-                              "format": "date-time",
-                              "description": "Datum der Messreihe"
-                            },
-                            "date_range": {
-                              "type": "object",
-                              "title": "Zeitabschnitt",
-                              "description": "Zeitabschnitt der Messreihe",
-                              "properties": {
-                                "start": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "description": "Startdatum der Zeitangabe"
-                                },
-                                "end": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "description": "Enddatum der Zeitangabe"
-                                }
-                              }
-                            },
-                            "date_text": {
-                              "type": "string",
-                              "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
-                              "examples": [
-                                "Sommer 2010"
-                              ]
-                            },
-                            "date_type": {
-                              "type": "string",
-                              "description": "Typ der Zeitangabe",
-                              "enum": [
-                                "created",
-                                "last_updated",
-                                "first_published"
-                              ]
-                            }
+              "type": "array",
+              "items": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name des Inhaltsbereichs",
+                    "examples": [
+                      "Bilder, Beschreibung, Wikipedia, Steckbrief"
+                    ]
+                  },
+                  "items": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "title": "Basisinformationen",
+                        "required": [
+                          "type"
+                        ],
+                        "description": "Liste der Inhalte",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "image",
+                              "text",
+                              "link"
+                            ]
                           },
-                          "oneOf": [
-                            {
-                              "required": [
-                                "date"
-                              ]
-                            },
-                            {
-                              "required": [
-                                "date_range"
-                              ]
-                            },
-                            {
-                              "required": [
-                                "date_text"
-                              ]
-                            }
-                          ],
-                          "description": "z.B. Aufnahmedatum eines Bildes",
-                          "$comment": "Ehemaliges Indexfeld: object_date"
-                        },
-                        "source": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string"
-                            },
-                            "url": {
-                              "type": "string"
-                            }
+                          "url": {
+                            "type": "string",
+                            "description": "Für Link und Bild"
                           },
-                          "required": [
-                            "name"
-                          ]
-                        },
-                        "license": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string"
-                            },
-                            "url": {
-                              "type": "string"
-                            }
+                          "title": {
+                            "type": "string",
+                            "description": "Titel des Elementes"
                           },
-                          "required": [
-                            "name"
-                          ]
-                        },
-                        "author": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string"
-                            },
-                            "url": {
-                              "type": "string"
-                            }
+                          "content": {
+                            "type": "string",
+                            "description": "Angaben zur Herkunft des Inhalts",
+                            "$comment": "Ehemaliges Indexfeld: object_date"
                           },
-                          "required": [
-                            "name"
-                          ]
+                          "assigned_to": {
+                            "type": "string",
+                            "description": "Partner für den das Detail spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
+                            "enum": [
+                              "ni",
+                              "sh",
+                              "rp"
+                            ]
+                          }
                         }
                       },
-                      "description": "Wird verwendet, um die Herkunft eines Inhalts zu beschreiben"
-                    }
-                  ]
-                }
+                      {
+                        "type": "object",
+                        "title": "Zusätzliche Informationen",
+                        "properties": {
+                          "temporal": {
+                            "type": "object",
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Datum des Ereignisses"
+                              },
+                              "date_range": {
+                                "type": "object",
+                                "title": "Zeitabschnitt",
+                                "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                                "properties": {
+                                  "gte": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Startdatum der Zeitangabe"
+                                  },
+                                  "lte": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "Enddatum der Zeitangabe"
+                                  }
+                                }
+                              },
+                              "date_text": {
+                                "type": "string",
+                                "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                                "examples": [
+                                  "Sommer 2010"
+                                ]
+                              },
+                              "date_type": {
+                                "type": "string",
+                                "description": "Typ der Zeitangabe",
+                                "enum": [
+                                  "created",
+                                  "last_updated",
+                                  "first_published"
+                                ]
+                              }
+                            },
+                            "oneOf": [
+                              {
+                                "required": [
+                                  "date"
+                                ]
+                              },
+                              {
+                                "required": [
+                                  "date_range"
+                                ]
+                              },
+                              {
+                                "required": [
+                                  "date_text"
+                                ]
+                              }
+                            ],
+                            "description": "z.B. Aufnahmedatum eines Bildes",
+                            "$comment": "Ehemaliges Indexfeld: object_date"
+                          },
+                          "source": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ]
+                          },
+                          "license": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ]
+                          },
+                          "author": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ]
+                          }
+                        },
+                        "description": "Wird verwendet, um die Herkunft eines Inhalts zu beschreiben"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "items"
+                ]
               },
-              "required": [
-                "name",
-                "items"
-              ],
               "description": "Liste der Inhalte zum Objekt unterteilt in Bereiche",
               "$comment": "Ehemaliges Indexfeld: data"
             },
             "relations": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Name der Relation",
-                  "examples": [
-                    "enthält, gehört zu"
-                  ]
-                },
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "oid": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
+              "type": "array",
+              "items": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name der Relation",
+                    "examples": [
+                      "enthält, gehört zu"
+                    ]
                   },
-                  "required": [
-                    "oid",
-                    "name"
-                  ]
-                }
-              },
-              "required": [
-                "name",
-                "items"
-              ]
-            },
-            "import_date": {
-              "type": "object",
-              "properties": {
-                "date": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "Datum der Messreihe"
-                },
-                "date_range": {
-                  "type": "object",
-                  "title": "Zeitabschnitt",
-                  "description": "Zeitabschnitt der Messreihe",
-                  "properties": {
-                    "start": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Startdatum der Zeitangabe"
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "oid": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
                     },
-                    "end": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "Enddatum der Zeitangabe"
-                    }
+                    "required": [
+                      "oid",
+                      "name"
+                    ]
                   }
                 },
-                "date_text": {
-                  "type": "string",
-                  "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
-                  "examples": [
-                    "Sommer 2010"
-                  ]
-                },
-                "date_type": {
-                  "type": "string",
-                  "description": "Typ der Zeitangabe",
-                  "enum": [
-                    "created",
-                    "last_updated",
-                    "first_published"
-                  ]
-                }
-              },
-              "oneOf": [
-                {
-                  "required": [
-                    "date"
-                  ]
-                },
-                {
-                  "required": [
-                    "date_range"
-                  ]
-                },
-                {
-                  "required": [
-                    "date_text"
-                  ]
-                }
-              ],
-              "description": "Datum des Imports in die Datenbank"
+                "required": [
+                  "name",
+                  "items"
+                ]
+              }
             },
             "import_ref": {
               "type": "object",
@@ -2108,10 +2075,11 @@
             },
             "target_platform": {
               "type": "string",
-              "description": "Target des Datesatzes (App oder Portal)",
+              "description": "Target des Datensatzes (App oder Portal)",
               "enum": [
                 "web",
-                "app"
+                "app",
+                "none"
               ]
             },
             "assigned_to": {
@@ -2120,7 +2088,8 @@
               "enum": [
                 "ni",
                 "sh",
-                "rp"
+                "rp",
+                "none"
               ]
             },
             "tags": {
@@ -2202,22 +2171,24 @@
                     ]
                   },
                   "values": {
-                    "type": "object",
-                    "properties": {
-                      "display_date": {
-                        "type": "string",
-                        "description": "Zeitwert für die Anzeige im Diagramm",
-                        "$comment": "Ehemaliges Indexfeld: time"
+                    "type": "array",
+                    "items": {
+                      "properties": {
+                        "display_date": {
+                          "type": "string",
+                          "description": "Zeitwert für die Anzeige im Diagramm",
+                          "$comment": "Ehemaliges Indexfeld: time"
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Wert pro Zeitwert"
+                        }
                       },
-                      "value": {
-                        "type": "string",
-                        "description": "Wert pro Zeitwert"
-                      }
-                    },
-                    "required": [
-                      "display_date",
-                      "value"
-                    ]
+                      "required": [
+                        "display_date",
+                        "value"
+                      ]
+                    }
                   },
                   "license": {
                     "type": "object",
@@ -2253,19 +2224,19 @@
                       "date": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Datum der Messreihe"
+                        "description": "Datum des Ereignisses"
                       },
                       "date_range": {
                         "type": "object",
                         "title": "Zeitabschnitt",
-                        "description": "Zeitabschnitt der Messreihe",
+                        "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                         "properties": {
-                          "start": {
+                          "gte": {
                             "type": "string",
                             "format": "date-time",
                             "description": "Startdatum der Zeitangabe"
                           },
-                          "end": {
+                          "lte": {
                             "type": "string",
                             "format": "date-time",
                             "description": "Enddatum der Zeitangabe"
@@ -2309,23 +2280,22 @@
                     "description": "Datum der Erhebung der Statistik",
                     "$comment": "Ehemaliges Indexfeld: object_date"
                   },
-                  "import_date": {
-                    "type": "string",
-                    "description": "Datum des Imports in die Datenbank"
-                  },
                   "import_ref": {
-                    "type": "number",
-                    "description": "entkält Datenbank ID der Statistik"
+                    "type": "object",
+                    "properties": {
+                      "original": {
+                        "type": "integer",
+                        "description": "enthält Datenbank ID der Statistik"
+                      }
+                    }
                   }
                 },
                 "required": [
                   "oid",
                   "name",
-                  "category",
                   "property",
                   "unit",
                   "values",
-                  "import_date",
                   "import_ref"
                 ],
                 "description": "Statistiken, die einem Objekt zugeordnet sind. Z.B. Einwohnerzahlen, Flächenversiegelung über mehrere Jahre",
@@ -2415,19 +2385,19 @@
                                   "date": {
                                     "type": "string",
                                     "format": "date-time",
-                                    "description": "Datum der Messreihe"
+                                    "description": "Datum des Ereignisses"
                                   },
                                   "date_range": {
                                     "type": "object",
                                     "title": "Zeitabschnitt",
-                                    "description": "Zeitabschnitt der Messreihe",
+                                    "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                                     "properties": {
-                                      "start": {
+                                      "gte": {
                                         "type": "string",
                                         "format": "date-time",
                                         "description": "Startdatum der Zeitangabe"
                                       },
-                                      "end": {
+                                      "lte": {
                                         "type": "string",
                                         "format": "date-time",
                                         "description": "Enddatum der Zeitangabe"
@@ -2503,19 +2473,19 @@
                                           "date": {
                                             "type": "string",
                                             "format": "date-time",
-                                            "description": "Datum der Messreihe"
+                                            "description": "Datum des Ereignisses"
                                           },
                                           "date_range": {
                                             "type": "object",
                                             "title": "Zeitabschnitt",
-                                            "description": "Zeitabschnitt der Messreihe",
+                                            "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
                                             "properties": {
-                                              "start": {
+                                              "gte": {
                                                 "type": "string",
                                                 "format": "date-time",
                                                 "description": "Startdatum der Zeitangabe"
                                               },
-                                              "end": {
+                                              "lte": {
                                                 "type": "string",
                                                 "format": "date-time",
                                                 "description": "Enddatum der Zeitangabe"
@@ -2656,20 +2626,19 @@
                     "description": "Datum der Erhebung der Statistik",
                     "$comment": "Ehemaliges Indexfeld: object_date"
                   },
-                  "import_date": {
-                    "type": "string",
-                    "description": "Datum des Imports in die Datenbank"
-                  },
                   "import_ref": {
-                    "type": "number",
-                    "description": "entkält Datenbank ID der collection"
+                    "type": "object",
+                    "properties": {
+                      "original": {
+                        "type": "integer",
+                        "description": "enthält Datenbank ID der collection"
+                      }
+                    }
                   }
                 },
                 "required": [
                   "oid",
                   "name",
-                  "category",
-                  "import_date",
                   "import_ref"
                 ],
                 "description": "z.B. Beobachtete Arten in einem Naturschutzgebiet",
@@ -2813,7 +2782,6 @@
             "oid",
             "part",
             "category",
-            "import_date",
             "import_ref"
           ]
         }
