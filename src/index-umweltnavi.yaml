@@ -29,32 +29,40 @@ allOf:
           - data_type
           - document_type
           - datasource
-          - provider
       spatials:
         type: array
         items:
           type: object
           allOf:
-            - $ref: "./parts/core.yaml#/$defs/SpatialItem"
+            - type: object
+              $ref: "./parts/core.yaml#/$defs/SpatialItem"
             - type: object
               title: UmweltNavi Spatial
               properties:
+                bounds:
+                  type: string
+                  description: Wird für Geo-Queries verwendet, für Abfragen in der Art "Schneidet die Bounding Box des Objekts einen Umkreis um den Standpunkt?"
                 centroid:
-                  type: string
+                  type: object
                   description: Schwerpunkt der Geometrie
+                  $ref: ./parts/shared-types.yaml#/$defs/GeoPoint
                 inside_point:
-                  type: string
-                  description: Punkt innerhalb der Geometrie, der dem Schwerpunkt am nächsten
-                    liegt.
+                  type: object
+                  description: Punkt innerhalb der Geometrie, der dem Schwerpunkt am nächsten liegt.
+                  $ref: ./parts/shared-types.yaml#/$defs/GeoPoint
                 geometry_points:
-                  type: string
+                  type: array
                   description: Geometrie als Punkte, wird für Distanz Berechnung verwendet (geo_distance
                     Sortierung funktioniert nicht mit geo_shape)
                   $comment: 'Ehemaliges Indexfeld: location_points'
+                  items:
+                    type: object
+                    $ref: ./parts/shared-types.yaml#/$defs/GeoPoint
                 outline:
                   type: array
                   items:
-                    type: string
+                    type: object
+                    $ref: ./parts/shared-types.yaml#/$defs/GeoShape
                     description: Outline für die Darstellung, ggf. reduzierte Geometrie
                   minItems: 0
       umweltnavi:
@@ -81,7 +89,7 @@ allOf:
             type: object
             description: Enthält Informationen über den Anbieter für die Facetten-Auswahl
             properties:
-              id:
+              slug:
                 type: string
                 description: Der Slug für die Filterung nach dem Anbieter
                 examples:
@@ -92,18 +100,19 @@ allOf:
                 examples:
                 - Bundesanstalt für Gewässerkunde (BfG)
             required:
-              - id
+              - slug
+              - name
           category:
             type: object
             properties:
-              name:
-                type: string
-                examples:
-                - Lärmindex Nacht
               slug:
                 type: string
                 examples:
                 - laermindex-nacht
+              name:
+                type: string
+                examples:
+                - Lärmindex Nacht
             required:
             - name
             - slug
@@ -122,10 +131,10 @@ allOf:
             examples:
               - Straße (City)
           classification:
-            type: string
+            type: number
             description: 'Nur für "Status-Layer", zusammen mit Kategorie "Lärmindex Nacht" ergibt sich folgende Id: laermindex-nacht-strasse-city-50'
             examples:
-              - '50'
+              - 50
             $comment: 'Ehemaliges Indexfeld: weight'
           service:
             type: array
@@ -163,7 +172,6 @@ allOf:
               required:
               - url
               - type
-              - layer
             minItems: 1
           info_text:
             type: string
@@ -209,39 +217,41 @@ allOf:
                   examples:
                   - 'Bilder, Beschreibung, Wikipedia, Steckbrief'
                 items:
-                  allOf:
-                    - type: object
-                      title: Basisinformationen
-                      required:
-                        - type
-                      description: Liste der Inhalte
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                            - image
-                            - text
-                            - link
-                        url:
-                          type: string
-                          description: Für Link und Bild
-                        title:
-                          type: string
-                          description: Titel des Elementes
-                        content:
-                          type: string
-                          description: Angaben zur Herkunft des Inhalts
-                          $comment: 'Ehemaliges Indexfeld: object_date'
-                        assigned_to:
-                          type: string
-                          description: Partner für den das Detail spezifisch erstellt wurde. Leer
-                            bedeutet für alle Partner.
-                          enum:
-                          - ni
-                          - sh
-                          - rp
-                    - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
-                      type: object
+                  type: array
+                  items:
+                    allOf:
+                      - type: object
+                        title: Basisinformationen
+                        required:
+                          - type
+                        description: Liste der Inhalte
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                              - image
+                              - text
+                              - link
+                          url:
+                            type: string
+                            description: Für Link und Bild
+                          title:
+                            type: string
+                            description: Titel des Elementes
+                          content:
+                            type: string
+                            description: Angaben zur Herkunft des Inhalts
+                            $comment: 'Ehemaliges Indexfeld: object_date'
+                          assigned_to:
+                            type: string
+                            description: Partner für den das Detail spezifisch erstellt wurde. Leer
+                              bedeutet für alle Partner.
+                            enum:
+                            - ni
+                            - sh
+                            - rp
+                      - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
+                        type: object
               required:
               - name
               - items
@@ -257,12 +267,13 @@ allOf:
                   examples:
                   - enthält, gehört zu
                 items:
-                  type: object
-                  properties:
-                    oid:
-                      type: string
-                    name:
-                      type: string
+                  type: array
+                  items:
+                    properties:
+                      oid:
+                        type: string
+                      name:
+                        type: string
                   required:
                   - oid
                   - name
@@ -282,20 +293,24 @@ allOf:
             examples:
             - { "original": 27900, "override": 1 }
           target_platform:
-            type: string
-            description: Target des Datensatzes (App oder Portal)
-            enum:
-            - web
-            - app
-            - none
+            type: array
+            description: Target(s) des Datensatzes (App oder Portal). Der Wert `_none_` bedeutet, dass das Target unspezifisch ist.
+            items:
+              type: string
+              enum:
+              - web
+              - app
+              - _none_
           assigned_to:
-            type: string
-            description: Partner für den der Datensatz spezifisch erstellt wurde. Leer bedeutet für alle Partner.
-            enum:
-            - ni
-            - sh
-            - rp
-            - none
+            type: array
+            description: Partner für die das Detail spezifisch erstellt wurde. Der Wert `_none_` bedeutet, dass das Detail unspezifisch ist.
+            items:
+              type: string
+              enum:
+              - ni
+              - sh
+              - rp
+              - _none_
           tags:
             type: array
             items:

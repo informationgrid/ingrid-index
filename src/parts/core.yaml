@@ -115,16 +115,6 @@ properties:
       type: object
       title: item
       $ref: "#/$defs/ReferenceItem"
-      if:
-        properties:
-          internal:
-            const: true
-      then:
-        required:
-          - uuid_ref
-      else:
-        required:
-          - url
   fulltext:
     type: array
     description: Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet
@@ -153,34 +143,11 @@ $defs:
           - <oid>-<geometrie-id> (für UMWELTNAVI)
       geometry:
         type: object
-        description: 'Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON'
-        properties:
-          type:
-            type: string
-            enum:
-              - Point
-              - LineString
-              - Polygon
-              - MultiPoint
-              - MultiLineString
-              - MultiPolygon
-          coordinates:
-            type: array
-            items:
-              type: array
-              minItems: 4
-              items:
-                type: array
-                minItems: 2
-                items:
-                  type: number
-            description: 'Koordinaten des Geometrieelements'
-            examples:
-              - '...'
+        $ref: ./shared-types.yaml#/$defs/GeoShape
       bbox:
         type: array
         title: Bounding Box
-        description: Umschließende BBOX der Geometrie
+        description: Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.
         items:
           type: number
           minimum: -180
@@ -288,16 +255,9 @@ $defs:
   ReferenceItem:
     type: object
     properties:
-      internal:
-        type: boolean
-        description: "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
       url:
-        $comment: "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?"
         type: string
         description: "Die URL zur externen Ressource oder Download."
-      uuid_ref:
-        type: string
-        description: "Die UUID des internen Datensatzes."
       type:
         type: object
         title: type
