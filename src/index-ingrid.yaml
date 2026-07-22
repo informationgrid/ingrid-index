@@ -265,13 +265,129 @@ $defs:
                           description: "Parameter, die die Georeferenzierung der Rasterdaten ermöglichen"
 
           #   - Erstellungsmaßstab
-          #   - Darstellender Dienst (als Referenz!)
-          #   - Datengrundlage/Herkunft
-          #   - Herstellungsprozess
-          #   - Symbolkatalog
-          #   - Schlüsselkatalog
-          #   - Sachdaten/Attributinformation
+          spatialResolutionScale:
+            type: object
+            properties:
+              scale:
+                type: integer
+                description: "Angabe des Erstellungsmaßstabs"
+                examples:
+                  - 25000 für 1:25.000
+              resolution_ground:
+                type: number
+                description: "Bodenauflösung in Metern"
+              resolution_scan:
+                type: number
+                description: "Scan-Auflösung in DPI"
 
+          #   - Darstellender Dienst (als Referenz!)
+          cross_references:
+            type: array
+            items:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                name:
+                  type: string
+                document_type:
+                  type: string
+                description:
+                  type: string
+                reference_type:
+                  type: string
+                direction:
+                  type: string
+                  enum:
+                    - IN
+                    - OUT
+
+          #   - Datengrundlage/Herkunft
+          lineage:
+            type: object
+            title: "Datenherkunft"
+            description: "Angaben zur Herkunft und Entstehung der Daten (Lineage)"
+            properties:
+              statement:
+                type: string
+                description: "Allgemeine Beschreibung der Datenherkunft/Prozesskette"
+              source:
+                type: string
+                description: "Beschreibung der Ausgangsdaten"
+              process_step:
+                type: string
+                description: "Beschreibung der Bearbeitungsschritte"
+
+          #   - Herstellungsprozess
+          processStepDescription:
+            type: array
+            description: "Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat."
+            items:
+              type: string
+          #   - Symbolkatalog
+          symbolCatalogue:
+            type: array
+            description: "Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden"
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "Titel des Symbolkataloges"
+                date:
+                  type: string
+                  description: "Datum des Symbolkataloges"
+                version:
+                  type: string
+                  description: "Version des Symbolkataloges"
+          #   - Schlüsselkatalog
+          codeListReference:
+            type: array
+            description: "An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen."
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "Titel des Schlüsselkataloges"
+                date:
+                  type: string
+                  description: "Datum des Schlüsselkataloges"
+                version:
+                  type: string
+                  description: "Version des Schlüsselkataloges"
+          #   - Sachdaten/Attributinformation
+          attributeDescription:
+            type: array
+            description: "Angabe der mit der Geo-Information/Karte verbundenen Sachdaten."
+            items:
+              type: string
+
+          spatial:
+            type: object
+            properties:
+              description:
+                type: string
+                description: "Erläuterung zu den Raumbezügen"
+              vertical_extent:
+                type: object
+                title: Vertikale Ausdehnung
+                description: Höhenbereich der beschriebenen Daten, z. B. für Höhenmodelle.
+                properties:
+                  minimum:
+                    type: number
+                    description: Minimaler Wert der vertikalen Ausdehnung
+                  maximum:
+                    type: number
+                    description: Maximaler Wert der vertikalen Ausdehnung
+                  unit:
+                    type: object
+                    description: Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.
+                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                  vdatum:
+                    type: object
+                    description: Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.
+                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
           # - Zusatzinformationen
           #   - Eignung
           specific_usage:
@@ -348,298 +464,67 @@ $defs:
             description: "Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz."
             $ref: ./parts/shared-types.yaml#/$defs/KeyValue
 
+          service:
+            type: object
+            description: "Angaben zu einem Geodaten-Dienst"
+            properties:
+              type:
+                type: string
+                description: Art des Dienstes
+              classifications:
+                type: array
+                items:
+                  type: string
+                  examples:
+                    - Dienst für die Konversion von Koordinaten
+              versions:
+                type: array
+                items:
+                  type: string
+                  examples:
+                    - OGC:WMS 1.3.0
+              operations:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      description: Name der Operation
+                    description:
+                      type: string
+                      description: Beschreibung der Operation
+                    access_url:
+                      type: string
+                      description: URL zur Operation
+              # Dargestellte Daten, siehe cross_references bzw. references
+
+              # Erstellungsmaßstab, siehe: spatialResolutionScale
+
+              environmentDescription:
+                type: string
+                description: Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird.
+              serviceHistory:
+                type: string
+                description: Angaben zur Implementierungsgeschichte des Dienstes.
+              additionalInformation:
+                type: string
+                description: Zusätzliche Informationen zum Dienst
+              hasAccessConstraints:
+                type: boolean
+                description: Ist der Zugriff auf den Dienst eingeschränkt?
+              doi:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: Angabe des DOI (Digital Object Identifier) des Dokumentes
+                  generalResourceType:
+                    type: string
+                    description: Angabe der übergeordneten Art des Dokumentes
+                  resourceType:
+                    type: string
+                    description: Angabe der Art des Dokumentes
+
           # TODO: merge references and fileReferences
           # TODO: properties to tags (core?)
           # TODO: parentIdentifier (core?)
-
-    # FROM EDITOR
-
-#          properties:
-#            type: object
-#            title: properties
-#            properties:
-#              subType:
-#                type: object
-#                title: subType
-#                properties:
-#                  key:
-#                    type: string
-#              isInspireIdentified:
-#                type: string
-#              isOpenData:
-#                type: boolean
-#              isAdVCompatible:
-#                type: boolean
-#
-#          lineage:
-#            type: object
-#            title: lineage
-#            properties:
-#              statement:
-#                type: string
-#          identifier:
-#            type: string
-#
-#          resolution:
-#            type: array
-#            items:
-#              type: object
-#              title: item
-#              properties:
-#                denominator:
-#                  type: integer
-#                distanceMeter:
-#                  type: integer
-#                distanceDPI:
-#                  type: integer
-#          dataQualityInfo:
-#            type: object
-#            title: dataQualityInfo
-#            properties:
-#              lineage:
-#                type: object
-#                title: lineage
-#                properties:
-#                  source:
-#                    type: object
-#                    title: source
-#                    properties:
-#                      descriptions:
-#                        type: array
-#                        items:
-#                          type: object
-#                          title: item
-#                          properties:
-#                            _type:
-#                              type: string
-#                            value:
-#                              type: string
-#                      processStep:
-#                        type: object
-#                        title: processStep
-#                        properties:
-#                          description:
-#                            type: array
-#                            items:
-#                              type: object
-#                              title: item
-#                              properties:
-#                                key:
-#                                  type: 'null'
-#                                value:
-#                                  type: string
-#          portrayalCatalogueInfo:
-#            type: object
-#            title: portrayalCatalogueInfo
-#            properties:
-#              citation:
-#                type: array
-#                items:
-#                  type: object
-#                  title: item
-#                  properties:
-#                    title:
-#                      type: object
-#                      title: title
-#                      properties:
-#                        key:
-#                          type: string
-#                    date:
-#                      type: string
-#                    edition:
-#                      type: string
-#          featureCatalogueDescription:
-#            type: object
-#            title: featureCatalogueDescription
-#            properties:
-#              citation:
-#                type: array
-#                items:
-#                  type: object
-#                  title: item
-#                  properties:
-#                    title:
-#                      type: object
-#                      title: title
-#                      properties:
-#                        key:
-#                          type: string
-#                    date:
-#                      type: string
-#                    edition:
-#                      type: string
-#              featureTypes:
-#                type: array
-#                items:
-#                  type: object
-#                  title: item
-#                  properties:
-#                    key:
-#                      type: 'null'
-#                    value:
-#                      type: string
-#          dataQuality:
-#            type: object
-#            title: dataQuality
-#            properties:
-#              completenessOmission:
-#                type: object
-#                title: completenessOmission
-#                properties:
-#                  measResult:
-#                    type: integer
-#          absoluteExternalPositionalAccuracy:
-#            type: object
-#            title: absoluteExternalPositionalAccuracy
-#            properties:
-#              vertical:
-#                type: integer
-#              horizontal:
-#                type: integer
-#          qualities:
-#            type: array
-#            items:
-#              type: object
-#              title: item
-#              properties:
-#                _type:
-#                  type: string
-#                measureType:
-#                  type: object
-#                  title: measureType
-#                  properties:
-#                    key:
-#                      type: string
-#                value:
-#                  type: integer
-#                parameter:
-#                  type: string
-#          maintenanceInformation:
-#            type: object
-#            title: maintenanceInformation
-#            properties:
-#              maintenanceAndUpdateFrequency:
-#                type: object
-#                title: maintenanceAndUpdateFrequency
-#                properties:
-#                  key:
-#                    type: string
-#                  value:
-#                    type: string
-#                  _codelistId:
-#                    type: string
-#              userDefinedMaintenanceFrequency:
-#                type: object
-#                title: userDefinedMaintenanceFrequency
-#                properties:
-#                  number:
-#                    type: integer
-#                  unit:
-#                    type: object
-#                    title: unit
-#                    properties:
-#                      key:
-#                        type: string
-#                      value:
-#                        type: string
-#                      _codelistId:
-#                        type: string
-#              description:
-#                type: string
-#          dataset:
-#            type: object
-#            title: dataset
-#            properties:
-#              languages:
-#                type: array
-#                items:
-#                  type: string
-#          extraInfo:
-#            type: object
-#            title: extraInfo
-#            properties:
-#              legalBasicsDescriptions:
-#                type: array
-#                items:
-#                  type: object
-#                  title: item
-#                  properties:
-#                    key:
-#                      type: string
-#                    value:
-#                      type: string
-#                    _codelistId:
-#                      type: string
-#          distribution:
-#            type: object
-#            title: distribution
-#            properties:
-#              format:
-#                type: array
-#                items:
-#                  type: object
-#                  title: item
-#                  properties:
-#                    name:
-#                      type: object
-#                      title: name
-#                      properties:
-#                        key:
-#                          type: string
-#                    version:
-#                      type: string
-#                    compression:
-#                      type: string
-#                    specification:
-#                      type: string
-#          digitalTransferOptions:
-#            type: array
-#            items:
-#              type: object
-#              title: item
-#              properties:
-#                name:
-#                  type: object
-#                  title: name
-#                  properties:
-#                    key:
-#                      type: string
-#                    value:
-#                      type: string
-#                    _codelistId:
-#                      type: string
-#                transferSize:
-#                  type: object
-#                  title: transferSize
-#                  properties:
-#                    value:
-#                      type: integer
-#                    unit:
-#                      type: object
-#                      title: unit
-#                      properties:
-#                        key:
-#                          type: string
-#                        value:
-#                          type: string
-#                        _codelistId:
-#                          type: 'null'
-#                mediumNote:
-#                  type: string
-#          orderInfo:
-#            type: string
-#          spatialScope:
-#            type: object
-#            title: spatialScope
-#            properties:
-#              key:
-#                type: string
-#              value:
-#                type: string
-#              _codelistId:
-#                type: string
-#          priorityDatasets:
-#            type: array
-#            items:
-#              type: object
-#

@@ -13,17 +13,6 @@ properties:
     description: Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.
     examples:
       - https://example.com/schemas/order/v2.1.0/schema.json
-  schema_version:
-    type: string
-    description: | 
-      Die Version des Schemas des Indexes. 
-      Die Version richtet sich nach der Versionierung des InGrid Releases. 
-      Semantic Versioning soll verwendet werden.
-      Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1
-    examples:
-    - 1.0.0
-    - 1.1.0-1
-    - 1.2.0-1
   metadata:
     description: Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.
     $ref: "#/$defs/Metadata"
@@ -79,6 +68,15 @@ properties:
       type: object
       $ref: "#/$defs/SpatialItem"
     $comment: 'Ehemaliges Indexfeld: layer'
+  crs:
+    type: array
+    title: Referenzsystem
+    description: "Koordinatenreferenzsystem(e) des Datensatzes."
+    items:
+      type: string
+      examples: [
+        "EPSG:25832"
+      ]
   temporal:
     description: Gültigkeitsdatumsbereich der beschriebenen Daten
     $ref: ./shared-types.yaml#/$defs/Temporal
