@@ -24,15 +24,6 @@
             "https://example.com/schemas/order/v2.1.0/schema.json"
           ]
         },
-        "schema_version": {
-          "type": "string",
-          "description": "Die Version des Schemas des Indexes. \nDie Version richtet sich nach der Versionierung des InGrid Releases. \nSemantic Versioning soll verwendet werden.\nZusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1\n",
-          "examples": [
-            "1.0.0",
-            "1.1.0-1",
-            "1.2.0-1"
-          ]
-        },
         "metadata": {
           "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
           "type": "object",
@@ -242,6 +233,7 @@
                   },
                   "coordinates": {
                     "type": "array",
+                    "description": "Koordinaten des Geometrieelements",
                     "items": {
                       "type": "array",
                       "minItems": 4,
@@ -252,18 +244,14 @@
                           "type": "number"
                         }
                       }
-                    },
-                    "description": "Koordinaten des Geometrieelements",
-                    "examples": [
-                      "..."
-                    ]
+                    }
                   }
                 }
               },
               "bbox": {
                 "type": "array",
                 "title": "Bounding Box",
-                "description": "Umschließende BBOX der Geometrie",
+                "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
                 "items": {
                   "type": "number",
                   "minimum": -180,
@@ -332,6 +320,17 @@
             ]
           },
           "$comment": "Ehemaliges Indexfeld: layer"
+        },
+        "crs": {
+          "type": "array",
+          "title": "Referenzsystem",
+          "description": "Koordinatenreferenzsystem(e) des Datensatzes.",
+          "items": {
+            "type": "string",
+            "examples": [
+              "EPSG:25832"
+            ]
+          }
         },
         "temporal": {
           "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
@@ -442,36 +441,10 @@
           "items": {
             "type": "object",
             "title": "item",
-            "if": {
-              "properties": {
-                "internal": {
-                  "const": true
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "uuid_ref"
-              ]
-            },
-            "else": {
-              "required": [
-                "url"
-              ]
-            },
             "properties": {
-              "internal": {
-                "type": "boolean",
-                "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
-              },
               "url": {
-                "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
                 "type": "string",
                 "description": "Die URL zur externen Ressource oder Download."
-              },
-              "uuid_ref": {
-                "type": "string",
-                "description": "Die UUID des internen Datensatzes."
               },
               "type": {
                 "type": "object",
@@ -557,6 +530,7 @@
                 },
                 "coordinates": {
                   "type": "array",
+                  "description": "Koordinaten des Geometrieelements",
                   "items": {
                     "type": "array",
                     "minItems": 4,
@@ -567,18 +541,14 @@
                         "type": "number"
                       }
                     }
-                  },
-                  "description": "Koordinaten des Geometrieelements",
-                  "examples": [
-                    "..."
-                  ]
+                  }
                 }
               }
             },
             "bbox": {
               "type": "array",
               "title": "Bounding Box",
-              "description": "Umschließende BBOX der Geometrie",
+              "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
               "items": {
                 "type": "number",
                 "minimum": -180,
@@ -755,18 +725,9 @@
         "ReferenceItem": {
           "type": "object",
           "properties": {
-            "internal": {
-              "type": "boolean",
-              "description": "Gibt an, ob es sich um einen internen oder externen Verweis handelt."
-            },
             "url": {
-              "$comment": "Sollten url und uuidRef vereint werden? Wodurch die Logik vereinfacht wird?",
               "type": "string",
               "description": "Die URL zur externen Ressource oder Download."
-            },
-            "uuid_ref": {
-              "type": "string",
-              "description": "Die UUID des internen Datensatzes."
             },
             "type": {
               "type": "object",
@@ -1326,6 +1287,193 @@
                 }
               }
             },
+            "spatialResolutionScale": {
+              "type": "object",
+              "properties": {
+                "scale": {
+                  "type": "integer",
+                  "description": "Angabe des Erstellungsmaßstabs",
+                  "examples": [
+                    "25000 für 1:25.000"
+                  ]
+                },
+                "resolution_ground": {
+                  "type": "number",
+                  "description": "Bodenauflösung in Metern"
+                },
+                "resolution_scan": {
+                  "type": "number",
+                  "description": "Scan-Auflösung in DPI"
+                }
+              }
+            },
+            "cross_references": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "uuid": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "document_type": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "reference_type": {
+                    "type": "string"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": [
+                      "IN",
+                      "OUT"
+                    ]
+                  }
+                }
+              }
+            },
+            "lineage": {
+              "type": "object",
+              "title": "Datenherkunft",
+              "description": "Angaben zur Herkunft und Entstehung der Daten (Lineage)",
+              "properties": {
+                "statement": {
+                  "type": "string",
+                  "description": "Allgemeine Beschreibung der Datenherkunft/Prozesskette"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Beschreibung der Ausgangsdaten"
+                },
+                "process_step": {
+                  "type": "string",
+                  "description": "Beschreibung der Bearbeitungsschritte"
+                }
+              }
+            },
+            "processStepDescription": {
+              "type": "array",
+              "description": "Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "symbolCatalogue": {
+              "type": "array",
+              "description": "Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Titel des Symbolkataloges"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Datum des Symbolkataloges"
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Version des Symbolkataloges"
+                  }
+                }
+              }
+            },
+            "codeListReference": {
+              "type": "array",
+              "description": "An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Titel des Schlüsselkataloges"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Datum des Schlüsselkataloges"
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Version des Schlüsselkataloges"
+                  }
+                }
+              }
+            },
+            "attributeDescription": {
+              "type": "array",
+              "description": "Angabe der mit der Geo-Information/Karte verbundenen Sachdaten.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spatial": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Erläuterung zu den Raumbezügen"
+                },
+                "vertical_extent": {
+                  "type": "object",
+                  "title": "Vertikale Ausdehnung",
+                  "description": "Höhenbereich der beschriebenen Daten, z. B. für Höhenmodelle.",
+                  "properties": {
+                    "minimum": {
+                      "type": "number",
+                      "description": "Minimaler Wert der vertikalen Ausdehnung"
+                    },
+                    "maximum": {
+                      "type": "number",
+                      "description": "Maximaler Wert der vertikalen Ausdehnung"
+                    },
+                    "unit": {
+                      "type": "object",
+                      "description": "Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.",
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    },
+                    "vdatum": {
+                      "type": "object",
+                      "description": "Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.",
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "specific_usage": {
               "type": "string"
             },
@@ -1457,6 +1605,86 @@
                   ]
                 }
               }
+            },
+            "service": {
+              "type": "object",
+              "description": "Angaben zu einem Geodaten-Dienst",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Art des Dienstes"
+                },
+                "classifications": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "examples": [
+                      "Dienst für die Konversion von Koordinaten"
+                    ]
+                  }
+                },
+                "versions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "examples": [
+                      "OGC:WMS 1.3.0"
+                    ]
+                  }
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name der Operation"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Beschreibung der Operation"
+                      },
+                      "access_url": {
+                        "type": "string",
+                        "description": "URL zur Operation"
+                      }
+                    }
+                  }
+                },
+                "environmentDescription": {
+                  "type": "string",
+                  "description": "Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird."
+                },
+                "serviceHistory": {
+                  "type": "string",
+                  "description": "Angaben zur Implementierungsgeschichte des Dienstes."
+                },
+                "additionalInformation": {
+                  "type": "string",
+                  "description": "Zusätzliche Informationen zum Dienst"
+                },
+                "hasAccessConstraints": {
+                  "type": "boolean",
+                  "description": "Ist der Zugriff auf den Dienst eingeschränkt?"
+                },
+                "doi": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "description": "Angabe des DOI (Digital Object Identifier) des Dokumentes"
+                    },
+                    "generalResourceType": {
+                      "type": "string",
+                      "description": "Angabe der übergeordneten Art des Dokumentes"
+                    },
+                    "resourceType": {
+                      "type": "string",
+                      "description": "Angabe der Art des Dokumentes"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -1501,8 +1729,7 @@
           "required": [
             "data_type",
             "document_type",
-            "datasource",
-            "provider"
+            "datasource"
           ]
         },
         "spatials": {
@@ -1511,8 +1738,8 @@
             "type": "object",
             "allOf": [
               {
-                "title": "Spatial Core",
                 "type": "object",
+                "title": "Spatial Core",
                 "properties": {
                   "name": {
                     "type": "string",
@@ -1538,6 +1765,7 @@
                       },
                       "coordinates": {
                         "type": "array",
+                        "description": "Koordinaten des Geometrieelements",
                         "items": {
                           "type": "array",
                           "minItems": 4,
@@ -1548,18 +1776,14 @@
                               "type": "number"
                             }
                           }
-                        },
-                        "description": "Koordinaten des Geometrieelements",
-                        "examples": [
-                          "..."
-                        ]
+                        }
                       }
                     }
                   },
                   "bbox": {
                     "type": "array",
                     "title": "Bounding Box",
-                    "description": "Umschließende BBOX der Geometrie",
+                    "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
                     "items": {
                       "type": "number",
                       "minimum": -180,
@@ -1631,24 +1855,119 @@
                 "type": "object",
                 "title": "UmweltNavi Spatial",
                 "properties": {
-                  "centroid": {
+                  "bounds": {
                     "type": "string",
-                    "description": "Schwerpunkt der Geometrie"
+                    "description": "Wird für Geo-Queries verwendet, für Abfragen in der Art \"Schneidet die Bounding Box des Objekts einen Umkreis um den Standpunkt?\""
+                  },
+                  "centroid": {
+                    "type": "object",
+                    "description": "Schwerpunkt der Geometrie",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "Point"
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number"
+                        },
+                        "examples": [
+                          [
+                            -71.34,
+                            41.12
+                          ]
+                        ]
+                      }
+                    }
                   },
                   "inside_point": {
-                    "type": "string",
-                    "description": "Punkt innerhalb der Geometrie, der dem Schwerpunkt am nächsten liegt."
+                    "type": "object",
+                    "description": "Punkt innerhalb der Geometrie, der dem Schwerpunkt am nächsten liegt.",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "Point"
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number"
+                        },
+                        "examples": [
+                          [
+                            -71.34,
+                            41.12
+                          ]
+                        ]
+                      }
+                    }
                   },
                   "geometry_points": {
-                    "type": "string",
+                    "type": "array",
                     "description": "Geometrie als Punkte, wird für Distanz Berechnung verwendet (geo_distance Sortierung funktioniert nicht mit geo_shape)",
-                    "$comment": "Ehemaliges Indexfeld: location_points"
+                    "$comment": "Ehemaliges Indexfeld: location_points",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "Point"
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "items": {
+                            "type": "number"
+                          },
+                          "examples": [
+                            [
+                              -71.34,
+                              41.12
+                            ]
+                          ]
+                        }
+                      }
+                    }
                   },
                   "outline": {
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "description": "Outline für die Darstellung, ggf. reduzierte Geometrie"
+                      "type": "object",
+                      "description": "Outline für die Darstellung, ggf. reduzierte Geometrie",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Point",
+                            "LineString",
+                            "Polygon",
+                            "MultiPoint",
+                            "MultiLineString",
+                            "MultiPolygon"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "description": "Koordinaten des Geometrieelements",
+                          "items": {
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
                     },
                     "minItems": 0
                   }
@@ -1678,7 +1997,7 @@
               "type": "object",
               "description": "Enthält Informationen über den Anbieter für die Facetten-Auswahl",
               "properties": {
-                "id": {
+                "slug": {
                   "type": "string",
                   "description": "Der Slug für die Filterung nach dem Anbieter",
                   "examples": [
@@ -1694,22 +2013,23 @@
                 }
               },
               "required": [
-                "id"
+                "slug",
+                "name"
               ]
             },
             "category": {
               "type": "object",
               "properties": {
-                "name": {
-                  "type": "string",
-                  "examples": [
-                    "Lärmindex Nacht"
-                  ]
-                },
                 "slug": {
                   "type": "string",
                   "examples": [
                     "laermindex-nacht"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "examples": [
+                    "Lärmindex Nacht"
                   ]
                 }
               },
@@ -1737,10 +2057,10 @@
               ]
             },
             "classification": {
-              "type": "string",
+              "type": "number",
               "description": "Nur für \"Status-Layer\", zusammen mit Kategorie \"Lärmindex Nacht\" ergibt sich folgende Id: laermindex-nacht-strasse-city-50",
               "examples": [
-                "50"
+                50
               ],
               "$comment": "Ehemaliges Indexfeld: weight"
             },
@@ -1790,8 +2110,7 @@
                 },
                 "required": [
                   "url",
-                  "type",
-                  "layer"
+                  "type"
                 ]
               },
               "minItems": 1
@@ -1857,159 +2176,162 @@
                     ]
                   },
                   "items": {
-                    "allOf": [
-                      {
-                        "type": "object",
-                        "title": "Basisinformationen",
-                        "required": [
-                          "type"
-                        ],
-                        "description": "Liste der Inhalte",
-                        "properties": {
-                          "type": {
-                            "type": "string",
-                            "enum": [
-                              "image",
-                              "text",
-                              "link"
-                            ]
-                          },
-                          "url": {
-                            "type": "string",
-                            "description": "Für Link und Bild"
-                          },
-                          "title": {
-                            "type": "string",
-                            "description": "Titel des Elementes"
-                          },
-                          "content": {
-                            "type": "string",
-                            "description": "Angaben zur Herkunft des Inhalts",
-                            "$comment": "Ehemaliges Indexfeld: object_date"
-                          },
-                          "assigned_to": {
-                            "type": "string",
-                            "description": "Partner für den das Detail spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
-                            "enum": [
-                              "ni",
-                              "sh",
-                              "rp"
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "type": "object",
-                        "title": "Zusätzliche Informationen",
-                        "properties": {
-                          "temporal": {
-                            "type": "object",
-                            "properties": {
-                              "date": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "Datum des Ereignisses"
-                              },
-                              "date_range": {
-                                "type": "object",
-                                "title": "Zeitabschnitt",
-                                "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
-                                "properties": {
-                                  "gte": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "description": "Startdatum der Zeitangabe"
-                                  },
-                                  "lte": {
-                                    "type": "string",
-                                    "format": "date-time",
-                                    "description": "Enddatum der Zeitangabe"
-                                  }
-                                }
-                              },
-                              "date_text": {
-                                "type": "string",
-                                "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
-                                "examples": [
-                                  "Sommer 2010"
-                                ]
-                              },
-                              "date_type": {
-                                "type": "string",
-                                "description": "Typ der Zeitangabe",
-                                "enum": [
-                                  "created",
-                                  "last_updated",
-                                  "first_published"
-                                ]
-                              }
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "title": "Basisinformationen",
+                          "required": [
+                            "type"
+                          ],
+                          "description": "Liste der Inhalte",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "image",
+                                "text",
+                                "link"
+                              ]
                             },
-                            "oneOf": [
-                              {
-                                "required": [
-                                  "date"
-                                ]
-                              },
-                              {
-                                "required": [
-                                  "date_range"
-                                ]
-                              },
-                              {
-                                "required": [
-                                  "date_text"
-                                ]
-                              }
-                            ],
-                            "description": "z.B. Aufnahmedatum eines Bildes",
-                            "$comment": "Ehemaliges Indexfeld: object_date"
-                          },
-                          "source": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              },
-                              "url": {
-                                "type": "string"
-                              }
+                            "url": {
+                              "type": "string",
+                              "description": "Für Link und Bild"
                             },
-                            "required": [
-                              "name"
-                            ]
-                          },
-                          "license": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              },
-                              "url": {
-                                "type": "string"
-                              }
+                            "title": {
+                              "type": "string",
+                              "description": "Titel des Elementes"
                             },
-                            "required": [
-                              "name"
-                            ]
-                          },
-                          "author": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              },
-                              "url": {
-                                "type": "string"
-                              }
+                            "content": {
+                              "type": "string",
+                              "description": "Angaben zur Herkunft des Inhalts",
+                              "$comment": "Ehemaliges Indexfeld: object_date"
                             },
-                            "required": [
-                              "name"
-                            ]
+                            "assigned_to": {
+                              "type": "string",
+                              "description": "Partner für den das Detail spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
+                              "enum": [
+                                "ni",
+                                "sh",
+                                "rp"
+                              ]
+                            }
                           }
                         },
-                        "description": "Wird verwendet, um die Herkunft eines Inhalts zu beschreiben"
-                      }
-                    ]
+                        {
+                          "type": "object",
+                          "title": "Zusätzliche Informationen",
+                          "properties": {
+                            "temporal": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "description": "Datum des Ereignisses"
+                                },
+                                "date_range": {
+                                  "type": "object",
+                                  "title": "Zeitabschnitt",
+                                  "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                                  "properties": {
+                                    "gte": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "Startdatum der Zeitangabe"
+                                    },
+                                    "lte": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "description": "Enddatum der Zeitangabe"
+                                    }
+                                  }
+                                },
+                                "date_text": {
+                                  "type": "string",
+                                  "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                                  "examples": [
+                                    "Sommer 2010"
+                                  ]
+                                },
+                                "date_type": {
+                                  "type": "string",
+                                  "description": "Typ der Zeitangabe",
+                                  "enum": [
+                                    "created",
+                                    "last_updated",
+                                    "first_published"
+                                  ]
+                                }
+                              },
+                              "oneOf": [
+                                {
+                                  "required": [
+                                    "date"
+                                  ]
+                                },
+                                {
+                                  "required": [
+                                    "date_range"
+                                  ]
+                                },
+                                {
+                                  "required": [
+                                    "date_text"
+                                  ]
+                                }
+                              ],
+                              "description": "z.B. Aufnahmedatum eines Bildes",
+                              "$comment": "Ehemaliges Indexfeld: object_date"
+                            },
+                            "source": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ]
+                            },
+                            "license": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ]
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ]
+                            }
+                          },
+                          "description": "Wird verwendet, um die Herkunft eines Inhalts zu beschreiben"
+                        }
+                      ]
+                    }
                   }
                 },
                 "required": [
@@ -2032,13 +2354,15 @@
                     ]
                   },
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "oid": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
+                    "type": "array",
+                    "items": {
+                      "properties": {
+                        "oid": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
                       }
                     },
                     "required": [
@@ -2074,23 +2398,29 @@
               ]
             },
             "target_platform": {
-              "type": "string",
-              "description": "Target des Datensatzes (App oder Portal)",
-              "enum": [
-                "web",
-                "app",
-                "none"
-              ]
+              "type": "array",
+              "description": "Target(s) des Datensatzes (App oder Portal). Der Wert `_none_` bedeutet, dass das Target unspezifisch ist.",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "web",
+                  "app",
+                  "_none_"
+                ]
+              }
             },
             "assigned_to": {
-              "type": "string",
-              "description": "Partner für den der Datensatz spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
-              "enum": [
-                "ni",
-                "sh",
-                "rp",
-                "none"
-              ]
+              "type": "array",
+              "description": "Partner für die das Detail spezifisch erstellt wurde. Der Wert `_none_` bedeutet, dass das Detail unspezifisch ist.",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ni",
+                  "sh",
+                  "rp",
+                  "_none_"
+                ]
+              }
             },
             "tags": {
               "type": "array",

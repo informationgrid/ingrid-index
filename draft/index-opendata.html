@@ -165,65 +165,6 @@
         </div>
     </div>
 </div>
-<div class="accordion" id="accordionallOf_i0_schema_version">
-    <div class="card">
-        <div class="card-header" id="headingallOf_i0_schema_version">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i0_schema_version"
-                        aria-expanded="" aria-controls="allOf_i0_schema_version" onclick="setAnchor('#allOf_i0_schema_version')"><span class="property-name">schema_version</span></button>
-            </h2>
-        </div>
-
-        <div id="allOf_i0_schema_version"
-             class="collapse property-definition-div" aria-labelledby="headingallOf_i0_schema_version"
-             data-parent="#accordionallOf_i0_schema_version">
-            <div class="card-body pl-5">
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_schema_version" onclick="anchorLink('allOf_i0_schema_version')">schema_version</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die Version des Schemas des Indexes.<br />
-Die Version richtet sich nach der Versionierung des InGrid Releases.<br />
-Semantic Versioning soll verwendet werden.<br />
-Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
-</span>
-        
-
-        
-        
-
-        <br/>
-<div class="badge badge-secondary">Examples:</div>
-<br/><div id="allOf_i0_schema_version_ex1" class="jumbotron examples"><div class="highlight"><pre><span></span><span class="s2">&quot;1.0.0&quot;</span>
-</pre></div>
-</div><div id="allOf_i0_schema_version_ex2" class="jumbotron examples"><div class="highlight"><pre><span></span><span class="s2">&quot;1.1.0-1&quot;</span>
-</pre></div>
-</div><div id="allOf_i0_schema_version_ex3" class="jumbotron examples"><div class="highlight"><pre><span></span><span class="s2">&quot;1.2.0-1&quot;</span>
-</pre></div>
-</div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="accordion" id="accordionallOf_i0_metadata">
     <div class="card">
         <div class="card-header" id="headingallOf_i0_metadata">
@@ -2609,6 +2550,8 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
     <a href="#allOf_i0_spatials_items_geometry" onclick="anchorLink('allOf_i0_spatials_items_geometry')">geometry</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
 <span class="description"><p>Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON</p>
 </span>
+
+    
         
 
         
@@ -2960,11 +2903,7 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
         </div>
     </div>
         </div>
-    </div><br/>
-<div class="badge badge-secondary">Example:</div>
-<br/><div id="allOf_i0_spatials_items_geometry_coordinates_ex1" class="jumbotron examples"><div class="highlight"><pre><span></span><span class="s2">&quot;...&quot;</span>
-</pre></div>
-</div>
+    </div>
             </div>
         </div>
     </div>
@@ -3023,7 +2962,7 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_bbox" onclick="anchorLink('allOf_i0_spatials_items_bbox')">bbox</a></div><h4>Bounding Box</h4><span class="badge badge-dark value-type">Type: array of number</span><br/>
-<span class="description"><p>Umschließende BBOX der Geometrie</p>
+<span class="description"><p>Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist <code>[min Longitude west, min Latitude south, max Longitude east, max Latitude north]</code>.</p>
 </span>
         
 
@@ -3538,6 +3477,100 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
             </div>
         </div>
     </div>
+</div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordionallOf_i0_crs">
+    <div class="card">
+        <div class="card-header" id="headingallOf_i0_crs">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i0_crs"
+                        aria-expanded="" aria-controls="allOf_i0_crs" onclick="setAnchor('#allOf_i0_crs')"><span class="property-name">crs</span></button>
+            </h2>
+        </div>
+
+        <div id="allOf_i0_crs"
+             class="collapse property-definition-div" aria-labelledby="headingallOf_i0_crs"
+             data-parent="#accordionallOf_i0_crs">
+            <div class="card-body pl-5">
+
+    <div class="breadcrumbs">root
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i0_crs" onclick="anchorLink('allOf_i0_crs')">crs</a></div><h4>Referenzsystem</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<span class="description"><p>Koordinatenreferenzsystem(e) des Datensatzes.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="allOf_i0_crs_items">
+            
+
+    <div class="breadcrumbs">root
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i0_crs" onclick="anchorLink('allOf_i0_crs')">crs</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i0_crs_items" onclick="anchorLink('allOf_i0_crs_items')">crs items</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+
+        
+
+        
+        
+
+        <br/>
+<div class="badge badge-secondary">Example:</div>
+<br/><div id="allOf_i0_crs_items_ex1" class="jumbotron examples"><div class="highlight"><pre><span></span><span class="s2">&quot;EPSG:25832&quot;</span>
+</pre></div>
 </div>
         </div>
     </div>
@@ -4711,325 +4744,13 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
     <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">item</a></div><h4>item</h4><span class="badge badge-dark value-type">Type: object</span><br/>
 
 
-    <h2 class="handle">
-    <label>Conditional Subschema</label>
-</h2>
-<p>If the conditions in the "If" tab are respected, then the conditions in the "Then" tab should be respected.
-    Otherwise, the conditions in the "Else" tab should be respected.</p>
-<ul class="nav nav-tabs" id="allOf_i0_references_items_condition_tabs" role="tablist">
-    
-    <li class="nav-item">
-        <a class="nav-link active"
-           id="allOf_i0_references_items_if" data-toggle="tab" href="#tab-pane_allOf_i0_references_items_if" role="tab"
-           onclick="setAnchor('#allOf_i0_references_items_if')"
-        >If</a>
-    </li>
-
     
         
-        <li class="nav-item">
-            <a class="nav-link"
-               id="allOf_i0_references_items_then" data-toggle="tab" href="#tab-pane_allOf_i0_references_items_then" role="tab"
-               onclick="setAnchor('#allOf_i0_references_items_then')"
-            >Then</a>
-        </li><li class="nav-item">
-            <a class="nav-link"
-               id="allOf_i0_references_items_else" data-toggle="tab" href="#tab-pane_allOf_i0_references_items_else" role="tab"
-               onclick="setAnchor('#allOf_i0_references_items_else')"
-            >Else</a>
-        </li></ul>
-
-<div class="tab-content card">
-    
-    <div class="tab-pane fade card-body active show"
-         id="tab-pane_allOf_i0_references_items_if" role="tabpanel">
-        
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">item</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_if" onclick="anchorLink('allOf_i0_references_items_if')">if</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-
-        
 
         
         
 
         
-<div class="accordion" id="accordionallOf_i0_references_items_if_internal">
-    <div class="card">
-        <div class="card-header" id="headingallOf_i0_references_items_if_internal">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i0_references_items_if_internal"
-                        aria-expanded="" aria-controls="allOf_i0_references_items_if_internal" onclick="setAnchor('#allOf_i0_references_items_if_internal')"><span class="property-name">internal</span></button>
-            </h2>
-        </div>
-
-        <div id="allOf_i0_references_items_if_internal"
-             class="collapse property-definition-div" aria-labelledby="headingallOf_i0_references_items_if_internal"
-             data-parent="#accordionallOf_i0_references_items_if_internal">
-            <div class="card-body pl-5">
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">item</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_if" onclick="anchorLink('allOf_i0_references_items_if')">if</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_if_internal" onclick="anchorLink('allOf_i0_references_items_if_internal')">internal</a></div><span class="badge badge-dark value-type">Type: const</span><br/>
-<span class="const-value" id="allOf_i0_references_items_if_internal_const">Specific value: <code>true</code></span>
-        
-
-        
-        
-
-        
-            </div>
-        </div>
-    </div>
-</div>
-    </div>
-
-    
-        
-        <div class="tab-pane fade card-body"
-             id="tab-pane_allOf_i0_references_items_then" role="tabpanel">
-            
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">item</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_then" onclick="anchorLink('allOf_i0_references_items_then')">then</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-
-        <div class="enum-value">
-    <h4>The following properties are required:</h4>
-    <ul class="list-group"><li class="list-group-item required-property">uuid_ref</li></ul>
-    </div>
-
-        
-        
-
-        
-        </div>
-        <div class="tab-pane fade card-body"
-             id="tab-pane_allOf_i0_references_items_else" role="tabpanel">
-            
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">item</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_else" onclick="anchorLink('allOf_i0_references_items_else')">else</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-
-        <div class="enum-value">
-    <h4>The following properties are required:</h4>
-    <ul class="list-group"><li class="list-group-item required-property">url</li></ul>
-    </div>
-
-        
-        
-
-        
-        </div></div>
-        
-
-        
-        
-
-        
-<div class="accordion" id="accordionallOf_i0_references_items_internal">
-    <div class="card">
-        <div class="card-header" id="headingallOf_i0_references_items_internal">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i0_references_items_internal"
-                        aria-expanded="" aria-controls="allOf_i0_references_items_internal" onclick="setAnchor('#allOf_i0_references_items_internal')"><span class="property-name">internal</span></button>
-            </h2>
-        </div>
-
-        <div id="allOf_i0_references_items_internal"
-             class="collapse property-definition-div" aria-labelledby="headingallOf_i0_references_items_internal"
-             data-parent="#accordionallOf_i0_references_items_internal">
-            <div class="card-body pl-5">
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">references items</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_internal" onclick="anchorLink('allOf_i0_references_items_internal')">internal</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Gibt an, ob es sich um einen internen oder externen Verweis handelt.</p>
-</span>
-        
-
-        
-        
-
-        
-            </div>
-        </div>
-    </div>
-</div>
 <div class="accordion" id="accordionallOf_i0_references_items_url">
     <div class="card">
         <div class="card-header" id="headingallOf_i0_references_items_url">
@@ -5081,68 +4802,6 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
         </svg>
     <a href="#allOf_i0_references_items_url" onclick="anchorLink('allOf_i0_references_items_url')">url</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
 <span class="description"><p>Die URL zur externen Ressource oder Download.</p>
-</span>
-        
-
-        
-        
-
-        
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordionallOf_i0_references_items_uuid_ref">
-    <div class="card">
-        <div class="card-header" id="headingallOf_i0_references_items_uuid_ref">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i0_references_items_uuid_ref"
-                        aria-expanded="" aria-controls="allOf_i0_references_items_uuid_ref" onclick="setAnchor('#allOf_i0_references_items_uuid_ref')"><span class="property-name">uuid_ref</span></button>
-            </h2>
-        </div>
-
-        <div id="allOf_i0_references_items_uuid_ref"
-             class="collapse property-definition-div" aria-labelledby="headingallOf_i0_references_items_uuid_ref"
-             data-parent="#accordionallOf_i0_references_items_uuid_ref">
-            <div class="card-body pl-5">
-
-    <div class="breadcrumbs">root
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0" onclick="anchorLink('allOf_i0')">Root fields</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items" onclick="anchorLink('allOf_i0_references_items')">references items</a>
-        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path
-                fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-            />
-        </svg>
-    <a href="#allOf_i0_references_items_uuid_ref" onclick="anchorLink('allOf_i0_references_items_uuid_ref')">uuid_ref</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die UUID des internen Datensatzes.</p>
 </span>
         
 
@@ -6373,6 +6032,6 @@ Zusätzlich kann eine Schema- Release-Nummer verwendet werden, z.B. 1.0.0-1</p>
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-07-07 at 16:53:43 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-07-23 at 06:05:40 +0000</p>
     </footer></body>
 </html>
