@@ -1445,7 +1445,7 @@
           ]
         },
         "exports": {
-          "unevaluatedProperties": false,
+          "unevaluatedProperties": true,
           "properties": {
             "iso": {
               "type": "string",
@@ -3154,13 +3154,16 @@
                             },
                             "assigned_to": {
                               "type": "array",
-                              "description": "Partner für den das Detail spezifisch erstellt wurde. Leer bedeutet für alle Partner.",
-                              "enum": [
-                                "ni",
-                                "sh",
-                                "rp",
-                                "_none_"
-                              ]
+                              "description": "Partner für die das Detail spezifisch erstellt wurde. Der Wert `_none_` bedeutet, dass das Detail unspezifisch ist.",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "ni",
+                                  "sh",
+                                  "rp",
+                                  "_none_"
+                                ]
+                              }
                             }
                           }
                         },

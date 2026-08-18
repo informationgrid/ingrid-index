@@ -1453,7 +1453,7 @@
               ]
             },
             "exports": {
-              "unevaluatedProperties": false,
+              "unevaluatedProperties": true,
               "properties": {
                 "iso": {
                   "type": "string",
@@ -2379,7 +2379,7 @@
               ]
             },
             "exports": {
-              "unevaluatedProperties": false,
+              "unevaluatedProperties": true,
               "properties": {
                 "iso": {
                   "type": "string",
