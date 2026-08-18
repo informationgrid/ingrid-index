@@ -40,7 +40,8 @@ allOf:
               title: UmweltNavi Spatial
               properties:
                 bounds:
-                  type: string
+                  type: object
+                  $ref: ./parts/shared-types.yaml#/$defs/GeoShape
                   description: Wird für Geo-Queries verwendet, für Abfragen in der Art "Schneidet die Bounding Box des Objekts einen Umkreis um den Standpunkt?"
                 centroid:
                   type: object
@@ -59,12 +60,9 @@ allOf:
                     type: object
                     $ref: ./parts/shared-types.yaml#/$defs/GeoPoint
                 outline:
-                  type: array
-                  items:
-                    type: object
-                    $ref: ./parts/shared-types.yaml#/$defs/GeoShape
-                    description: Outline für die Darstellung, ggf. reduzierte Geometrie
-                  minItems: 0
+                  type: object
+                  $ref: ./parts/shared-types.yaml#/$defs/GeoShape
+                  description: Outline für die Darstellung, ggf. reduzierte Geometrie
       umweltnavi:
         type: object
         description: All field for umweltnavi
@@ -243,13 +241,14 @@ allOf:
                             description: Angaben zur Herkunft des Inhalts
                             $comment: 'Ehemaliges Indexfeld: object_date'
                           assigned_to:
-                            type: string
+                            type: array
                             description: Partner für den das Detail spezifisch erstellt wurde. Leer
                               bedeutet für alle Partner.
                             enum:
                             - ni
                             - sh
                             - rp
+                            - _none_
                       - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
                         type: object
               required:
