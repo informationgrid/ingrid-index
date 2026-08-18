@@ -98,7 +98,7 @@ $defs:
                 examples:
                   - 60
       exports:
-        unevaluatedProperties: false
+        unevaluatedProperties: true
         properties:
           iso:
             type: string
