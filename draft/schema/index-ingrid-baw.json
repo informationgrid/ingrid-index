@@ -47,7 +47,7 @@
                 },
                 "document_type": {
                   "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
                   "examples": [
                     "InGridGeoDataset",
                     "InGridGeoService"
@@ -129,6 +129,22 @@
                     "name": {
                       "type": "string",
                       "description": "Der Name der Datenquelle."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Der Typ der Datenquelle.",
+                      "$comment": "Anforderung kommt aus Harvester.",
+                      "examples": [
+                        "csw",
+                        "wfs",
+                        "ckan",
+                        "json",
+                        "dcat",
+                        "dcatapplu",
+                        "GENESIS",
+                        "sparql",
+                        "oai_iso19139"
+                      ]
                     }
                   }
                 }
@@ -1006,7 +1022,7 @@
                 },
                 "document_type": {
                   "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
                   "examples": [
                     "InGridGeoDataset",
                     "InGridGeoService"
@@ -1088,6 +1104,22 @@
                     "name": {
                       "type": "string",
                       "description": "Der Name der Datenquelle."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Der Typ der Datenquelle.",
+                      "$comment": "Anforderung kommt aus Harvester.",
+                      "examples": [
+                        "csw",
+                        "wfs",
+                        "ckan",
+                        "json",
+                        "dcat",
+                        "dcatapplu",
+                        "GENESIS",
+                        "sparql",
+                        "oai_iso19139"
+                      ]
                     }
                   }
                 }
@@ -1165,7 +1197,7 @@
                     },
                     "document_type": {
                       "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
                       "examples": [
                         "InGridGeoDataset",
                         "InGridGeoService"
@@ -1247,6 +1279,22 @@
                         "name": {
                           "type": "string",
                           "description": "Der Name der Datenquelle."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Der Typ der Datenquelle.",
+                          "$comment": "Anforderung kommt aus Harvester.",
+                          "examples": [
+                            "csw",
+                            "wfs",
+                            "ckan",
+                            "json",
+                            "dcat",
+                            "dcatapplu",
+                            "GENESIS",
+                            "sparql",
+                            "oai_iso19139"
+                          ]
                         }
                       }
                     }
@@ -2091,7 +2139,7 @@
                     },
                     "document_type": {
                       "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie Wird im Profil definiert.",
+                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
                       "examples": [
                         "InGridGeoDataset",
                         "InGridGeoService"
@@ -2173,6 +2221,22 @@
                         "name": {
                           "type": "string",
                           "description": "Der Name der Datenquelle."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Der Typ der Datenquelle.",
+                          "$comment": "Anforderung kommt aus Harvester.",
+                          "examples": [
+                            "csw",
+                            "wfs",
+                            "ckan",
+                            "json",
+                            "dcat",
+                            "dcatapplu",
+                            "GENESIS",
+                            "sparql",
+                            "oai_iso19139"
+                          ]
                         }
                       }
                     }
