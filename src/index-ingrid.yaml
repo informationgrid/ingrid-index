@@ -167,7 +167,16 @@ $defs:
                   description: "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet."
                   items:
                     title: item
-                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                    properties:
+                      key:
+                        type: [ "string", "null" ]
+                      value:
+                        type: [ "string", "null" ]
+                      source:
+                        type: string
+                        description: "Quelle der Einschränkung"
+
+
           # - Identifikator des übergeordneten Datensatzes (parentIdentifier)
           parent_identifier:
             type: string
@@ -265,7 +274,7 @@ $defs:
                           description: "Parameter, die die Georeferenzierung der Rasterdaten ermöglichen"
 
           #   - Erstellungsmaßstab
-          spatialResolutionScale:
+          spatial_resolution_scale:
             type: object
             properties:
               scale:
@@ -319,13 +328,13 @@ $defs:
                 description: "Beschreibung der Bearbeitungsschritte"
 
           #   - Herstellungsprozess
-          processStepDescription:
+          process_step_description:
             type: array
             description: "Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat."
             items:
               type: string
           #   - Symbolkatalog
-          symbolCatalogue:
+          symbol_catalogue:
             type: array
             description: "Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden"
             items:
@@ -341,7 +350,7 @@ $defs:
                   type: string
                   description: "Version des Symbolkataloges"
           #   - Schlüsselkatalog
-          codeListReference:
+          codelist_reference:
             type: array
             description: "An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen."
             items:
@@ -357,7 +366,7 @@ $defs:
                   type: string
                   description: "Version des Schlüsselkataloges"
           #   - Sachdaten/Attributinformation
-          attributeDescription:
+          attribute_description:
             type: array
             description: "Angabe der mit der Geo-Information/Karte verbundenen Sachdaten."
             items:
@@ -425,9 +434,9 @@ $defs:
           # Datenqualität
           data_quality:
             properties:
-              completenessOmission:
+              completeness_omission:
                 type: number
-              positionalAccuracy:
+              positional_accuracy:
                 properties:
                   horizontal:
                     type: number
@@ -500,16 +509,16 @@ $defs:
 
               # Erstellungsmaßstab, siehe: spatialResolutionScale
 
-              environmentDescription:
+              environment_description:
                 type: string
                 description: Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird.
-              serviceHistory:
+              service_history:
                 type: string
                 description: Angaben zur Implementierungsgeschichte des Dienstes.
-              additionalInformation:
+              additional_information:
                 type: string
                 description: Zusätzliche Informationen zum Dienst
-              hasAccessConstraints:
+              has_access_constraints:
                 type: boolean
                 description: Ist der Zugriff auf den Dienst eingeschränkt?
               doi:
@@ -518,10 +527,10 @@ $defs:
                   identifier:
                     type: string
                     description: Angabe des DOI (Digital Object Identifier) des Dokumentes
-                  generalResourceType:
+                  general_resource_type:
                     type: string
                     description: Angabe der übergeordneten Art des Dokumentes
-                  resourceType:
+                  resource_type:
                     type: string
                     description: Angabe der Art des Dokumentes
 
