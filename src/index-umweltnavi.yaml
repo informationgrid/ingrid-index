@@ -178,22 +178,10 @@ allOf:
             type: string
           license:
             type: object
-            properties:
-              name:
-                type: string
-              url:
-                type: string
-            required:
-            - name
+            $ref: "#/$defs/UmweltNaviNamedLink"
           owner:
             type: object
-            properties:
-              name:
-                type: string
-              url:
-                type: string
-            required:
-            - name
+            $ref: "#/$defs/UmweltNaviNamedLink"
           contact:
             type: string
             description: Adresse des Objekts
@@ -250,7 +238,7 @@ allOf:
                               - sh
                               - rp
                               - _none_
-                      - $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviSourceAttributes"
+                      - $ref: "#/$defs/UmweltNaviSourceAttributes"
                         type: object
               required:
               - name
@@ -380,25 +368,12 @@ allOf:
                         description: Wert pro Zeitwert
                     required:
                     - display_date
-                    - value
                 license:
                   type: object
-                  properties:
-                    name:
-                      type: string
-                    url:
-                      type: string
-                  required:
-                  - name
+                  $ref: "#/$defs/UmweltNaviNamedLink"
                 owner:
                   type: object
-                  properties:
-                    name:
-                      type: string
-                    url:
-                      type: string
-                  required:
-                  - name
+                  $ref: "#/$defs/UmweltNaviNamedLink"
                 temporal:
                   $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
                   description: Datum der Erhebung der Statistik
@@ -483,7 +458,7 @@ allOf:
                               description: Fund, Beobachtung in Observation.org
                               $comment: 'Ehemaliges Indexfeld: object_date'
                             image:
-                              $ref: "./parts/shared-types.yaml#/$defs/UmweltNaviImage"
+                              $ref: "#/$defs/UmweltNaviImage"
                           required:
                           - name
                         minItems: 0
@@ -493,24 +468,12 @@ allOf:
                   minItems: 0
                 license:
                   type: object
-                  properties:
-                    name:
-                      type: string
-                    url:
-                      type: string
-                  required:
-                  - name
+                  $ref: "#/$defs/UmweltNaviNamedLink"
                 owner:
                   type: object
-                  properties:
-                    name:
-                      type: string
-                    url:
-                      type: string
-                  required:
-                  - name
+                  $ref: "#/$defs/UmweltNaviNamedLink"
                 temporal:
-                  type: string
+                  $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
                   description: Datum der Erhebung der Statistik
                   $comment: 'Ehemaliges Indexfeld: object_date'
                 import_ref:
@@ -582,6 +545,8 @@ allOf:
                             title: Messwerttyp
                             examples:
                               - P1M
+          has_details:
+            type: boolean
         allOf:
           - if:
               properties:
@@ -613,3 +578,50 @@ allOf:
         - import_ref
     required:
       - metadata
+$defs:
+  UmweltNaviSourceAttributes:
+    type: object
+    title: Zusätzliche Informationen
+    properties:
+      temporal:
+        $ref: "./parts/shared-types.yaml#/$defs/TypedPeriodOfTime"
+        description: z.B. Aufnahmedatum eines Bildes
+        $comment: 'Ehemaliges Indexfeld: object_date'
+      source:
+        type: object
+        $ref: "#/$defs/UmweltNaviNamedLink"
+      license:
+        type: object
+        $ref: "#/$defs/UmweltNaviNamedLink"
+      author:
+        type: object
+        $ref: "#/$defs/UmweltNaviNamedLink"
+    description: Wird verwendet, um die Herkunft eines Inhalts zu beschreiben
+  UmweltNaviImage:
+    allOf:
+      - type: object
+        title: Basisinformationen
+        required:
+          - url
+        description: Liste der Inhalte
+        properties:
+          url:
+            type: string
+          title:
+            type: string
+          description:
+            type: string
+      - $ref: "#/$defs/UmweltNaviSourceAttributes"
+        description: Angaben zur Herkunft des Bildes
+    required:
+      - url
+  UmweltNaviNamedLink:
+    type: object
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+    anyOf:
+      - required: [ "name" ]
+      - required: [ "url" ]
