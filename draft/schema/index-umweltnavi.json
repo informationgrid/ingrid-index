@@ -1528,7 +1528,6 @@
                     "description": "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet.",
                     "items": {
                       "title": "item",
-                      "additionalProperties": false,
                       "properties": {
                         "key": {
                           "type": [
@@ -1541,6 +1540,10 @@
                             "string",
                             "null"
                           ]
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "Quelle der Einschränkung"
                         }
                       }
                     }
@@ -1703,7 +1706,7 @@
                 }
               }
             },
-            "spatialResolutionScale": {
+            "spatial_resolution_scale": {
               "type": "object",
               "properties": {
                 "scale": {
@@ -1772,14 +1775,14 @@
                 }
               }
             },
-            "processStepDescription": {
+            "process_step_description": {
               "type": "array",
               "description": "Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat.",
               "items": {
                 "type": "string"
               }
             },
-            "symbolCatalogue": {
+            "symbol_catalogue": {
               "type": "array",
               "description": "Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden",
               "items": {
@@ -1800,7 +1803,7 @@
                 }
               }
             },
-            "codeListReference": {
+            "codelist_reference": {
               "type": "array",
               "description": "An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen.",
               "items": {
@@ -1821,7 +1824,7 @@
                 }
               }
             },
-            "attributeDescription": {
+            "attribute_description": {
               "type": "array",
               "description": "Angabe der mit der Geo-Information/Karte verbundenen Sachdaten.",
               "items": {
@@ -1941,10 +1944,10 @@
             },
             "data_quality": {
               "properties": {
-                "completenessOmission": {
+                "completeness_omission": {
                   "type": "number"
                 },
-                "positionalAccuracy": {
+                "positional_accuracy": {
                   "properties": {
                     "horizontal": {
                       "type": "number"
@@ -2067,19 +2070,19 @@
                     }
                   }
                 },
-                "environmentDescription": {
+                "environment_description": {
                   "type": "string",
                   "description": "Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird."
                 },
-                "serviceHistory": {
+                "service_history": {
                   "type": "string",
                   "description": "Angaben zur Implementierungsgeschichte des Dienstes."
                 },
-                "additionalInformation": {
+                "additional_information": {
                   "type": "string",
                   "description": "Zusätzliche Informationen zum Dienst"
                 },
-                "hasAccessConstraints": {
+                "has_access_constraints": {
                   "type": "boolean",
                   "description": "Ist der Zugriff auf den Dienst eingeschränkt?"
                 },
@@ -2090,11 +2093,11 @@
                       "type": "string",
                       "description": "Angabe des DOI (Digital Object Identifier) des Dokumentes"
                     },
-                    "generalResourceType": {
+                    "general_resource_type": {
                       "type": "string",
                       "description": "Angabe der übergeordneten Art des Dokumentes"
                     },
-                    "resourceType": {
+                    "resource_type": {
                       "type": "string",
                       "description": "Angabe der Art des Dokumentes"
                     }
@@ -3140,8 +3143,17 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "name"
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "url"
+                  ]
+                }
               ]
             },
             "owner": {
@@ -3154,8 +3166,17 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "name"
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "url"
+                  ]
+                }
               ]
             },
             "contact": {
@@ -3307,8 +3328,17 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name"
+                              "anyOf": [
+                                {
+                                  "required": [
+                                    "name"
+                                  ]
+                                },
+                                {
+                                  "required": [
+                                    "url"
+                                  ]
+                                }
                               ]
                             },
                             "license": {
@@ -3321,8 +3351,17 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name"
+                              "anyOf": [
+                                {
+                                  "required": [
+                                    "name"
+                                  ]
+                                },
+                                {
+                                  "required": [
+                                    "url"
+                                  ]
+                                }
                               ]
                             },
                             "author": {
@@ -3335,8 +3374,17 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name"
+                              "anyOf": [
+                                {
+                                  "required": [
+                                    "name"
+                                  ]
+                                },
+                                {
+                                  "required": [
+                                    "url"
+                                  ]
+                                }
                               ]
                             }
                           },
@@ -3527,8 +3575,7 @@
                         }
                       },
                       "required": [
-                        "display_date",
-                        "value"
+                        "display_date"
                       ]
                     }
                   },
@@ -3542,8 +3589,17 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "name"
+                    "anyOf": [
+                      {
+                        "required": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "url"
+                        ]
+                      }
                     ]
                   },
                   "owner": {
@@ -3556,8 +3612,17 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "name"
+                    "anyOf": [
+                      {
+                        "required": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "url"
+                        ]
+                      }
                     ]
                   },
                   "temporal": {
@@ -3881,8 +3946,17 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": [
-                                          "name"
+                                        "anyOf": [
+                                          {
+                                            "required": [
+                                              "name"
+                                            ]
+                                          },
+                                          {
+                                            "required": [
+                                              "url"
+                                            ]
+                                          }
                                         ]
                                       },
                                       "license": {
@@ -3895,8 +3969,17 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": [
-                                          "name"
+                                        "anyOf": [
+                                          {
+                                            "required": [
+                                              "name"
+                                            ]
+                                          },
+                                          {
+                                            "required": [
+                                              "url"
+                                            ]
+                                          }
                                         ]
                                       },
                                       "author": {
@@ -3909,8 +3992,17 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": [
-                                          "name"
+                                        "anyOf": [
+                                          {
+                                            "required": [
+                                              "name"
+                                            ]
+                                          },
+                                          {
+                                            "required": [
+                                              "url"
+                                            ]
+                                          }
                                         ]
                                       }
                                     }
@@ -3945,8 +4037,17 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "name"
+                    "anyOf": [
+                      {
+                        "required": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "url"
+                        ]
+                      }
                     ]
                   },
                   "owner": {
@@ -3959,12 +4060,78 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "name"
+                    "anyOf": [
+                      {
+                        "required": [
+                          "name"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "url"
+                        ]
+                      }
                     ]
                   },
                   "temporal": {
-                    "type": "string",
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Datum des Ereignisses"
+                      },
+                      "date_range": {
+                        "type": "object",
+                        "title": "Zeitabschnitt",
+                        "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                        "properties": {
+                          "gte": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Startdatum der Zeitangabe"
+                          },
+                          "lte": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Enddatum der Zeitangabe"
+                          }
+                        }
+                      },
+                      "date_text": {
+                        "type": "string",
+                        "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                        "examples": [
+                          "Sommer 2010"
+                        ]
+                      },
+                      "date_type": {
+                        "type": "string",
+                        "description": "Typ der Zeitangabe",
+                        "enum": [
+                          "created",
+                          "last_updated",
+                          "first_published"
+                        ]
+                      }
+                    },
+                    "oneOf": [
+                      {
+                        "required": [
+                          "date"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "date_range"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "date_text"
+                        ]
+                      }
+                    ],
                     "description": "Datum der Erhebung der Statistik",
                     "$comment": "Ehemaliges Indexfeld: object_date"
                   },
@@ -4073,6 +4240,9 @@
                   }
                 }
               }
+            },
+            "has_details": {
+              "type": "boolean"
             }
           },
           "allOf": [
@@ -4132,5 +4302,332 @@
         "metadata"
       ]
     }
-  ]
+  ],
+  "$defs": {
+    "UmweltNaviSourceAttributes": {
+      "type": "object",
+      "title": "Zusätzliche Informationen",
+      "properties": {
+        "temporal": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Datum des Ereignisses"
+            },
+            "date_range": {
+              "type": "object",
+              "title": "Zeitabschnitt",
+              "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+              "properties": {
+                "gte": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Startdatum der Zeitangabe"
+                },
+                "lte": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Enddatum der Zeitangabe"
+                }
+              }
+            },
+            "date_text": {
+              "type": "string",
+              "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+              "examples": [
+                "Sommer 2010"
+              ]
+            },
+            "date_type": {
+              "type": "string",
+              "description": "Typ der Zeitangabe",
+              "enum": [
+                "created",
+                "last_updated",
+                "first_published"
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "date"
+              ]
+            },
+            {
+              "required": [
+                "date_range"
+              ]
+            },
+            {
+              "required": [
+                "date_text"
+              ]
+            }
+          ],
+          "description": "z.B. Aufnahmedatum eines Bildes",
+          "$comment": "Ehemaliges Indexfeld: object_date"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "name"
+              ]
+            },
+            {
+              "required": [
+                "url"
+              ]
+            }
+          ]
+        },
+        "license": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "name"
+              ]
+            },
+            {
+              "required": [
+                "url"
+              ]
+            }
+          ]
+        },
+        "author": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "name"
+              ]
+            },
+            {
+              "required": [
+                "url"
+              ]
+            }
+          ]
+        }
+      },
+      "description": "Wird verwendet, um die Herkunft eines Inhalts zu beschreiben"
+    },
+    "UmweltNaviImage": {
+      "allOf": [
+        {
+          "type": "object",
+          "title": "Basisinformationen",
+          "required": [
+            "url"
+          ],
+          "description": "Liste der Inhalte",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "description": "Angaben zur Herkunft des Bildes",
+          "type": "object",
+          "title": "Zusätzliche Informationen",
+          "properties": {
+            "temporal": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Datum des Ereignisses"
+                },
+                "date_range": {
+                  "type": "object",
+                  "title": "Zeitabschnitt",
+                  "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                  "properties": {
+                    "gte": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Startdatum der Zeitangabe"
+                    },
+                    "lte": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Enddatum der Zeitangabe"
+                    }
+                  }
+                },
+                "date_text": {
+                  "type": "string",
+                  "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                  "examples": [
+                    "Sommer 2010"
+                  ]
+                },
+                "date_type": {
+                  "type": "string",
+                  "description": "Typ der Zeitangabe",
+                  "enum": [
+                    "created",
+                    "last_updated",
+                    "first_published"
+                  ]
+                }
+              },
+              "oneOf": [
+                {
+                  "required": [
+                    "date"
+                  ]
+                },
+                {
+                  "required": [
+                    "date_range"
+                  ]
+                },
+                {
+                  "required": [
+                    "date_text"
+                  ]
+                }
+              ],
+              "description": "z.B. Aufnahmedatum eines Bildes",
+              "$comment": "Ehemaliges Indexfeld: object_date"
+            },
+            "source": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "url"
+                  ]
+                }
+              ]
+            },
+            "license": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "url"
+                  ]
+                }
+              ]
+            },
+            "author": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "url"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "required": [
+        "url"
+      ]
+    },
+    "UmweltNaviNamedLink": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        }
+      ]
+    }
+  }
 }
