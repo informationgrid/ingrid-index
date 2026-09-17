@@ -632,8 +632,7 @@
               }
             },
             "required": [
-              "term",
-              "source"
+              "term"
             ]
           }
         },

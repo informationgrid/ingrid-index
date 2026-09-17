@@ -630,8 +630,7 @@
               }
             },
             "required": [
-              "term",
-              "source"
+              "term"
             ]
           }
         },
@@ -4242,7 +4241,8 @@
               }
             },
             "has_details": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Beschreibt, ob das Objekt Details (Bilder, Text, Links, Relationen, Statistiken oder Sammlungen) enthält"
             }
           },
           "allOf": [
