@@ -547,6 +547,7 @@ allOf:
                               - P1M
           has_details:
             type: boolean
+            description: Beschreibt, ob das Objekt Details (Bilder, Text, Links, Relationen, Statistiken oder Sammlungen) enthält
         allOf:
           - if:
               properties:

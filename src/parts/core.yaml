@@ -105,7 +105,6 @@ properties:
             - iso_topic
       required:
       - term
-      - source
   references:
     type: array
     description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden."
@@ -248,8 +247,8 @@ $defs:
             description: Der Name der Datenquelle.
           type:
             type: string
-            description: Der Typ der Datenquelle. 
-            $comment: Anforderung kommt aus Harvester. 
+            description: Der Typ der Datenquelle.
+            $comment: Anforderung kommt aus Harvester.
             examples:
               - csw
               - wfs
