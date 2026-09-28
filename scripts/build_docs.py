@@ -3,6 +3,7 @@
 import argparse
 import sys
 from html import escape
+from html.parser import HTMLParser
 from pathlib import Path
 
 import yaml
@@ -10,7 +11,7 @@ from json_schema_for_humans.generate import generate_from_filename
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
 
 sys.path.insert(0, str(Path(__file__).parent))
-from html_common import render_page
+from html_common import render_page, _breadcrumb
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT_DIR / "src"
@@ -48,6 +49,37 @@ def read_title(schema_path):
     with open(schema_path, encoding="utf-8") as f:
         doc = yaml.safe_load(f)
     return doc.get("title", schema_path.stem)
+
+
+class _BodyTagLocator(HTMLParser):
+    """Finds the character offset right after the opening <body> tag."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.body_end = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "body" and self.body_end is None:
+            line, col = self.getpos()
+            self.body_end = (line, col + len(self.get_starttag_text()))
+
+
+def _offset_of(html, line, col):
+    """Convert a 1-indexed (line, col) from HTMLParser.getpos() to a flat char offset."""
+    lines = html.splitlines(keepends=True)
+    return sum(len(l) for l in lines[: line - 1]) + col
+
+
+def inject_header(html_path):
+    """Insert the back-to-index header right after <body> in a generated doc page."""
+    html = html_path.read_text(encoding="utf-8")
+    locator = _BodyTagLocator()
+    locator.feed(html)
+    if locator.body_end is None:
+        raise RuntimeError(f"No <body> tag found in {html_path}")
+    offset = _offset_of(html, *locator.body_end)
+    html = html[:offset] + _breadcrumb(version=escape(VERSION)) + html[offset:]
+    html_path.write_text(html, encoding="utf-8")
 
 
 def generate_index(entries):
@@ -92,6 +124,7 @@ def build():
     for schema_path in schemas:
         out_file = DOCS_DIR / f"{schema_path.stem}.html"
         generate_from_filename(str(schema_path), str(out_file), config=config)
+        inject_header(out_file)
         print(f"  docs -> {out_file.relative_to(SRC_DIR.parent)}")
         json_filename = f"schema/{schema_path.stem}.json"
         entries.append((read_title(schema_path), out_file.name, schema_path.name, json_filename))

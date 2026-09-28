@@ -7,13 +7,13 @@ SCHEMA_ROOT_URL = "https://schema.ingrid-oss.eu/"
 SCHEMA_INDEX_URL = f"{SCHEMA_ROOT_URL}index/"
 
 
-def _breadcrumb(version=None):
+def _breadcrumb(version=None,):
     crumbs = (
         f'<a href="{SCHEMA_ROOT_URL}">schema</a> / '
-        f'<a href="{SCHEMA_INDEX_URL}">index</a>'
+        f'<a href="{SCHEMA_INDEX_URL}">index</a> / '
     )
     if version:
-        crumbs += f" / {version}"
+        crumbs += f'<a href="{SCHEMA_INDEX_URL}{version}/">{version}</a>'
     return f'<nav style="font-size:.875rem; margin-bottom:1.5rem;">{crumbs}</nav>'
 
 
