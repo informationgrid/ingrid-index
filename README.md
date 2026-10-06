@@ -17,15 +17,63 @@ src/                     ← Source of truth (editable YAML with $ref)
   parts/                 ← Shared schema fragments referenced via $ref
     core.yaml
     shared-types.yaml
+    x-transform-sources.yaml ← Source formats of the mapping descriptions (no schema part)
 dist/                    ← Local build output (gitignored, do not commit)
   <version>/
-    schema/              ← Fully dereferenced JSON (no $ref)
+    schema/              ← Fully dereferenced JSON (no $ref, no x-transform)
+      annotated/         ← Same, including the x-transform annotations
     *.html               ← Generated HTML documentation
 scripts/
   build_schemas.js       ← Resolves schemas
   build_docs.py          ← Generates HTML docs
+  x_transform.js         ← Checks the x-transform mapping descriptions
+  x_transform_lib.js     ← Shared helpers for the above
+  x-transform.schema.yaml ← Meta-schema for the check
 .github/workflows/
   build.yml              ← CI: builds on tag push, publishes to "releases" branch
+```
+
+## Mapping descriptions (`x-transform`)
+
+A field can carry `x-transform`: per source format a Markdown description of how
+the field is read from a source record and written to one. The schema is the
+documentation; the HTML docs show the descriptions under "Transformation".
+
+```yaml
+language:
+  type: string
+  x-transform:
+    iso19139-2007: |
+      # Lesen & schreiben
+
+      `gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`
+
+      ## Mapping (lookup)
+
+      - `de` ↔ `ger` (lesen auch `deu`, `de`)
+      - `en` ↔ `eng` (lesen auch `en`)
+
+      > Lesen: ohne Angabe `de`.
+```
+
+- Use the YAML block style `|`. Headings start at `#`: `# Lesen & schreiben`
+  (or `# Lesen` / `# Schreiben` if they differ), the full path as code,
+  `## Mapping (lookup|logic)` as a list if values are not just copied, comments
+  (`>`) for special cases ("Lesen: …", "Schreiben: …", "DCAT-AP 2.x: …").
+  Fields without counterpart: "Kein Gegenstück in <format>." plus the origin.
+- In mapping lists the index value is on the left: `↔` both directions,
+  `←` only when reading, `→` only when writing.
+- Source formats (title, path language, general rules, schemas, namespaces) are
+  declared in [`src/parts/x-transform-sources.yaml`](src/parts/x-transform-sources.yaml).
+  Their general rules are shown at the top of each schema page.
+- A profile can override a description by repeating the field with only
+  `x-transform`; such a field is dropped when publishing.
+- The annotations are removed from the published schemas in
+  `dist/<version>/schema/` (Ajv's strict mode rejects unknown keywords) and kept
+  in `dist/<version>/schema/annotated/`.
+
+```bash
+npm run check   # validate the descriptions, print coverage per schema and source format
 ```
 
 ## Branches
@@ -145,10 +193,11 @@ source .venv/bin/activate
 # Install Python dependencies for the docs build
 pip install json-schema-for-humans pyyaml
 
-# Build resolved schemas plus HTML docs
+# Check x-transform descriptions, build resolved schemas and HTML docs
 npm run build
 
 # Or run the steps separately
+node scripts/x_transform.js check
 node scripts/build_schemas.js
 python scripts/build_docs.py
 

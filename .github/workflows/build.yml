@@ -95,8 +95,14 @@ jobs:
             echo "version=draft" >> "$GITHUB_OUTPUT"
           fi
 
+      # ── Check ──────────────────────────────────────────────────
+      # Validates the x-transform mapping descriptions.
+      - name: Check x-transform annotations
+        run: npm run check
+
       # ── Build ──────────────────────────────────────────────────
-      # Resolve all $ref → dist/<version>/schema/*.json
+      # Resolve all $ref → dist/<version>/schema/*.json (without x-transform)
+      # and dist/<version>/schema/annotated/*.json (with x-transform)
       - name: Build resolved schemas
         run: node scripts/build_schemas.js --version ${{ steps.version.outputs.version }}
 

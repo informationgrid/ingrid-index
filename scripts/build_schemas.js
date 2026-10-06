@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const $RefParser = require("@apidevtools/json-schema-ref-parser");
+const { resolveSchema } = require("./x_transform_lib");
 
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SRC_DIR = path.join(ROOT_DIR, "src");
@@ -14,6 +14,9 @@ const version =
   versionFlag !== -1 ? process.argv[versionFlag + 1] : "draft";
 
 const DIST_DIR = path.join(ROOT_DIR, "dist", version, "schema");
+// Same schemas including the x-transform mapping annotations, which are
+// stripped from the published ones (see README.md).
+const ANNOTATED_DIR = path.join(DIST_DIR, "annotated");
 
 function ensureDir(dir) {
   if (fs.existsSync(dir)) {
@@ -38,26 +41,15 @@ function discoverSchemas() {
   });
 }
 
-// Set $id from package.json's "homepage", e.g.
+// $id from package.json's "homepage", e.g.
 // "https://schema.ingrid-oss.eu/index/8.4.0/schema/index-dcat.json"
-// Placed right after "title" so it's visible near the top of the file.
-function setId(schema, ver, baseName) {
-  const id = `${PKG.homepage}/${ver}/schema/${baseName}.json`;
-  const ordered = {};
-  for (const [key, value] of Object.entries(schema)) {
-    ordered[key] = value;
-    if (key === "title") {
-      ordered.$id = id;
-    }
-  }
-  if (!("$id" in ordered)) {
-    ordered.$id = id;
-  }
-  return ordered;
+function schemaId(ver, baseName, subDir = "") {
+  return `${PKG.homepage}/${ver}/schema/${subDir}${baseName}.json`;
 }
 
 async function build() {
   ensureDir(DIST_DIR);
+  fs.mkdirSync(ANNOTATED_DIR);
 
   const files = discoverSchemas();
   console.log(`Found ${files.length} schema(s): ${files.join(", ")}`);
@@ -66,13 +58,18 @@ async function build() {
     const srcPath = path.join(SRC_DIR, file);
     const baseName = path.basename(file, ".yaml");
 
-    // --- Fully resolved (no $ref) ---
-    const resolved = await $RefParser.dereference(srcPath);
-    delete resolved["x-wip"];
-    const ordered = setId(resolved, version, baseName);
+    // --- Fully resolved (no $ref), with and without x-transform ---
+    const { annotated, published } = await resolveSchema(
+      srcPath,
+      schemaId(version, baseName),
+      schemaId(version, baseName, "annotated/")
+    );
     const resolvedOut = path.join(DIST_DIR, `${baseName}.json`);
-    fs.writeFileSync(resolvedOut, JSON.stringify(ordered, null, 2));
+    fs.writeFileSync(resolvedOut, published);
     console.log(`  resolved → ${path.relative(process.cwd(), resolvedOut)}`);
+    const annotatedOut = path.join(ANNOTATED_DIR, `${baseName}.json`);
+    fs.writeFileSync(annotatedOut, annotated);
+    console.log(`  annotated → ${path.relative(process.cwd(), annotatedOut)}`);
   }
 
   console.log("Done.");

@@ -1,0 +1,48 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "urn:ingrid-index:x-transform"
+title: x-transform Annotation
+description: |
+  Meta-Schema für die Mapping-Annotationen in den Index-Schemas (siehe README.md); geprüft von
+  scripts/x_transform.js.
+  `$defs/xTransform` beschreibt den Wert von `x-transform` an einem Index-Feld: pro Quellformat eine
+  Beschreibung in Markdown, wie das Feld aus dem Quellformat gelesen und in das Quellformat geschrieben wird.
+  `$defs/xTransformSources` beschreibt die Deklaration der Quellformate in `src/parts/x-transform-sources.yaml`.
+$defs:
+  sourceKey:
+    enum: [dcat-ap, iso19139-2007]
+  xTransform:
+    type: object
+    minProperties: 1
+    propertyNames: { $ref: "#/$defs/sourceKey" }
+    additionalProperties:
+      description: Beschreibung in Markdown (Überschriften beginnen bei `#`, siehe README.md).
+      type: string
+      minLength: 1
+  xTransformSources:
+    type: object
+    minProperties: 1
+    propertyNames: { $ref: "#/$defs/sourceKey" }
+    additionalProperties:
+      type: object
+      additionalProperties: false
+      required: [title, pathLanguage]
+      properties:
+        title:        { type: string, minLength: 1 }
+        pathLanguage: { type: string, minLength: 1 }
+        description:
+          type: string
+          minLength: 1
+          description: Regeln, die für alle Beschreibungen dieses Quellformats gelten (Markdown).
+        schemas:
+          description: |
+            Index-Schemas (Dateiname ohne .yaml), die aus diesem Quellformat befüllt werden.
+            Übersichten, Abdeckung und HTML-Doku berücksichtigen das Quellformat nur für diese
+            Schemas. Ohne Angabe: alle Schemas.
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, pattern: "^[a-z0-9-]+$" }
+        namespaces:
+          type: object
+          propertyNames: { pattern: "^[A-Za-z][\\w-]*$" }
+          additionalProperties: { type: string, minLength: 1 }

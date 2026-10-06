@@ -13,42 +13,180 @@ allOf:
           rdf:
             type: string
             description: Enthält das vollständige RDF-Dokument im XML-Format.
+            x-transform:
+              dcat-ap: |
+                # Lesen
+
+                `.`
+
+                > Der vollständige Quelldatensatz als RDF/XML.
+
+                # Schreiben
+
+                Wird nicht geschrieben; der Datensatz entsteht aus den übrigen Feldern.
+      # Nur Mapping-Beschreibung (Profil-Überschreibung, siehe README.md); entfällt beim Veröffentlichen
+      references:
+        x-transform:
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `foaf:page`
+
+            ## Mapping (logic)
+
+            - `url` ↔ `foaf:page`, `title` ↔ dessen `dct:title`; `type.value` `information`, `type.key` ← ID des
+              Eintrags der InGrid-Codeliste 2000 dazu
+            - `type.value` `previewGraphic` → `foaf:depiction`
+
+            > In `index-opendata` stehen Landingpage und Distributionen in `dcat.landing_page` bzw.
+            > `distributions`.
       dcat:
         type: object
         properties:
           landing_page:
             type: string
+            x-transform:
+              dcat-ap: |
+                # Lesen & schreiben
+
+                `dcat:landingPage`
       legal_basis:
         type: string
+        x-transform:
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dcatde:legalBasis`
+
+            > DCAT-AP.de-Erweiterung.
       distributions:
         type: array
+        x-transform:
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dcat:distribution`
+
+            > Eine `dcat:Distribution` je Eintrag.
         items: 
           type: object
           properties:
             format:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dct:format`
+
+                  ## Mapping (logic)
+
+                  - `format` ↔ letzter Pfadabschnitt der IRI aus
+                    `http://publications.europa.eu/resource/authority/file-type/` (z. B. `CSV`)
+
+                  > Lesen: auch `dcat:mediaType` (IANA-Medientyp, z. B. `text/csv`), ein Literal oder das Label eines
+                  > Knotens; `dct:format` vor `dcat:mediaType`.
             access_url:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dcat:accessURL`
             modified:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dct:modified`
             title:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dct:title`
             description:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dct:description`
             license:
               type: object
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dct:license`
+
+                  > Eine Lizenz je Distribution.
               properties:
                 url:
                   type: string
+                  x-transform:
+                    dcat-ap: |
+                      # Lesen & schreiben
+
+                      `dcat:distribution/dct:license`
+
+                      > IRI der Lizenz (z. B. `http://dcat-ap.de/def/licenses/cc-by/4.0`).
                 name:
                   type: string
+                  x-transform:
+                    dcat-ap: |
+                      # Lesen
+
+                      `dcat:distribution/dct:license/dct:title`
+
+                      > Auch `rdfs:label` oder `skos:prefLabel`; ohne Angabe der Titel aus der Lizenzliste von DCAT-AP.de.
+
+                      # Schreiben
+
+                      Wird nicht geschrieben; die Lizenz ist über `url` bestimmt.
                 attribution_by_text:
                   type: string
+                  x-transform:
+                    dcat-ap: |
+                      # Lesen & schreiben
+
+                      `dcat:distribution/dcatde:licenseAttributionByText`
+
+                      > DCAT-AP.de-Erweiterung.
                 languages:
                   type: array
+                  x-transform:
+                    dcat-ap: |
+                      # Lesen & schreiben
+
+                      `dcat:distribution/dct:language`
+
+                      ## Mapping (logic)
+
+                      - je Wert ↔ letzter Pfadabschnitt der IRI aus
+                        `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)
                   items:
                     type: string
             availability:
               type: string
+              x-transform:
+                dcat-ap: |
+                  # Lesen & schreiben
+
+                  `dcat:distribution/dcatap:availability`
+
+                  ## Mapping (logic)
+
+                  - `availability` ↔ letzter Pfadabschnitt der IRI aus
+                    `http://publications.europa.eu/resource/authority/planned-availability/` (z. B. `STABLE`)
       political_geocoding_level_uri:
         type: string
+        x-transform:
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dcatde:politicalGeocodingLevelURI`
+
+            > DCAT-AP.de-Erweiterung.

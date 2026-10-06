@@ -4,14 +4,18 @@
   "description": "InGrid Index JSON Schema repository with pre-resolved distributions and generated documentation.",
   "homepage": "https://schema.ingrid-oss.eu/index",
   "scripts": {
+    "check": "node scripts/x_transform.js check",
+    "test": "npm run check",
     "build:schemas": "node scripts/build_schemas.js",
     "build:docs": "python scripts/build_docs.py",
-    "build": "npm run build:schemas && npm run build:docs"
+    "build": "npm run check && npm run build:schemas && npm run build:docs"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^11.7.3"
+    "@apidevtools/json-schema-ref-parser": "^11.7.3",
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
+    "ajv": "^8.20.0",
     "browser-sync": "^3.0.4",
     "nodemon": "^3.1.14"
   }

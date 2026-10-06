@@ -1,0 +1,92 @@
+# Quellformate der Mapping-Beschreibungen (x-transform), siehe README.md.
+# Kein Schema-Teil: wird nicht per $ref eingebunden, sondern von scripts/x_transform.js (Prüfung)
+# und scripts/build_docs.py (HTML-Doku) gelesen. Geprüft gegen
+# scripts/x-transform.schema.yaml#/$defs/xTransformSources.
+
+iso19139-2007:
+  title: ISO 19139:2007
+  pathLanguage: XPath 2.0 (Pfadausdrücke), vollständig ab gmd:MD_Metadata bzw. gmi:MI_Metadata
+  schemas: [index-ingrid, index-opendata]
+  description: |
+    Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die
+    allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen
+    Beschreibung.
+
+    # Lesen
+
+    - Text auch als `gmx:Anchor` (dann gilt der Textinhalt) statt `gco:CharacterString`; Übersetzungen
+      (`gmd:PT_FreeText`) werden nicht übernommen.
+    - `gmd:identificationInfo/*` ist die erste Identifikation (`gmd:identificationInfo[1]`), Datensatz
+      (`gmd:MD_DataIdentification`) oder Dienst (`srv:SV_ServiceIdentification`); bei Diensten
+      `srv:extent` statt `gmd:extent`.
+    - Bei Einzelwerten gilt das erste Vorkommen; Codelistenwerte stehen in `@codeListValue`.
+    - Wahrheitswerte (`gco:Boolean`): `true` und `1` ergeben `true`, `false` und `0` ergeben `false`.
+
+    # Schreiben
+
+    - Genau ein `gmd:identificationInfo`; `gmd:identificationInfo/*` ist `gmd:MD_DataIdentification`,
+      bei `metadata.document_type` `InGridGeoService` `srv:SV_ServiceIdentification` (dann `srv:extent`
+      statt `gmd:extent`).
+    - `gmd:spatialRepresentationInfo/*` und `gmd:report/*` stehen für das Element, das
+      `ingrid.spatial_representation[].type` bzw. `ingrid.data_quality.qualities[].type` festlegt.
+    - Text als `gco:CharacterString`; Codelistenwerte in `@codeListValue` und als Elementinhalt,
+      `@codeList` verweist auf das ISO-Codelisten-Register
+      (`http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#<Codeliste>`).
+    - Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert
+      erhalten `gco:nilReason="missing"`.
+  namespaces:
+    gmd:   "http://www.isotc211.org/2005/gmd"
+    gco:   "http://www.isotc211.org/2005/gco"
+    gts:   "http://www.isotc211.org/2005/gts"
+    gmx:   "http://www.isotc211.org/2005/gmx"
+    srv:   "http://www.isotc211.org/2005/srv"
+    gml:   "http://www.opengis.net/gml"
+    gml32: "http://www.opengis.net/gml/3.2"
+    gmi:   "http://www.isotc211.org/2005/gmi"
+    xlink: "http://www.w3.org/1999/xlink"
+
+dcat-ap:
+  title: DCAT-AP (inkl. DCAT-AP.de)
+  pathLanguage: SPARQL 1.1 Property Path, vollständig ab der beschriebenen Ressource (dcat:Dataset, dcat:DataService, dcat:DatasetSeries)
+  schemas: [index-ingrid, index-opendata]
+  description: |
+    Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0.
+    Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.
+
+    # Lesen
+
+    - Bei mehreren Sprachfassungen eines Literals gilt das mit Sprach-Tag `de`, sonst das ohne
+      Sprach-Tag, sonst das erste.
+    - Ist der Wert ein Knoten statt eines Literals, gilt sein Label (`rdfs:label`, `skos:prefLabel`
+      bzw. `dct:title`), bei einer IRI ohne Label die IRI selbst.
+    - E-Mail-Adressen und Telefonnummern ohne `mailto:` bzw. `tel:`; bei Einzelwerten das erste Vorkommen;
+      Werte, die kein gültiges Datum sind, werden bei Datumsfeldern nicht übernommen.
+    - `^foaf:primaryTopic` führt zum `dcat:CatalogRecord` der Ressource (Angaben zum Metadatensatz).
+
+    # Schreiben
+
+    - Eine Ressource vom Typ `dcat:Dataset`, bei `metadata.document_type` `InGridGeoService` vom Typ
+      `dcat:DataService`.
+    - Textliterale mit dem Sprach-Tag der Ressourcensprache (`language`), Datumswerte als `xsd:date`
+      bzw. `xsd:dateTime`.
+    - Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate,
+      Frequenzen und Zugriffsrechte, DCAT-AP.de-Lizenzen).
+    - Zwischenknoten (`dct:Location`, `dct:PeriodOfTime`, `vcard:Kind`, `foaf:Agent`, `dct:Standard` …)
+      als Blank Nodes mit passendem `rdf:type`; `^foaf:primaryTopic` als `dcat:CatalogRecord`, dessen
+      `foaf:primaryTopic` die Ressource ist.
+  namespaces:
+    dcat:   "http://www.w3.org/ns/dcat#"
+    dct:    "http://purl.org/dc/terms/"
+    dcatap: "http://data.europa.eu/r5r/"
+    dcatde: "http://dcat-ap.de/def/dcatde/"
+    foaf:   "http://xmlns.com/foaf/0.1/"
+    vcard:  "http://www.w3.org/2006/vcard/ns#"
+    locn:   "http://www.w3.org/ns/locn#"
+    adms:   "http://www.w3.org/ns/adms#"
+    skos:   "http://www.w3.org/2004/02/skos/core#"
+    rdf:    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    rdfs:   "http://www.w3.org/2000/01/rdf-schema#"
+    schema: "http://schema.org/"
+    gsp:    "http://www.opengis.net/ont/geosparql#"
+    prov:   "http://www.w3.org/ns/prov#"
+    time:   "http://www.w3.org/2006/time#"

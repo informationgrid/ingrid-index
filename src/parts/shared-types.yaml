@@ -13,6 +13,42 @@ $defs:
     properties:
       data_temporal:
         type: array
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date`
+
+            ## Mapping (logic)
+
+            - `date_range` ↔ `gml:TimePeriod` (`gte` ↔ `gml:beginPosition`, `lte` ↔ `gml:endPosition`)
+            - `date` ↔ `gml:TimeInstant/gml:timePosition`
+            - `date` mit `date_type` ↔ `gmd:CI_Date`: `created` ↔ `creation`, `last_updated` ↔ `revision`,
+              `first_published` ↔ `publication`
+
+            > Lesen: auch GML 3.2 (`gml32:`) und `gml:begin/gml:TimeInstant/gml:timePosition`;
+            > `indeterminatePosition` (`now`, `unknown`) lässt die Grenze offen; ungültige Werte → `date_text`.
+            >
+            > Schreiben: offene Grenze als leeres Element mit `indeterminatePosition="unknown"`;
+            > `gml:TimePeriod` mit `gml:id`; `date_text` wird nicht geschrieben.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dct:temporal | dct:issued | dct:modified | dct:created`
+
+            ## Mapping (logic)
+
+            - `date_range` ↔ `dct:temporal` (`dct:PeriodOfTime`; `gte` ↔ `dcat:startDate`, `lte` ↔
+              `dcat:endDate`)
+            - `date` mit `date_type`: `first_published` ↔ `dct:issued`, `last_updated` ↔ `dct:modified`,
+              `created` ↔ `dct:created`
+
+            > Schreiben: `date` ohne `date_type` als `dct:temporal` mit gleichem Start- und Enddatum;
+            > `date_text` wird nicht geschrieben.
+            >
+            > DCAT-AP 1.x / DCAT-AP.de 1.x: `schema:startDate`/`schema:endDate` statt
+            > `dcat:startDate`/`dcat:endDate` (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich
+            > `time:hasBeginning`/`time:hasEnd` (nur lesen).
         items:
           $ref: "./shared-types.yaml#/$defs/TypedPeriodOfTime"
   TypedPeriodOfTime:

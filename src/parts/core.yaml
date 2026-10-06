@@ -5,12 +5,30 @@ properties:
   id:
     type: string
     description: Die ID des Datensatzes. Die ID **muss** eindeutig im Index sein.
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:fileIdentifier/gco:CharacterString`
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:identifier`
+
+        > Lesen: ohne `dct:identifier` die IRI der Ressource.
     examples:
     - Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'
     - For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'
   $schema:
     type: string
     description: Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.
+    x-transform:
+      iso19139-2007: |
+        Kein Gegenstück in ISO 19139:2007. Enthält die `$id` des Index-Schemas, gegen das das Dokument
+        validiert wird.
+      dcat-ap: |
+        Kein Gegenstück in DCAT-AP. Enthält die `$id` des Index-Schemas, gegen das das Dokument validiert
+        wird.
     examples:
       - https://example.com/schemas/order/v2.1.0/schema.json
   metadata:
@@ -18,28 +36,168 @@ properties:
     $ref: "#/$defs/Metadata"
   sort_uuid:
     description: Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.
+    x-transform:
+      iso19139-2007: |
+        Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben
+        wird.
+      dcat-ap: |
+        Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.
     type: string
   title:
     type: string
     description: | 
       Der Titel des Datensatzes.
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString`
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:title`
   description:
     description: | 
       Die Beschreibung des Datensatzes.
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:abstract/gco:CharacterString`
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:description`
     type: string
   language:
     type: string
     description: Welches Format hat die Sprache, wo wird es verwendet.
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`
+
+        ## Mapping (lookup)
+
+        - `de` ↔ `ger` (lesen auch `deu`, `de`)
+        - `en` ↔ `eng` (lesen auch `en`)
+
+        > Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als `gco:CharacterString`; ohne
+        > Angabe oder ohne Treffer `de`.
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:language`
+
+        ## Mapping (lookup)
+
+        - `de` ↔ `http://publications.europa.eu/resource/authority/language/DEU`
+        - `en` ↔ `http://publications.europa.eu/resource/authority/language/ENG`
+
+        > Sprache der Ressource. Lesen: auch die Literale `de`, `deu`, `ger`, `en`, `eng`; ohne Angabe `de`.
   contacts:
     type: array
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty`
+
+        ## Mapping (logic)
+
+        - je Kontakt ein `gmd:CI_ResponsibleParty`; die Art des Kontakts ergibt sich nur aus `role`
+
+        > Lesen: zusätzlich die Kontakte zum Metadatensatz (`gmd:contact/gmd:CI_ResponsibleParty`), nach
+        > denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.
+        >
+        > Schreiben: `gmd:contact` (Pflicht) erhält die Kontakte mit `role` `pointOfContact`, sonst den
+        > ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und
+        > zum Metadatensatz.
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer`
+
+        ## Mapping (logic)
+
+        - je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt `role` (siehe dort)
+        - `dcat:contactPoint` als `vcard:Kind`, alle anderen als `foaf:Agent`
+
+        > Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.
     items:
       properties:
         role:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue`
+
+              > Wert unverändert (`CI_RoleCode`, z. B. `pointOfContact`, `custodian`).
+            dcat-ap: |
+              # Lesen & schreiben
+
+              Die Property, über die der Kontakt an der Ressource angegeben ist.
+
+              ## Mapping (lookup)
+
+              - `pointOfContact` ↔ `dcat:contactPoint`
+              - `publisher` ↔ `dct:publisher`
+              - `author` ↔ `dct:creator`
+              - `owner` ↔ `dct:rightsHolder`
+              - `originator` ↔ `dcatde:originator`
+              - `custodian` ↔ `dcatde:maintainer`
+
+              > Andere Rollen über `prov:qualifiedAttribution` mit `dcat:hadRole` (IRI der INSPIRE-Codeliste
+              > `ResponsiblePartyRole`, letzter Pfadabschnitt = Rolle).
         name:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString`
+
+              > Lesen: ohne Organisation der Personenname (`gmd:individualName`). Geschrieben wird immer
+              > `gmd:organisationName`, da das Indexformat nicht zwischen Person und Organisation unterscheidet.
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:fn`
+
+              > Bei `foaf:Agent` `foaf:name`. Lesen: bei `dcat:contactPoint` zuerst `vcard:organization-name`.
         communications:
           type: array
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact`
+
+              ## Mapping (logic)
+
+              - `email` ↔ `gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString`
+              - `phone` ↔ `gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString`
+              - `fax` ↔ `gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString`
+              - `website` ↔ `gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL`
+
+              > `social` und `other` haben kein Gegenstück. Schreiben: nur die erste `website`.
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint`
+
+              ## Mapping (logic)
+
+              - `email` ↔ `vcard:hasEmail` (`foaf:mbox`)
+              - `phone` ↔ `vcard:hasTelephone` (`foaf:phone`)
+              - `website` ↔ `vcard:hasURL` (`foaf:homepage`)
+
+              > In Klammern die Form bei `foaf:Agent`. E-Mail als `mailto:`-IRI, Telefon als `tel:`-IRI. Lesen:
+              > Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein
+              > Gegenstück.
           items:
             properties:
               type:
@@ -49,21 +207,120 @@ properties:
                 type: string
         street:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`
+
+              > Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden.
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:street-address`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
         code:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:postal-code`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
         pocode:
           type: string
+          x-transform:
+            iso19139-2007: |
+              Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des
+              Postfachs.
+            dcat-ap: |
+              Kein Gegenstück in DCAT-AP.
         pobox:
           type: string
+          x-transform:
+            iso19139-2007: |
+              Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:post-office-box`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
         locality:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString`
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:locality`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
         country:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString`
+
+              > Wert unverändert, ohne Normalisierung auf einen Ländercode.
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:country-name`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
         administrative_area:
           type: string
+          x-transform:
+            iso19139-2007: |
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString`
+            dcat-ap: |
+              # Lesen & schreiben
+
+              `dcat:contactPoint/vcard:hasAddress/vcard:region`
+
+              > Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.
   spatials:
     type: array
     description: "Dieser Bereich enthält Informationen über den Raumbezug."
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement`
+
+        ## Mapping (logic)
+
+        - je Eintrag ein `gmd:geographicElement`
+        - `bbox` und `geometry` ↔ `gmd:EX_GeographicBoundingBox`
+        - `geometry` ↔ `gmd:EX_BoundingPolygon`
+        - `toponym` ↔ `gmd:EX_GeographicDescription`
+
+        > Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd > Nord)
+        > werden verworfen. Schreiben: alle in einem `gmd:EX_Extent`, je Wert in `toponym` ein eigenes
+        > `gmd:geographicElement`.
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:spatial | dcatde:politicalGeocodingURI`
+
+        ## Mapping (logic)
+
+        - `geometry`, `bbox`, `toponym` ↔ je ein `dct:spatial` (`dct:Location` oder IRI eines Gazetteers)
+        - `administrative` ↔ je ein `dcatde:politicalGeocodingURI`
     items:
       type: object
       $ref: "#/$defs/SpatialItem"
@@ -72,6 +329,28 @@ properties:
     type: array
     title: Referenzsystem
     description: "Koordinatenreferenzsystem(e) des Datensatzes."
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier`
+
+        ## Mapping (logic)
+
+        - je Wert ein `gmd:referenceSystemInfo`
+        - `<codeSpace>:<code>` (z. B. `EPSG:25832`) ↔ `gmd:codeSpace/gco:CharacterString` und
+          `gmd:code/gco:CharacterString`
+        - URI ↔ nur `gmd:code`
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dct:conformsTo`
+
+        ## Mapping (logic)
+
+        - `EPSG:<code>` ↔ `http://www.opengis.net/def/crs/EPSG/0/<code>`
+
+        > Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.
     items:
       type: string
       examples: [
@@ -83,6 +362,47 @@ properties:
     $comment: 'Ehemaliges Indexfeld: object_date'
   keywords:
     type: array
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords`
+
+        ## Mapping (logic)
+
+        - `term` ↔ Text von `gmd:keyword`, `id` ↔ `gmx:Anchor/@xlink:href`
+        - `source` ↔ Titel des Thesaurus (`gmd:thesaurusName/gmd:CI_Citation/gmd:title`):
+            - `inspire` ↔ `GEMET - INSPIRE themes, version 1.0`
+            - `gemet` ↔ `GEMET - Concepts, version 2.1`
+            - `umthes` ↔ `UMTHES Thesaurus`
+            - `frei` ↔ ohne Thesaurus
+        - `term` mit `source` `iso_topic` ↔
+          `gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode` (nur
+          Datensätze)
+
+        > Lesen: gleiche Einträge (`term`, `source`) nur einmal. Schreiben: ein `gmd:MD_Keywords` je
+        > `source`; Keyword mit `id` als `gmx:Anchor`; Thesaurus `inspire` mit Datum 2008-06-01
+        > (`publication`).
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory`
+
+        ## Mapping (logic)
+
+        - `term` mit `source` `frei` ↔ `dcat:keyword`
+        - `id` und `term` ↔ `dcat:theme` (IRI; `term` aus `skos:prefLabel`, sonst letzter Pfadabschnitt);
+          `source` nach dem Anfang der IRI:
+            - `inspire` ↔ `http://inspire.ec.europa.eu/theme/`
+            - `gemet` ↔ `http://www.eionet.europa.eu/gemet/concept/`
+            - `umthes` ↔ `https://sns.uba.de/umthes/`
+            - `data-theme` ↔ `http://publications.europa.eu/resource/authority/data-theme/`
+        - `source` `iso_topic` ↔ `dct:subject` mit IRI aus
+          `http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/`
+        - `source` `hvd` ↔ `dcatap:hvdCategory` mit IRI aus `http://data.europa.eu/bna/`
+
+        > Lesen: gleiche Einträge (`term`, `source`) nur einmal; ein Literal statt einer IRI wird `term` mit
+        > `source` `frei`. UNKLAR: Die Kennungen `data-theme` und `hvd` sind noch abzustimmen.
     items:
       type: object
       title: item
@@ -108,6 +428,41 @@ properties:
   references:
     type: array
     description: "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden."
+    x-transform:
+      iso19139-2007: |
+        # Lesen & schreiben
+
+        `gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource`
+
+        ## Mapping (logic)
+
+        - `url` ↔ `gmd:linkage/gmd:URL`, `title` ↔ `gmd:name`, `explanation` ↔ `gmd:description`
+        - `type.value` ↔ `gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue`; `type.key` ← ID des
+          Eintrags der InGrid-Codeliste 2000 zum Code
+        - `type.value` `previewGraphic` ↔
+          `gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic` (`url` ↔ `gmd:fileName`,
+          `explanation` ↔ `gmd:fileDescription`)
+        - `type.key` `3600` (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes
+          (`srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint`)
+
+        > Lesen: jede URL nur einmal. Schreiben: `3600` wird nicht als `gmd:onLine` geschrieben, die URL
+        > gehört zu `ingrid.service.operations`.
+      dcat-ap: |
+        # Lesen & schreiben
+
+        `dcat:landingPage | foaf:page | dcat:distribution`
+
+        ## Mapping (logic)
+
+        - `url` ↔ `dcat:landingPage` bzw. `foaf:page`, `title` ↔ dessen `dct:title`; `type.value`
+          `information`
+        - `url` ↔ `dcat:distribution/dcat:downloadURL` (`type.value` `download`), sonst `dcat:accessURL`
+          (`type.value` `information`); `title` ↔ `dct:title`, `explanation` ↔ `dct:description`
+        - `type.value` `previewGraphic` → `foaf:depiction`
+        - `type.key` ← ID des Eintrags der InGrid-Codeliste 2000 zu `type.value`
+
+        > Lesen: jede URL nur einmal. Schreiben: `download` mit `dcat:downloadURL` und `dcat:accessURL`;
+        > andere Typen außer `information` als `dcat:distribution` mit `dcat:accessURL`.
     items:
       type: object
       title: item
@@ -117,6 +472,11 @@ properties:
     description: Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet
       werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.
     $comment: Früher content-Feld
+    x-transform:
+      iso19139-2007: |
+        Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.
+      dcat-ap: |
+        Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.
     items:
       type: string
   exports:
@@ -136,15 +496,56 @@ $defs:
       name:
         type: string
         description: Kann einen Namen oder eine ID gür eine Geometrie enthalten.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007.
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP.
         examples:
           - <oid>-<geometrie-id> (für UMWELTNAVI)
       geometry:
         type: object
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon`
+
+            ## Mapping (logic)
+
+            - GeoJSON ↔ GML-Geometrie
+
+            > Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString).
+            > Schreiben: nur, wenn `geometry` nicht das Rechteck aus `bbox` ist.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dct:spatial/locn:geometry`
+
+            > Als GeoJSON-Literal (`gsp:geoJSONLiteral`). Lesen: auch WKT (`gsp:wktLiteral`); ohne
+            > `locn:geometry` aus `dcat:bbox`, sonst aus `dcat:centroid`.
         $ref: ./shared-types.yaml#/$defs/GeoShape
       bbox:
         type: array
         title: Bounding Box
         description: Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox`
+
+            ## Mapping (logic)
+
+            - `[west, south, east, north]` ↔ `gmd:westBoundLongitude`, `gmd:southBoundLatitude`,
+              `gmd:eastBoundLongitude`, `gmd:northBoundLatitude` (je `gco:Decimal`)
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dct:spatial/dcat:bbox`
+
+            > Als WKT-Polygon (`gsp:wktLiteral`). Lesen: ohne `dcat:bbox` das umschließende Rechteck von
+            > `locn:geometry`.
         items:
           type: number
           minimum: -180
@@ -155,9 +556,35 @@ $defs:
         type: string
         title: Well-known text
         description: Angabe eines Well-known text-Formats.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in `geometry` bzw. `bbox`.
+          dcat-ap: |
+            # Lesen
+
+            `dct:spatial/(locn:geometry | dcat:bbox)`
+
+            > Nur ein WKT-Literal, unverändert.
+
+            # Schreiben
+
+            Wird nicht geschrieben; die Geometrie steht in `geometry` bzw. `bbox`.
       toponym:
         type: array
         title: Toponym
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`
+
+            > Lesen: auch `gmd:RS_Identifier`.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dct:spatial/skos:prefLabel`
+
+            > Lesen: auch `rdfs:label` und `locn:geographicName`; bei der IRI eines Gazetteers deren Label.
         items:
           type: string
           description: Textueller Raumbezug (wie Stadtnamen oder Flussnamen)
@@ -177,6 +604,20 @@ $defs:
           regional_key:
             type: string
         description: Administrative Zuordnung
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `dcatde:politicalGeocodingURI`
+
+            ## Mapping (logic)
+
+            - `regional_key` ↔ `http://dcat-ap.de/def/politicalGeocoding/regionalKey/<schlüssel>`
+            - `state` ↔ `http://dcat-ap.de/def/politicalGeocoding/stateKey/<schlüssel>`
+
+            > DCAT-AP.de-Erweiterung.
     anyOf:
       - required: [ "bbox" ]
       - required: [ "wkt" ]
@@ -187,6 +628,9 @@ $defs:
     properties:
       data_type:
         type: string
+        x-transform:
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).
         description: |
           Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.
         examples:
@@ -196,6 +640,17 @@ $defs:
       document_type:
         type: string
         description: Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.
+        x-transform:
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `rdf:type`
+
+            ## Mapping (lookup)
+
+            - `InGridGeoService` ↔ `dcat:DataService`
+            - `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)
+            - alle anderen → `dcat:Dataset`
         examples:
           - InGridGeoDataset
           - InGridGeoService
@@ -204,6 +659,12 @@ $defs:
         format: date-time
         description: |
           Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;
+            Wert `null`.
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.
         examples:
           - '2026-04-22T12:00:00Z'
           - '2026-04-22T12:00:00+01:00'
@@ -212,6 +673,19 @@ $defs:
         format: date-time
         description: |
           Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:dateStamp/gco:DateTime`
+
+            > Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `^foaf:primaryTopic/dct:modified`
+
+            > Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.
         examples:
           - '2026-04-22T12:00:00Z'
           - '2026-04-22T12:00:00+01:00'
@@ -220,24 +694,74 @@ $defs:
         format: date-time
         description: |
           Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des
+            Metadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `^foaf:primaryTopic/dct:issued`
+
+            > Aufnahme in den Katalog laut `dcat:CatalogRecord`.
       partner:
         type: string
         description: |
           Der Partner der Datenquelle als Kürzel.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.
         examples:
           - bb
           - st
       provider:
         type: string
         description: Der Anbieter der Datenquelle.
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.
         examples:
           - ni_gll
           - bw_mj
       language:
         title: language
         description: Enthält die Sprache des Metadatensatzes.
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:language/gmd:LanguageCode/@codeListValue`
+
+            ## Mapping (logic)
+
+            - ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)
+
+            > Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`
+            > `http://www.loc.gov/standards/iso639-2/`.
+          dcat-ap: |
+            # Lesen & schreiben
+
+            `^foaf:primaryTopic/dct:language`
+
+            ## Mapping (logic)
+
+            - ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO
+              639-2)
+
+            > Sprache des Metadatensatzes.
         $ref: ./shared-types.yaml#/$defs/KeyValue
       datasource:
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen
+            wurde (Kennung, Name, Art).
+          dcat-ap: |
+            Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde
+            (Kennung, Name, Art).
         properties:
           id:
             type: string
