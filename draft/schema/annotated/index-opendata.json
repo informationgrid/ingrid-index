@@ -271,28 +271,28 @@
               "street": {
                 "type": "string",
                 "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n> Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden.\n",
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n> Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden, außer dem Postfach (siehe `pobox`).\n",
                   "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:street-address`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
                 }
               },
               "code": {
                 "type": "string",
                 "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n",
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n\n> Lesen: nicht, wenn `gmd:deliveryPoint` nur das Postfach enthält (dann `pocode`).\n",
                   "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:postal-code`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
                 }
               },
               "pocode": {
                 "type": "string",
                 "x-transform": {
-                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des\nPostfachs.\n",
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n\n> `gmd:CI_Address` hat nur eine Postleitzahl; sie gehört zur Hausadresse (`code`). Lesen: nur, wenn\n> `gmd:deliveryPoint` ausschließlich das Postfach enthält. Schreiben: nur ohne `code`.\n",
                   "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
                 }
               },
               "pobox": {
                 "type": "string",
                 "x-transform": {
-                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.\n",
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<pobox>` ↔ `Postfach <pobox>`\n\n> Postfach gemäß ISO 11180, Anhang A. Lesen: ein `gmd:deliveryPoint`, der mit `Postfach` beginnt.\n> Schreiben: als eigenes `gmd:deliveryPoint` nach der Hausadresse (`street`). UNKLAR: Das Präfix\n> `Postfach` ist abzustimmen.\n",
                   "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:post-office-box`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
                 }
               },

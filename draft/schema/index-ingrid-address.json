@@ -1,8 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "InGrid Index - LVR",
-  "$id": "https://schema.ingrid-oss.eu/index/draft/schema/annotated/index-lvr.json",
+  "title": "InGrid Index - Adresse",
+  "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-ingrid-address.json",
+  "description": "Dies ist das JSON-Schema für Adressen (Personen und Organisationen) im InGrid-Index.\n\nAdressen nutzen die \"Root fields\", die für Metadatensätze entworfen sind. Wie ein Feld bei Adressen\nbefüllt wird, steht am Feld im Teil \"Address\"; Felder ohne Angabe dort werden wie beschrieben\nverwendet (z. B. `title`). Anschrift und Kommunikation der Adresse stehen in `contacts` im Eintrag mit\n`role` `self`; Angaben ohne Gegenstück in den \"Root fields\" in `address`.\n\nNicht befüllt werden `description`, `language`, `spatials`, `crs`, `temporal`, `keywords` und\n`references`.\n\nISO 19139:2007: Eine Adresse entspricht einem `gmd:CI_ResponsibleParty`. Die Pfade nennen es unter\n`gmd:identificationInfo/*/gmd:pointOfContact`; sie gelten ebenso für jedes andere\n`gmd:CI_ResponsibleParty` eines Metadatensatzes (z. B. `gmd:contact`).\n",
   "type": "object",
+  "unevaluatedProperties": false,
   "allOf": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -12,10 +14,6 @@
         "id": {
           "type": "string",
           "description": "Die ID des Datensatzes. Die ID **muss** eindeutig im Index sein.",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:fileIdentifier/gco:CharacterString`\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:identifier`\n\n> Lesen: ohne `dct:identifier` die IRI der Ressource.\n"
-          },
           "examples": [
             "Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'",
             "For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'"
@@ -24,10 +22,6 @@
         "$schema": {
           "type": "string",
           "description": "Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.",
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Enthält die `$id` des Index-Schemas, gegen das das Dokument\nvalidiert wird.\n",
-            "dcat-ap": "Kein Gegenstück in DCAT-AP. Enthält die `$id` des Index-Schemas, gegen das das Dokument validiert\nwird.\n"
-          },
           "examples": [
             "https://example.com/schemas/order/v2.1.0/schema.json"
           ]
@@ -38,9 +32,6 @@
           "properties": {
             "data_type": {
               "type": "string",
-              "x-transform": {
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
-              },
               "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
               "examples": [
                 "UmweltNAVI Datensatz ['UMWELTNAVI']",
@@ -51,9 +42,6 @@
             "document_type": {
               "type": "string",
               "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "x-transform": {
-                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-              },
               "examples": [
                 "InGridGeoDataset",
                 "InGridGeoService"
@@ -66,10 +54,6 @@
               ],
               "format": "date-time",
               "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
-              },
               "examples": [
                 "2026-04-22T12:00:00Z",
                 "2026-04-22T12:00:00+01:00"
@@ -82,10 +66,6 @@
               ],
               "format": "date-time",
               "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
-              },
               "examples": [
                 "2026-04-22T12:00:00Z",
                 "2026-04-22T12:00:00+01:00"
@@ -97,19 +77,11 @@
                 "null"
               ],
               "format": "date-time",
-              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
-              }
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n"
             },
             "partner": {
               "type": "string",
               "description": "Der Partner der Datenquelle als Kürzel.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
-              },
               "examples": [
                 "bb",
                 "st"
@@ -118,10 +90,6 @@
             "provider": {
               "type": "string",
               "description": "Der Anbieter der Datenquelle.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
-              },
               "examples": [
                 "ni_gll",
                 "bw_mj"
@@ -130,10 +98,6 @@
             "language": {
               "title": "language",
               "description": "Enthält die Sprache des Metadatensatzes.",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -151,10 +115,6 @@
               }
             },
             "datasource": {
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
-              },
               "properties": {
                 "id": {
                   "type": "string",
@@ -191,64 +151,32 @@
         },
         "sort_uuid": {
           "description": "Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.",
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben\nwird.\n",
-            "dcat-ap": "Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.\n"
-          },
           "type": "string"
         },
         "title": {
           "type": "string",
-          "description": "Der Titel des Datensatzes.\n",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString`\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:title`\n"
-          }
+          "description": "Der Titel des Datensatzes.\n"
         },
         "description": {
           "description": "Die Beschreibung des Datensatzes.\n",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:abstract/gco:CharacterString`\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:description`\n"
-          },
           "type": "string"
         },
         "language": {
           "type": "string",
-          "description": "Welches Format hat die Sprache, wo wird es verwendet.",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `de` ↔ `ger` (lesen auch `deu`, `de`)\n- `en` ↔ `eng` (lesen auch `en`)\n\n> Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als `gco:CharacterString`; ohne\n> Angabe oder ohne Treffer `de`.\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:language`\n\n## Mapping (lookup)\n\n- `de` ↔ `http://publications.europa.eu/resource/authority/language/DEU`\n- `en` ↔ `http://publications.europa.eu/resource/authority/language/ENG`\n\n> Sprache der Ressource. Lesen: auch die Literale `de`, `deu`, `ger`, `en`, `eng`; ohne Angabe `de`.\n"
-          }
+          "description": "Welches Format hat die Sprache, wo wird es verwendet."
         },
         "contacts": {
           "type": "array",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty`\n\n## Mapping (logic)\n\n- je Kontakt ein `gmd:CI_ResponsibleParty`; die Art des Kontakts ergibt sich nur aus `role`\n\n> Lesen: zusätzlich die Kontakte zum Metadatensatz (`gmd:contact/gmd:CI_ResponsibleParty`), nach\n> denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.\n>\n> Schreiben: `gmd:contact` (Pflicht) erhält die Kontakte mit `role` `pointOfContact`, sonst den\n> ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und\n> zum Metadatensatz.\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer`\n\n## Mapping (logic)\n\n- je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt `role` (siehe dort)\n- `dcat:contactPoint` als `vcard:Kind`, alle anderen als `foaf:Agent`\n\n> Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.\n"
-          },
           "items": {
             "properties": {
               "role": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue`\n\n> Wert unverändert (`CI_RoleCode`, z. B. `pointOfContact`, `custodian`).\n",
-                  "dcat-ap": "# Lesen & schreiben\n\nDie Property, über die der Kontakt an der Ressource angegeben ist.\n\n## Mapping (lookup)\n\n- `pointOfContact` ↔ `dcat:contactPoint`\n- `publisher` ↔ `dct:publisher`\n- `author` ↔ `dct:creator`\n- `owner` ↔ `dct:rightsHolder`\n- `originator` ↔ `dcatde:originator`\n- `custodian` ↔ `dcatde:maintainer`\n\n> Andere Rollen über `prov:qualifiedAttribution` mit `dcat:hadRole` (IRI der INSPIRE-Codeliste\n> `ResponsiblePartyRole`, letzter Pfadabschnitt = Rolle).\n"
-                }
+                "type": "string"
               },
               "name": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString`\n\n> Lesen: ohne Organisation der Personenname (`gmd:individualName`). Geschrieben wird immer\n> `gmd:organisationName`, da das Indexformat nicht zwischen Person und Organisation unterscheidet.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:fn`\n\n> Bei `foaf:Agent` `foaf:name`. Lesen: bei `dcat:contactPoint` zuerst `vcard:organization-name`.\n"
-                }
+                "type": "string"
               },
               "communications": {
                 "type": "array",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact`\n\n## Mapping (logic)\n\n- `email` ↔ `gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString`\n- `phone` ↔ `gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString`\n- `fax` ↔ `gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString`\n- `website` ↔ `gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL`\n\n> `social` und `other` haben kein Gegenstück. Schreiben: nur die erste `website`.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint`\n\n## Mapping (logic)\n\n- `email` ↔ `vcard:hasEmail` (`foaf:mbox`)\n- `phone` ↔ `vcard:hasTelephone` (`foaf:phone`)\n- `website` ↔ `vcard:hasURL` (`foaf:homepage`)\n\n> In Klammern die Form bei `foaf:Agent`. E-Mail als `mailto:`-IRI, Telefon als `tel:`-IRI. Lesen:\n> Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein\n> Gegenstück.\n"
-                },
                 "items": {
                   "properties": {
                     "type": {
@@ -269,53 +197,25 @@
                 }
               },
               "street": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n> Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden, außer dem Postfach (siehe `pobox`).\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:street-address`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               },
               "code": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n\n> Lesen: nicht, wenn `gmd:deliveryPoint` nur das Postfach enthält (dann `pocode`).\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:postal-code`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               },
               "pocode": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n\n> `gmd:CI_Address` hat nur eine Postleitzahl; sie gehört zur Hausadresse (`code`). Lesen: nur, wenn\n> `gmd:deliveryPoint` ausschließlich das Postfach enthält. Schreiben: nur ohne `code`.\n",
-                  "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
-                }
+                "type": "string"
               },
               "pobox": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<pobox>` ↔ `Postfach <pobox>`\n\n> Postfach gemäß ISO 11180, Anhang A. Lesen: ein `gmd:deliveryPoint`, der mit `Postfach` beginnt.\n> Schreiben: als eigenes `gmd:deliveryPoint` nach der Hausadresse (`street`). UNKLAR: Das Präfix\n> `Postfach` ist abzustimmen.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:post-office-box`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               },
               "locality": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString`\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:locality`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               },
               "country": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString`\n\n> Wert unverändert, ohne Normalisierung auf einen Ländercode.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:country-name`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               },
               "administrative_area": {
-                "type": "string",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString`\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:region`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
-                }
+                "type": "string"
               }
             }
           }
@@ -323,10 +223,6 @@
         "spatials": {
           "type": "array",
           "description": "Dieser Bereich enthält Informationen über den Raumbezug.",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement`\n\n## Mapping (logic)\n\n- je Eintrag ein `gmd:geographicElement`\n- `bbox` und `geometry` ↔ `gmd:EX_GeographicBoundingBox`\n- `geometry` ↔ `gmd:EX_BoundingPolygon`\n- `toponym` ↔ `gmd:EX_GeographicDescription`\n\n> Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd > Nord)\n> werden verworfen. Schreiben: alle in einem `gmd:EX_Extent`, je Wert in `toponym` ein eigenes\n> `gmd:geographicElement`.\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial | dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `geometry`, `bbox`, `toponym` ↔ je ein `dct:spatial` (`dct:Location` oder IRI eines Gazetteers)\n- `administrative` ↔ je ein `dcatde:politicalGeocodingURI`\n"
-          },
           "items": {
             "type": "object",
             "title": "Spatial Core",
@@ -334,20 +230,12 @@
               "name": {
                 "type": "string",
                 "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
-                "x-transform": {
-                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
-                  "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
-                },
                 "examples": [
                   "<oid>-<geometrie-id> (für UMWELTNAVI)"
                 ]
               },
               "geometry": {
                 "type": "object",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon`\n\n## Mapping (logic)\n\n- GeoJSON ↔ GML-Geometrie\n\n> Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString).\n> Schreiben: nur, wenn `geometry` nicht das Rechteck aus `bbox` ist.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/locn:geometry`\n\n> Als GeoJSON-Literal (`gsp:geoJSONLiteral`). Lesen: auch WKT (`gsp:wktLiteral`); ohne\n> `locn:geometry` aus `dcat:bbox`, sonst aus `dcat:centroid`.\n"
-                },
                 "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
                 "oneOf": [
                   {
@@ -566,10 +454,6 @@
                 "type": "array",
                 "title": "Bounding Box",
                 "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox`\n\n## Mapping (logic)\n\n- `[west, south, east, north]` ↔ `gmd:westBoundLongitude`, `gmd:southBoundLatitude`,\n  `gmd:eastBoundLongitude`, `gmd:northBoundLatitude` (je `gco:Decimal`)\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/dcat:bbox`\n\n> Als WKT-Polygon (`gsp:wktLiteral`). Lesen: ohne `dcat:bbox` das umschließende Rechteck von\n> `locn:geometry`.\n"
-                },
                 "items": {
                   "type": "number",
                   "minimum": -180,
@@ -581,19 +465,11 @@
               "wkt": {
                 "type": "string",
                 "title": "Well-known text",
-                "description": "Angabe eines Well-known text-Formats.",
-                "x-transform": {
-                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in `geometry` bzw. `bbox`.\n",
-                  "dcat-ap": "# Lesen\n\n`dct:spatial/(locn:geometry | dcat:bbox)`\n\n> Nur ein WKT-Literal, unverändert.\n\n# Schreiben\n\nWird nicht geschrieben; die Geometrie steht in `geometry` bzw. `bbox`.\n"
-                }
+                "description": "Angabe eines Well-known text-Formats."
               },
               "toponym": {
                 "type": "array",
                 "title": "Toponym",
-                "x-transform": {
-                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/skos:prefLabel`\n\n> Lesen: auch `rdfs:label` und `locn:geographicName`; bei der IRI eines Gazetteers deren Label.\n"
-                },
                 "items": {
                   "type": "string",
                   "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
@@ -619,11 +495,7 @@
                     "type": "string"
                   }
                 },
-                "description": "Administrative Zuordnung",
-                "x-transform": {
-                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `regional_key` ↔ `http://dcat-ap.de/def/politicalGeocoding/regionalKey/<schlüssel>`\n- `state` ↔ `http://dcat-ap.de/def/politicalGeocoding/stateKey/<schlüssel>`\n\n> DCAT-AP.de-Erweiterung.\n"
-                }
+                "description": "Administrative Zuordnung"
               }
             },
             "anyOf": [
@@ -655,10 +527,6 @@
           "type": "array",
           "title": "Referenzsystem",
           "description": "Koordinatenreferenzsystem(e) des Datensatzes.",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier`\n\n## Mapping (logic)\n\n- je Wert ein `gmd:referenceSystemInfo`\n- `<codeSpace>:<code>` (z. B. `EPSG:25832`) ↔ `gmd:codeSpace/gco:CharacterString` und\n  `gmd:code/gco:CharacterString`\n- URI ↔ nur `gmd:code`\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo`\n\n## Mapping (logic)\n\n- `EPSG:<code>` ↔ `http://www.opengis.net/def/crs/EPSG/0/<code>`\n\n> Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.\n"
-          },
           "items": {
             "type": "string",
             "examples": [
@@ -673,10 +541,6 @@
           "properties": {
             "data_temporal": {
               "type": "array",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date`\n\n## Mapping (logic)\n\n- `date_range` ↔ `gml:TimePeriod` (`gte` ↔ `gml:beginPosition`, `lte` ↔ `gml:endPosition`)\n- `date` ↔ `gml:TimeInstant/gml:timePosition`\n- `date` mit `date_type` ↔ `gmd:CI_Date`: `created` ↔ `creation`, `last_updated` ↔ `revision`,\n  `first_published` ↔ `publication`\n\n> Lesen: auch GML 3.2 (`gml32:`) und `gml:begin/gml:TimeInstant/gml:timePosition`;\n> `indeterminatePosition` (`now`, `unknown`) lässt die Grenze offen; ungültige Werte → `date_text`.\n>\n> Schreiben: offene Grenze als leeres Element mit `indeterminatePosition=\"unknown\"`;\n> `gml:TimePeriod` mit `gml:id`; `date_text` wird nicht geschrieben.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:temporal | dct:issued | dct:modified | dct:created`\n\n## Mapping (logic)\n\n- `date_range` ↔ `dct:temporal` (`dct:PeriodOfTime`; `gte` ↔ `dcat:startDate`, `lte` ↔\n  `dcat:endDate`)\n- `date` mit `date_type`: `first_published` ↔ `dct:issued`, `last_updated` ↔ `dct:modified`,\n  `created` ↔ `dct:created`\n\n> Schreiben: `date` ohne `date_type` als `dct:temporal` mit gleichem Start- und Enddatum;\n> `date_text` wird nicht geschrieben.\n>\n> DCAT-AP 1.x / DCAT-AP.de 1.x: `schema:startDate`/`schema:endDate` statt\n> `dcat:startDate`/`dcat:endDate` (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich\n> `time:hasBeginning`/`time:hasEnd` (nur lesen).\n"
-              },
               "items": {
                 "type": "object",
                 "properties": {
@@ -742,10 +606,6 @@
         },
         "keywords": {
           "type": "array",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords`\n\n## Mapping (logic)\n\n- `term` ↔ Text von `gmd:keyword`, `id` ↔ `gmx:Anchor/@xlink:href`\n- `source` ↔ Titel des Thesaurus (`gmd:thesaurusName/gmd:CI_Citation/gmd:title`):\n    - `inspire` ↔ `GEMET - INSPIRE themes, version 1.0`\n    - `gemet` ↔ `GEMET - Concepts, version 2.1`\n    - `umthes` ↔ `UMTHES Thesaurus`\n    - `frei` ↔ ohne Thesaurus\n- `term` mit `source` `iso_topic` ↔\n  `gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode` (nur\n  Datensätze)\n\n> Lesen: gleiche Einträge (`term`, `source`) nur einmal. Schreiben: ein `gmd:MD_Keywords` je\n> `source`; Keyword mit `id` als `gmx:Anchor`; Thesaurus `inspire` mit Datum 2008-06-01\n> (`publication`).\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory`\n\n## Mapping (logic)\n\n- `term` mit `source` `frei` ↔ `dcat:keyword`\n- `id` und `term` ↔ `dcat:theme` (IRI; `term` aus `skos:prefLabel`, sonst letzter Pfadabschnitt);\n  `source` nach dem Anfang der IRI:\n    - `inspire` ↔ `http://inspire.ec.europa.eu/theme/`\n    - `gemet` ↔ `http://www.eionet.europa.eu/gemet/concept/`\n    - `umthes` ↔ `https://sns.uba.de/umthes/`\n    - `data-theme` ↔ `http://publications.europa.eu/resource/authority/data-theme/`\n- `source` `iso_topic` ↔ `dct:subject` mit IRI aus\n  `http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/`\n- `source` `hvd` ↔ `dcatap:hvdCategory` mit IRI aus `http://data.europa.eu/bna/`\n\n> Lesen: gleiche Einträge (`term`, `source`) nur einmal; ein Literal statt einer IRI wird `term` mit\n> `source` `frei`. UNKLAR: Die Kennungen `data-theme` und `hvd` sind noch abzustimmen.\n"
-          },
           "items": {
             "type": "object",
             "title": "item",
@@ -779,10 +639,6 @@
         "references": {
           "type": "array",
           "description": "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.",
-          "x-transform": {
-            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource`\n\n## Mapping (logic)\n\n- `url` ↔ `gmd:linkage/gmd:URL`, `title` ↔ `gmd:name`, `explanation` ↔ `gmd:description`\n- `type.value` ↔ `gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue`; `type.key` ← ID des\n  Eintrags der InGrid-Codeliste 2000 zum Code\n- `type.value` `previewGraphic` ↔\n  `gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic` (`url` ↔ `gmd:fileName`,\n  `explanation` ↔ `gmd:fileDescription`)\n- `type.key` `3600` (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes\n  (`srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint`)\n\n> Lesen: jede URL nur einmal. Schreiben: `3600` wird nicht als `gmd:onLine` geschrieben, die URL\n> gehört zu `ingrid.service.operations`.\n",
-            "dcat-ap": "# Lesen & schreiben\n\n`dcat:landingPage | foaf:page | dcat:distribution`\n\n## Mapping (logic)\n\n- `url` ↔ `dcat:landingPage` bzw. `foaf:page`, `title` ↔ dessen `dct:title`; `type.value`\n  `information`\n- `url` ↔ `dcat:distribution/dcat:downloadURL` (`type.value` `download`), sonst `dcat:accessURL`\n  (`type.value` `information`); `title` ↔ `dct:title`, `explanation` ↔ `dct:description`\n- `type.value` `previewGraphic` → `foaf:depiction`\n- `type.key` ← ID des Eintrags der InGrid-Codeliste 2000 zu `type.value`\n\n> Lesen: jede URL nur einmal. Schreiben: `download` mit `dcat:downloadURL` und `dcat:accessURL`;\n> andere Typen außer `information` als `dcat:distribution` mit `dcat:accessURL`.\n"
-          },
           "items": {
             "type": "object",
             "title": "item",
@@ -831,10 +687,6 @@
           "type": "array",
           "description": "Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.",
           "$comment": "Früher content-Feld",
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.\n",
-            "dcat-ap": "Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.\n"
-          },
           "items": {
             "type": "string"
           }
@@ -858,20 +710,12 @@
             "name": {
               "type": "string",
               "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
-              },
               "examples": [
                 "<oid>-<geometrie-id> (für UMWELTNAVI)"
               ]
             },
             "geometry": {
               "type": "object",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon`\n\n## Mapping (logic)\n\n- GeoJSON ↔ GML-Geometrie\n\n> Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString).\n> Schreiben: nur, wenn `geometry` nicht das Rechteck aus `bbox` ist.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/locn:geometry`\n\n> Als GeoJSON-Literal (`gsp:geoJSONLiteral`). Lesen: auch WKT (`gsp:wktLiteral`); ohne\n> `locn:geometry` aus `dcat:bbox`, sonst aus `dcat:centroid`.\n"
-              },
               "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
               "oneOf": [
                 {
@@ -1090,10 +934,6 @@
               "type": "array",
               "title": "Bounding Box",
               "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox`\n\n## Mapping (logic)\n\n- `[west, south, east, north]` ↔ `gmd:westBoundLongitude`, `gmd:southBoundLatitude`,\n  `gmd:eastBoundLongitude`, `gmd:northBoundLatitude` (je `gco:Decimal`)\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/dcat:bbox`\n\n> Als WKT-Polygon (`gsp:wktLiteral`). Lesen: ohne `dcat:bbox` das umschließende Rechteck von\n> `locn:geometry`.\n"
-              },
               "items": {
                 "type": "number",
                 "minimum": -180,
@@ -1105,19 +945,11 @@
             "wkt": {
               "type": "string",
               "title": "Well-known text",
-              "description": "Angabe eines Well-known text-Formats.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in `geometry` bzw. `bbox`.\n",
-                "dcat-ap": "# Lesen\n\n`dct:spatial/(locn:geometry | dcat:bbox)`\n\n> Nur ein WKT-Literal, unverändert.\n\n# Schreiben\n\nWird nicht geschrieben; die Geometrie steht in `geometry` bzw. `bbox`.\n"
-              }
+              "description": "Angabe eines Well-known text-Formats."
             },
             "toponym": {
               "type": "array",
               "title": "Toponym",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/skos:prefLabel`\n\n> Lesen: auch `rdfs:label` und `locn:geographicName`; bei der IRI eines Gazetteers deren Label.\n"
-              },
               "items": {
                 "type": "string",
                 "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
@@ -1143,11 +975,7 @@
                   "type": "string"
                 }
               },
-              "description": "Administrative Zuordnung",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `regional_key` ↔ `http://dcat-ap.de/def/politicalGeocoding/regionalKey/<schlüssel>`\n- `state` ↔ `http://dcat-ap.de/def/politicalGeocoding/stateKey/<schlüssel>`\n\n> DCAT-AP.de-Erweiterung.\n"
-              }
+              "description": "Administrative Zuordnung"
             }
           },
           "anyOf": [
@@ -1178,9 +1006,6 @@
           "properties": {
             "data_type": {
               "type": "string",
-              "x-transform": {
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
-              },
               "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
               "examples": [
                 "UmweltNAVI Datensatz ['UMWELTNAVI']",
@@ -1191,9 +1016,6 @@
             "document_type": {
               "type": "string",
               "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "x-transform": {
-                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-              },
               "examples": [
                 "InGridGeoDataset",
                 "InGridGeoService"
@@ -1206,10 +1028,6 @@
               ],
               "format": "date-time",
               "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
-              },
               "examples": [
                 "2026-04-22T12:00:00Z",
                 "2026-04-22T12:00:00+01:00"
@@ -1222,10 +1040,6 @@
               ],
               "format": "date-time",
               "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
-              },
               "examples": [
                 "2026-04-22T12:00:00Z",
                 "2026-04-22T12:00:00+01:00"
@@ -1237,19 +1051,11 @@
                 "null"
               ],
               "format": "date-time",
-              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
-              }
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n"
             },
             "partner": {
               "type": "string",
               "description": "Der Partner der Datenquelle als Kürzel.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
-              },
               "examples": [
                 "bb",
                 "st"
@@ -1258,10 +1064,6 @@
             "provider": {
               "type": "string",
               "description": "Der Anbieter der Datenquelle.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
-              },
               "examples": [
                 "ni_gll",
                 "bw_mj"
@@ -1270,10 +1072,6 @@
             "language": {
               "title": "language",
               "description": "Enthält die Sprache des Metadatensatzes.",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
               "additionalProperties": false,
               "properties": {
                 "key": {
@@ -1291,10 +1089,6 @@
               }
             },
             "datasource": {
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
-              },
               "properties": {
                 "id": {
                   "type": "string",
@@ -1375,180 +1169,296 @@
     },
     {
       "type": "object",
-      "title": "LVR",
+      "title": "Address",
+      "required": [
+        "contacts"
+      ],
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "document_type": {
+                "const": "InGridPersonDoc"
+              }
+            },
+            "required": [
+              "document_type"
+            ]
+          }
+        },
+        "required": [
+          "metadata"
+        ]
+      },
+      "then": {
+        "required": [
+          "address"
+        ],
+        "properties": {
+          "address": {
+            "required": [
+              "last_name"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "address": {
+            "properties": {
+              "salutation": false,
+              "academic_title": false,
+              "first_name": false,
+              "last_name": false,
+              "hide_address": false
+            }
+          }
+        }
+      },
       "properties": {
-        "lvr": {
-          "type": "object",
+        "metadata": {
+          "description": "Angaben zur Adresse statt zum Metadatensatz.",
           "properties": {
-            "relations": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string"
+            "data_type": {
+              "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
+            },
+            "created": {
+              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+              "enum": [
+                "InGridPersonDoc",
+                "InGridOrganisationDoc"
+              ]
+            },
+            "modified": {
+              "description": "Änderungsdatum der Adresse. ISO 8601 Format."
+            }
+          }
+        },
+        "contacts": {
+          "description": "Anschrift und Kommunikation der Adresse selbst stehen in genau einem Eintrag mit `role` `self`\n(Pflicht).\n",
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "self"
+              },
+              "communications": {
+                "contains": {
+                  "properties": {
+                    "type": {
+                      "const": "email"
+                    },
+                    "value": {
+                      "minLength": 1
+                    }
                   },
-                  "type": {
-                    "type": "string"
-                  },
-                  "score": {
-                    "type": "string"
-                  }
+                  "required": [
+                    "type",
+                    "value"
+                  ]
                 }
               }
             },
-            "media": {
+            "required": [
+              "role",
+              "administrative_area",
+              "communications"
+            ]
+          },
+          "items": {
+            "properties": {
+              "role": {
+                "description": "`self` für den Eintrag der Adresse selbst."
+              },
+              "name": {
+                "description": "Im Eintrag `self` wie `title`."
+              },
+              "street": {
+                "title": "Straße/Hausnummer",
+                "description": "Hausadresse der Zentrale bzw. des Hauptgebäudes. Pflicht, sofern kein Postfach angegeben ist.\n",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "Meyersgrund 14"
+                ]
+              },
+              "code": {
+                "title": "PLZ",
+                "description": "Postleitzahl der Hausadresse (`street`).",
+                "$comment": "InGrid-Domain 384",
+                "examples": [
+                  "30169"
+                ]
+              },
+              "pobox": {
+                "title": "Postfach",
+                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "30151"
+                ]
+              },
+              "pocode": {
+                "title": "PLZ (Postfach)",
+                "description": "Postleitzahl des Postfachs (`pobox`).",
+                "$comment": "InGrid-Domain 384",
+                "examples": [
+                  "8977"
+                ]
+              },
+              "locality": {
+                "title": "Ort",
+                "description": "Ort der Zentrale bzw. des Hauptgebäudes. Unterscheidet sich der Ort von Haus- und Postadresse,\nwird nur eine der beiden Adressen vollständig angegeben.\n",
+                "$comment": "InGrid-Domain 382",
+                "examples": [
+                  "Bruchsal"
+                ]
+              },
+              "administrative_area": {
+                "title": "Verwaltungsgebiet",
+                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
+                "examples": [
+                  "Niedersachsen"
+                ]
+              },
+              "country": {
+                "title": "Staat",
+                "description": "Wert der InGrid-Codeliste 6200.",
+                "examples": [
+                  "Deutschland"
+                ]
+              },
+              "communications": {
+                "title": "Kommunikation",
+                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
+              }
+            }
+          }
+        },
+        "address": {
+          "type": "object",
+          "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+          "properties": {
+            "position_name": {
+              "type": "string",
+              "title": "Aufgaben",
+              "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+              "$comment": "InGrid-Domain 377",
+              "examples": [
+                "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+              ]
+            },
+            "hours_of_service": {
+              "type": "string",
+              "title": "Servicezeiten",
+              "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
+            },
+            "salutation": {
+              "title": "Anrede",
+              "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+              "examples": [
+                "1 - Frau"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "academic_title": {
+              "title": "Titel",
+              "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+              "examples": [
+                "3 - Prof. Dr."
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "first_name": {
+              "type": "string",
+              "title": "Vorname",
+              "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+              "$comment": "InGrid-Domain 374",
+              "examples": [
+                "Rosemarie"
+              ]
+            },
+            "last_name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Vollständiger Nachname der Person.\n",
+              "$comment": "InGrid-Domain 374",
+              "examples": [
+                "vom Busche"
+              ]
+            },
+            "hide_address": {
+              "type": "boolean",
+              "title": "Adresse verbergen",
+              "description": "Bei `true` werden für die Anzeige die Daten der übergeordneten Organisation verwendet statt die der\nPerson.\n"
+            },
+            "cross_references": {
               "type": "array",
+              "title": "Verknüpfungen",
+              "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
               "items": {
                 "type": "object",
+                "title": "Verknüpfung",
+                "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
                 "properties": {
-                  "url": {
-                    "type": "string"
+                  "uuid": {
+                    "type": "string",
+                    "description": "UUID des verknüpften Dokuments."
                   },
-                  "type": {
-                    "type": "string"
+                  "name": {
+                    "type": "string",
+                    "description": "Titel des verknüpften Dokuments."
+                  },
+                  "document_type": {
+                    "type": "string",
+                    "description": "`metadata.document_type` des verknüpften Dokuments."
                   },
                   "description": {
-                    "type": "string"
-                  },
-                  "thumbnail": {
                     "type": "string",
-                    "description": "URL zu einem Thumbnail-Bild, falls vorhanden"
+                    "description": "Beschreibung des verknüpften Dokuments."
                   },
-                  "dimensions": {
-                    "type": "object",
-                    "properties": {
-                      "width": {
-                        "type": "integer",
-                        "description": "Breite in Pixeln",
-                        "examples": [
-                          "1600"
-                        ],
-                        "enum": [
-                          ">= 1"
-                        ]
-                      },
-                      "height": {
-                        "type": "integer",
-                        "description": "Höhe in Pixeln",
-                        "examples": [
-                          "900"
-                        ],
-                        "enum": [
-                          ">= 1"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "width",
-                      "height"
-                    ],
-                    "description": "Dimensionen des Bildes, falls type = \"image\""
-                  }
-                }
-              }
-            },
-            "persons": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "type": {
+                  "reference_type": {
                     "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
-                    "examples": [
-                      "personal, corporate"
-                    ]
+                    "description": "Art der Verknüpfung."
                   },
-                  "role": {
+                  "direction": {
                     "type": "string",
-                    "description": "Ermitteln, welche Werte in den einzelnen Quellen auftreten können, und dann normalisieren",
-                    "examples": [
-                      "Redactor"
-                    ]
-                  },
-                  "name": {
-                    "type": "object",
-                    "properties": {
-                      "first": {
-                        "type": "string",
-                        "description": "In den Daten können mehrere Vornamen auftreten; Vorschlag: .join(' ')",
-                        "examples": [
-                          "Ludger J."
-                        ]
-                      },
-                      "last": {
-                        "type": "string",
-                        "description": "In den Daten können mehrere Nachnamen auftreten; Vorschlag: .join(' ')",
-                        "examples": [
-                          "Sutthoff"
-                        ]
-                      },
-                      "display": {
-                        "type": "string",
-                        "examples": [
-                          "Sutthoff, Ludger J."
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "licenses": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "examples": [
-                      "dl-by-de/2.0"
-                    ]
-                  },
-                  "url": {
-                    "type": "string",
-                    "examples": [
-                      "https://www.govdata.de/dl-de/by-2-0"
-                    ]
-                  },
-                  "holder": {
-                    "type": "string",
-                    "description": "Rechteinhaber",
-                    "examples": [
-                      "LVR-Institut für Landeskunde und Regionalgeschichte"
+                    "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                    "enum": [
+                      "IN",
+                      "OUT"
                     ]
                   }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            },
-            "genres": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "description": "Normalisieren; z.B. buch, ort, rede, artefakt, ...",
-                "examples": [
-                  "book"
-                ]
-              }
-            },
-            "vector": {
-              "type": "object"
-            },
-            "original_id": {
-              "type": "string"
-            },
-            "source": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "display_url": {
-                  "type": "string"
                 }
               }
             }
@@ -1556,5 +1466,306 @@
         }
       }
     }
-  ]
+  ],
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "title": "Address",
+      "required": [
+        "contacts"
+      ],
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "document_type": {
+                "const": "InGridPersonDoc"
+              }
+            },
+            "required": [
+              "document_type"
+            ]
+          }
+        },
+        "required": [
+          "metadata"
+        ]
+      },
+      "then": {
+        "required": [
+          "address"
+        ],
+        "properties": {
+          "address": {
+            "required": [
+              "last_name"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "address": {
+            "properties": {
+              "salutation": false,
+              "academic_title": false,
+              "first_name": false,
+              "last_name": false,
+              "hide_address": false
+            }
+          }
+        }
+      },
+      "properties": {
+        "metadata": {
+          "description": "Angaben zur Adresse statt zum Metadatensatz.",
+          "properties": {
+            "data_type": {
+              "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
+            },
+            "created": {
+              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+              "enum": [
+                "InGridPersonDoc",
+                "InGridOrganisationDoc"
+              ]
+            },
+            "modified": {
+              "description": "Änderungsdatum der Adresse. ISO 8601 Format."
+            }
+          }
+        },
+        "contacts": {
+          "description": "Anschrift und Kommunikation der Adresse selbst stehen in genau einem Eintrag mit `role` `self`\n(Pflicht).\n",
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "self"
+              },
+              "communications": {
+                "contains": {
+                  "properties": {
+                    "type": {
+                      "const": "email"
+                    },
+                    "value": {
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "value"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "role",
+              "administrative_area",
+              "communications"
+            ]
+          },
+          "items": {
+            "properties": {
+              "role": {
+                "description": "`self` für den Eintrag der Adresse selbst."
+              },
+              "name": {
+                "description": "Im Eintrag `self` wie `title`."
+              },
+              "street": {
+                "title": "Straße/Hausnummer",
+                "description": "Hausadresse der Zentrale bzw. des Hauptgebäudes. Pflicht, sofern kein Postfach angegeben ist.\n",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "Meyersgrund 14"
+                ]
+              },
+              "code": {
+                "title": "PLZ",
+                "description": "Postleitzahl der Hausadresse (`street`).",
+                "$comment": "InGrid-Domain 384",
+                "examples": [
+                  "30169"
+                ]
+              },
+              "pobox": {
+                "title": "Postfach",
+                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "30151"
+                ]
+              },
+              "pocode": {
+                "title": "PLZ (Postfach)",
+                "description": "Postleitzahl des Postfachs (`pobox`).",
+                "$comment": "InGrid-Domain 384",
+                "examples": [
+                  "8977"
+                ]
+              },
+              "locality": {
+                "title": "Ort",
+                "description": "Ort der Zentrale bzw. des Hauptgebäudes. Unterscheidet sich der Ort von Haus- und Postadresse,\nwird nur eine der beiden Adressen vollständig angegeben.\n",
+                "$comment": "InGrid-Domain 382",
+                "examples": [
+                  "Bruchsal"
+                ]
+              },
+              "administrative_area": {
+                "title": "Verwaltungsgebiet",
+                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
+                "examples": [
+                  "Niedersachsen"
+                ]
+              },
+              "country": {
+                "title": "Staat",
+                "description": "Wert der InGrid-Codeliste 6200.",
+                "examples": [
+                  "Deutschland"
+                ]
+              },
+              "communications": {
+                "title": "Kommunikation",
+                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
+              }
+            }
+          }
+        },
+        "address": {
+          "type": "object",
+          "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+          "properties": {
+            "position_name": {
+              "type": "string",
+              "title": "Aufgaben",
+              "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+              "$comment": "InGrid-Domain 377",
+              "examples": [
+                "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+              ]
+            },
+            "hours_of_service": {
+              "type": "string",
+              "title": "Servicezeiten",
+              "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
+            },
+            "salutation": {
+              "title": "Anrede",
+              "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+              "examples": [
+                "1 - Frau"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "academic_title": {
+              "title": "Titel",
+              "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+              "examples": [
+                "3 - Prof. Dr."
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "first_name": {
+              "type": "string",
+              "title": "Vorname",
+              "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+              "$comment": "InGrid-Domain 374",
+              "examples": [
+                "Rosemarie"
+              ]
+            },
+            "last_name": {
+              "type": "string",
+              "title": "Name",
+              "description": "Vollständiger Nachname der Person.\n",
+              "$comment": "InGrid-Domain 374",
+              "examples": [
+                "vom Busche"
+              ]
+            },
+            "hide_address": {
+              "type": "boolean",
+              "title": "Adresse verbergen",
+              "description": "Bei `true` werden für die Anzeige die Daten der übergeordneten Organisation verwendet statt die der\nPerson.\n"
+            },
+            "cross_references": {
+              "type": "array",
+              "title": "Verknüpfungen",
+              "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+              "items": {
+                "type": "object",
+                "title": "Verknüpfung",
+                "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                "properties": {
+                  "uuid": {
+                    "type": "string",
+                    "description": "UUID des verknüpften Dokuments."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Titel des verknüpften Dokuments."
+                  },
+                  "document_type": {
+                    "type": "string",
+                    "description": "`metadata.document_type` des verknüpften Dokuments."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Beschreibung des verknüpften Dokuments."
+                  },
+                  "reference_type": {
+                    "type": "string",
+                    "description": "Art der Verknüpfung."
+                  },
+                  "direction": {
+                    "type": "string",
+                    "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                    "enum": [
+                      "IN",
+                      "OUT"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

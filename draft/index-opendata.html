@@ -2362,7 +2362,7 @@
 <p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
 
 <blockquote>
-  <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden.</p>
+  <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden, außer dem Postfach (siehe <code>pobox</code>).</p>
 </blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
@@ -2450,6 +2450,10 @@
 
 <p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
 
+<blockquote>
+  <p>Lesen: nicht, wenn <code>gmd:deliveryPoint</code> nur das Postfach enthält (dann <code>pocode</code>).</p>
+</blockquote>
+
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -2531,7 +2535,13 @@
 
 <h4>ISO 19139:2007</h4>
 
-<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des Postfachs.</p>
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
+
+<blockquote>
+  <p><code>gmd:CI_Address</code> hat nur eine Postleitzahl; sie gehört zur Hausadresse (<code>code</code>). Lesen: nur, wenn <code>gmd:deliveryPoint</code> ausschließlich das Postfach enthält. Schreiben: nur ohne <code>code</code>.</p>
+</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -2608,7 +2618,19 @@
 
 <h4>ISO 19139:2007</h4>
 
-<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.</p>
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>&lt;pobox&gt;</code> ↔ <code>Postfach &lt;pobox&gt;</code></li>
+</ul>
+
+<blockquote>
+  <p>Postfach gemäß ISO 11180, Anhang A. Lesen: ein <code>gmd:deliveryPoint</code>, der mit <code>Postfach</code> beginnt. Schreiben: als eigenes <code>gmd:deliveryPoint</code> nach der Hausadresse (<code>street</code>). UNKLAR: Das Präfix <code>Postfach</code> ist abzustimmen.</p>
+</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -11295,6 +11317,6 @@
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-08 at 12:39:40 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-08 at 15:04:10 +0000</p>
     </footer></body>
 </html>
