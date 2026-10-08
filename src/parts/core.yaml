@@ -213,7 +213,7 @@ properties:
 
               `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`
 
-              > Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden.
+              > Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden, außer dem Postfach (siehe `pobox`).
             dcat-ap: |
               # Lesen & schreiben
 
@@ -227,6 +227,8 @@ properties:
               # Lesen & schreiben
 
               `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`
+
+              > Lesen: nicht, wenn `gmd:deliveryPoint` nur das Postfach enthält (dann `pocode`).
             dcat-ap: |
               # Lesen & schreiben
 
@@ -237,15 +239,29 @@ properties:
           type: string
           x-transform:
             iso19139-2007: |
-              Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des
-              Postfachs.
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`
+
+              > `gmd:CI_Address` hat nur eine Postleitzahl; sie gehört zur Hausadresse (`code`). Lesen: nur, wenn
+              > `gmd:deliveryPoint` ausschließlich das Postfach enthält. Schreiben: nur ohne `code`.
             dcat-ap: |
               Kein Gegenstück in DCAT-AP.
         pobox:
           type: string
           x-transform:
             iso19139-2007: |
-              Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.
+              # Lesen & schreiben
+
+              `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`
+
+              ## Mapping (logic)
+
+              - `<pobox>` ↔ `Postfach <pobox>`
+
+              > Postfach gemäß ISO 11180, Anhang A. Lesen: ein `gmd:deliveryPoint`, der mit `Postfach` beginnt.
+              > Schreiben: als eigenes `gmd:deliveryPoint` nach der Hausadresse (`street`). UNKLAR: Das Präfix
+              > `Postfach` ist abzustimmen.
             dcat-ap: |
               # Lesen & schreiben
 

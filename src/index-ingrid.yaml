@@ -718,23 +718,7 @@ $defs:
                 > Nur bei `dcat:DataService`. `name`, `document_type` und `description` stammen aus dem gekoppelten
                 > Datensatz. Schreiben: nur Einträge mit `direction` `OUT`. UNKLAR: Bildung der IRI aus der UUID.
             items:
-              type: object
-              properties:
-                uuid:
-                  type: string
-                name:
-                  type: string
-                document_type:
-                  type: string
-                description:
-                  type: string
-                reference_type:
-                  type: string
-                direction:
-                  type: string
-                  enum:
-                    - IN
-                    - OUT
+              $ref: ./parts/shared-types.yaml#/$defs/CrossReference
 
           #   - Datengrundlage/Herkunft
           lineage:
