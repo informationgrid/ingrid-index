@@ -1459,11 +1459,6 @@
               "x-transform": {
                 "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.\n"
               }
-            },
-            "language": {
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-              }
             }
           }
         },
@@ -1570,41 +1565,6 @@
                 "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
               }
             }
-          }
-        },
-        "description": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "language": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "spatials": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "crs": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "temporal": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "keywords": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "references": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
           }
         },
         "address": {
@@ -1846,11 +1806,6 @@
               "x-transform": {
                 "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.\n"
               }
-            },
-            "language": {
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-              }
             }
           }
         },
@@ -1957,41 +1912,6 @@
                 "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
               }
             }
-          }
-        },
-        "description": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "language": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "spatials": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "crs": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "temporal": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "keywords": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
-          }
-        },
-        "references": {
-          "x-transform": {
-            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.\n"
           }
         },
         "address": {
