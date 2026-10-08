@@ -1,41 +1,15 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: InGrid Index - Adresse
 description: |
-  Dies ist das JSON-Schema für Adressen (Institutionen, Einheiten und Personen) im InGrid-Index.
+  Dies ist das JSON-Schema für Adressen (Personen und Organisationen) im InGrid-Index.
 
-  Adressen nutzen die "Root fields", die für Metadatensätze entworfen sind. Felder, deren Bedeutung
-  sich nicht ändert (z. B. `title`), sind hier nicht aufgeführt. Für Adressen gilt:
+  Adressen nutzen die "Root fields", die für Metadatensätze entworfen sind. Wie ein Feld bei Adressen
+  befüllt wird, steht am Feld im Teil "Address"; Felder ohne Angabe dort werden wie beschrieben
+  verwendet (z. B. `title`). Anschrift und Kommunikation der Adresse stehen in `contacts` im Eintrag mit
+  `role` `self`; Angaben ohne Gegenstück in den "Root fields" in `address`.
 
-  * `metadata`: Angaben zur Adresse statt zum Metadatensatz, z. B. `created` und `modified` als
-    Erstellungs- und Änderungsdatum der Adresse; `document_type` unterscheidet Personen
-    (`InGridPersonDoc`) und Organisationen (`InGridOrganisationDoc`). UNKLAR: Der Wert von `data_type`
-    ist noch festzulegen.
-  * `contacts`: Anschrift und Kommunikation der Adresse selbst stehen in genau einem Eintrag mit
-    `role` `self` (Pflicht):
-    * `name`: wie `title`.
-    * `street`: Straße und Hausnummer der Hausadresse (Zentrale bzw. Hauptgebäude), z. B.
-      `Meyersgrund 14`. Pflicht, sofern kein Postfach angegeben ist.
-    * `code`: Postleitzahl der Hausadresse, z. B. `30169`.
-    * `pobox`: Nummer des Postfachs, z. B. `30151`. Pflicht, sofern keine Hausadresse angegeben ist.
-    * `pocode`: Postleitzahl des Postfachs, z. B. `8977`.
-    * `locality`: Ort der Zentrale bzw. des Hauptgebäudes, z. B. `Bruchsal`. Unterscheidet sich der
-      Ort von Haus- und Postadresse, wird nur eine der beiden Adressen vollständig angegeben.
-    * `administrative_area`: Verwaltungsgebiet (Wert der InGrid-Codeliste 6250), z. B. ein
-      Bundesland. Dient der Recherche nach Ressourcen eines bestimmten Bundeslandes. Pflicht.
-    * `country`: Staat (Wert der InGrid-Codeliste 6200), z. B. `Deutschland`.
-    * `communications`: alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430:
-      `E-Mail` → `email`, `Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`.
-      `value` ist die zugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist
-      mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).
-  * `address`: Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`,
-    `academic_title`, `first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist
-    `last_name` Pflicht. `cross_references` enthält die internen InGrid-Verknüpfungen der Adresse:
-    * Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.
-    * Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit
-      `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet (z. B.
-      `pointOfContact`).
-  * Nicht befüllt werden `description`, `language`, `spatials`, `crs`, `temporal`, `keywords` und
-    `references`.
+  Nicht befüllt werden `description`, `language`, `spatials`, `crs`, `temporal`, `keywords` und
+  `references`.
 
   ISO 19139:2007: Eine Adresse entspricht einem `gmd:CI_ResponsibleParty`. Die Pfade nennen es unter
   `gmd:identificationInfo/*/gmd:pointOfContact`; sie gelten ebenso für jedes andere
@@ -95,7 +69,12 @@ $defs:
             > Schreiben bei Personen: aus `address.last_name`, `address.first_name` und
             > `address.academic_title` (siehe dort), nur ohne diese Angaben aus `title`.
       metadata:
+        description: Angaben zur Adresse statt zum Metadatensatz.
         properties:
+          data_type:
+            description: "UNKLAR: Der Wert für Adressen ist noch festzulegen."
+          created:
+            description: Erstellungsdatum der Adresse. ISO 8601 Format.
           document_type:
             type: string
             description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
@@ -118,14 +97,14 @@ $defs:
                 Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
                 `gmd:organisationName` geschrieben wird.
           modified:
+            description: Änderungsdatum der Adresse. ISO 8601 Format.
             x-transform:
               iso19139-2007: |
                 Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.
-          language:
-            x-transform:
-              iso19139-2007: |
-                Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
       contacts:
+        description: |
+          Anschrift und Kommunikation der Adresse selbst stehen in genau einem Eintrag mit `role` `self`
+          (Pflicht).
         x-transform:
           iso19139-2007: |
             # Lesen & schreiben
@@ -153,41 +132,71 @@ $defs:
         items:
           properties:
             role:
+              description: "`self` für den Eintrag der Adresse selbst."
               x-transform:
                 iso19139-2007: |
                   Kein Gegenstück in ISO 19139:2007. Der Eintrag der Adresse hat immer `role` `self`;
                   `gmd:role` ist die Rolle, in der ein Metadatensatz auf die Adresse verweist, und gehört nicht zur
                   Adresse.
-      description:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      language:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      spatials:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      crs:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      temporal:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      keywords:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
-      references:
-        x-transform:
-          iso19139-2007: |
-            Kein Gegenstück in ISO 19139:2007. Wird bei Adressen nicht befüllt.
+            name:
+              description: Im Eintrag `self` wie `title`.
+            street:
+              title: Straße/Hausnummer
+              description: |
+                Hausadresse der Zentrale bzw. des Hauptgebäudes. Pflicht, sofern kein Postfach angegeben ist.
+              $comment: 'InGrid-Domain 381'
+              examples:
+                - Meyersgrund 14
+            code:
+              title: PLZ
+              description: Postleitzahl der Hausadresse (`street`).
+              $comment: 'InGrid-Domain 384'
+              examples:
+                - '30169'
+            pobox:
+              title: Postfach
+              description: Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.
+              $comment: 'InGrid-Domain 381'
+              examples:
+                - '30151'
+            pocode:
+              title: PLZ (Postfach)
+              description: Postleitzahl des Postfachs (`pobox`).
+              $comment: 'InGrid-Domain 384'
+              examples:
+                - '8977'
+            locality:
+              title: Ort
+              description: |
+                Ort der Zentrale bzw. des Hauptgebäudes. Unterscheidet sich der Ort von Haus- und Postadresse,
+                wird nur eine der beiden Adressen vollständig angegeben.
+              $comment: 'InGrid-Domain 382'
+              examples:
+                - Bruchsal
+            administrative_area:
+              title: Verwaltungsgebiet
+              description: |
+                Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines
+                bestimmten Bundeslandes. Pflicht im Eintrag `self`.
+              examples:
+                - Niedersachsen
+            country:
+              title: Staat
+              description: Wert der InGrid-Codeliste 6200.
+              examples:
+                - Deutschland
+            communications:
+              title: Kommunikation
+              description: |
+                Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,
+                `Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die
+                zugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag
+                `self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).
       address:
         type: object
+        description: |
+          Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`, `academic_title`,
+          `first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
         properties:
           position_name:
             type: string
@@ -298,7 +307,13 @@ $defs:
           cross_references:
             type: array
             title: Verknüpfungen
-            description: Interne InGrid-Verknüpfungen der Adresse mit der übergeordneten Adresse und den zugeordneten Datensätzen.
+            description: |
+              Interne InGrid-Verknüpfungen der Adresse:
+
+              * Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.
+              * Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit
+                `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet
+                (z. B. `pointOfContact`).
             x-transform:
               iso19139-2007: |
                 Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.
