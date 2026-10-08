@@ -14,11 +14,74 @@
         
     
     <title>InGrid Index - OpenData</title>
+<style>
+  blockquote {
+    margin: .5rem 0 1rem;
+    padding: .4rem .9rem;
+    border-left: 4px solid #ced4da;
+    background: #f8f9fa;
+    color: #495057;
+    font-size: .95em;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+</style>
 </head>
 <body onload="anchorOnLoad();" id="root"><nav style="font-size:.875rem; margin-bottom:1.5rem;"><a href="https://schema.ingrid-oss.eu/">schema</a> / <a href="https://schema.ingrid-oss.eu/index/">index</a> / <a href="https://schema.ingrid-oss.eu/index/draft/">draft</a></nav>
 
     <div class="breadcrumbs"></div> <h1>InGrid Index - OpenData</h1><br/>
-<div class="all-of-value" id="allOf"><h2 class="handle">
+<div class="description collapse" id="collapseDescription_root">
+            <h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen Beschreibung.</p>
+
+<h5>Lesen</h5>
+
+<ul>
+<li>Text auch als <code>gmx:Anchor</code> (dann gilt der Textinhalt) statt <code>gco:CharacterString</code>; Übersetzungen (<code>gmd:PT_FreeText</code>) werden nicht übernommen.</li>
+<li><code>gmd:identificationInfo/*</code> ist die erste Identifikation (<code>gmd:identificationInfo[1]</code>), Datensatz (<code>gmd:MD_DataIdentification</code>) oder Dienst (<code>srv:SV_ServiceIdentification</code>); bei Diensten <code>srv:extent</code> statt <code>gmd:extent</code>.</li>
+<li>Bei Einzelwerten gilt das erste Vorkommen; Codelistenwerte stehen in <code>@codeListValue</code>.</li>
+<li>Wahrheitswerte (<code>gco:Boolean</code>): <code>true</code> und <code>1</code> ergeben <code>true</code>, <code>false</code> und <code>0</code> ergeben <code>false</code>.</li>
+</ul>
+
+<h5>Schreiben</h5>
+
+<ul>
+<li>Genau ein <code>gmd:identificationInfo</code>; <code>gmd:identificationInfo/*</code> ist <code>gmd:MD_DataIdentification</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> <code>srv:SV_ServiceIdentification</code> (dann <code>srv:extent</code> statt <code>gmd:extent</code>).</li>
+<li><code>gmd:spatialRepresentationInfo/*</code> und <code>gmd:report/*</code> stehen für das Element, das <code>ingrid.spatial_representation[].type</code> bzw. <code>ingrid.data_quality.qualities[].type</code> festlegt.</li>
+<li>Text als <code>gco:CharacterString</code>; Codelistenwerte in <code>@codeListValue</code> und als Elementinhalt, <code>@codeList</code> verweist auf das ISO-Codelisten-Register (<code>http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#&lt;Codeliste&gt;</code>).</li>
+<li>Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert erhalten <code>gco:nilReason="missing"</code>.</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0. Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.</p>
+
+<h5>Lesen</h5>
+
+<ul>
+<li>Bei mehreren Sprachfassungen eines Literals gilt das mit Sprach-Tag <code>de</code>, sonst das ohne Sprach-Tag, sonst das erste.</li>
+<li>Ist der Wert ein Knoten statt eines Literals, gilt sein Label (<code>rdfs:label</code>, <code>skos:prefLabel</code> bzw. <code>dct:title</code>), bei einer IRI ohne Label die IRI selbst.</li>
+<li>E-Mail-Adressen und Telefonnummern ohne <code>mailto:</code> bzw. <code>tel:</code>; bei Einzelwerten das erste Vorkommen; Werte, die kein gültiges Datum sind, werden bei Datumsfeldern nicht übernommen.</li>
+<li><code>^foaf:primaryTopic</code> führt zum <code>dcat:CatalogRecord</code> der Ressource (Angaben zum Metadatensatz).</li>
+</ul>
+
+<h5>Schreiben</h5>
+
+<ul>
+<li>Eine Ressource vom Typ <code>dcat:Dataset</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> vom Typ <code>dcat:DataService</code>.</li>
+<li>Textliterale mit dem Sprach-Tag der Ressourcensprache (<code>language</code>), Datumswerte als <code>xsd:date</code> bzw. <code>xsd:dateTime</code>.</li>
+<li>Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate, Frequenzen und Zugriffsrechte, DCAT-AP.de-Lizenzen).</li>
+<li>Zwischenknoten (<code>dct:Location</code>, <code>dct:PeriodOfTime</code>, <code>vcard:Kind</code>, <code>foaf:Agent</code>, <code>dct:Standard</code> …) als Blank Nodes mit passendem <code>rdf:type</code>; <code>^foaf:primaryTopic</code> als <code>dcat:CatalogRecord</code>, dessen <code>foaf:primaryTopic</code> die Ressource ist.</li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_root"
+               aria-expanded="false" aria-controls="collapseDescriptionroot"
+            ></a>
+        </div><div class="all-of-value" id="allOf"><h2 class="handle">
   <label>All of</label>
 </h2><ul class="nav nav-tabs" id="tabsallOf_allOf" role="tablist"><li class="nav-item">
             <a class="nav-link active allOf-option"
@@ -95,8 +158,33 @@
             />
         </svg>
     <a href="#allOf_i0_id" onclick="anchorLink('allOf_i0_id')">id</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die ID des Datensatzes. Die ID <strong>muss</strong> eindeutig im Index sein.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_id">
+            <p>Die ID des Datensatzes. Die ID <strong>muss</strong> eindeutig im Index sein.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:fileIdentifier/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:identifier</code></p>
+
+<blockquote>
+  <p>Lesen: ohne <code>dct:identifier</code> die IRI der Ressource.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_id"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_id"
+            ></a>
+        </div>
         
 
         
@@ -149,8 +237,25 @@
             />
         </svg>
     <a href="#allOf_i0_schema" onclick="anchorLink('allOf_i0_schema')">$schema</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_schema">
+            <p>Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_schema"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_schema"
+            ></a>
+        </div>
         
 
         
@@ -254,8 +359,21 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_data_type" onclick="anchorLink('allOf_i0_metadata_data_type')">data_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_data_type">
+            <p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (<code>index-ingrid</code>: <code>INGRID</code>).</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_data_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_data_type"
+            ></a>
+        </div>
         
 
         
@@ -317,8 +435,31 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_document_type" onclick="anchorLink('allOf_i0_metadata_document_type')">document_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_document_type">
+            <p>Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>rdf:type</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>InGridGeoService</code> ↔ <code>dcat:DataService</code></li>
+<li><code>InGridGeoDataset</code> ↔ <code>dcat:Dataset</code> (lesen auch <code>dcat:DatasetSeries</code>)</li>
+<li>alle anderen → <code>dcat:Dataset</code></li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_document_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_document_type"
+            ></a>
+        </div>
         
 
         
@@ -378,8 +519,25 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_created" onclick="anchorLink('allOf_i0_metadata_created')">created</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_created">
+            <p>Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_created"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_created"
+            ></a>
+        </div>
         
 
         
@@ -439,8 +597,37 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_modified" onclick="anchorLink('allOf_i0_metadata_modified')">modified</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_modified">
+            <p>Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dateStamp/gco:DateTime</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>gco:Date</code>; ein reines Datum gilt als 00:00 UTC.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:modified</code></p>
+
+<blockquote>
+  <p>Lesen: ohne <code>dcat:CatalogRecord</code> das <code>dct:modified</code> der Ressource.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_modified"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_modified"
+            ></a>
+        </div>
         
 
         
@@ -500,8 +687,31 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_issued" onclick="anchorLink('allOf_i0_metadata_issued')">issued</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_issued">
+            <p>Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des Metadatensatzes; das der Ressource steht in <code>temporal.data_temporal</code> (<code>first_published</code>).</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:issued</code></p>
+
+<blockquote>
+  <p>Aufnahme in den Katalog laut <code>dcat:CatalogRecord</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_issued"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_issued"
+            ></a>
+        </div>
         
 
         
@@ -555,8 +765,25 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_partner" onclick="anchorLink('allOf_i0_metadata_partner')">partner</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Partner der Datenquelle als Kürzel.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_partner">
+            <p>Der Partner der Datenquelle als Kürzel.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_partner"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_partner"
+            ></a>
+        </div>
         
 
         
@@ -616,8 +843,25 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_provider" onclick="anchorLink('allOf_i0_metadata_provider')">provider</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Anbieter der Datenquelle.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_provider">
+            <p>Der Anbieter der Datenquelle.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_provider"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_provider"
+            ></a>
+        </div>
         
 
         
@@ -677,8 +921,49 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')">language</a></div><h4>language</h4><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält die Sprache des Metadatensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_language">
+            <p>Enthält die Sprache des Metadatensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:language/gmd:LanguageCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. <code>ger</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>. Schreiben: <code>@codeList</code> <code>http://www.loc.gov/standards/iso639-2/</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:language</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO 639-2)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache des Metadatensatzes.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_language"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_language"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -856,7 +1141,23 @@
             />
         </svg>
     <a href="#allOf_i0_metadata_datasource" onclick="anchorLink('allOf_i0_metadata_datasource')">datasource</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_datasource">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_datasource"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_datasource"
+            ></a>
+        </div>
         
 
         
@@ -1113,8 +1414,25 @@
             />
         </svg>
     <a href="#allOf_i0_sort_uuid" onclick="anchorLink('allOf_i0_sort_uuid')">sort_uuid</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_sort_uuid">
+            <p>Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_sort_uuid"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_sort_uuid"
+            ></a>
+        </div>
         
 
         
@@ -1161,8 +1479,29 @@
             />
         </svg>
     <a href="#allOf_i0_title" onclick="anchorLink('allOf_i0_title')">title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Titel des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_title">
+            <p>Der Titel des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:title</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_title"
+            ></a>
+        </div>
         
 
         
@@ -1209,8 +1548,29 @@
             />
         </svg>
     <a href="#allOf_i0_description" onclick="anchorLink('allOf_i0_description')">description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die Beschreibung des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_description">
+            <p>Die Beschreibung des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:abstract/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:description</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_description"
+            ></a>
+        </div>
         
 
         
@@ -1257,8 +1617,51 @@
             />
         </svg>
     <a href="#allOf_i0_language" onclick="anchorLink('allOf_i0_language')">language</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Welches Format hat die Sprache, wo wird es verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_language">
+            <p>Welches Format hat die Sprache, wo wird es verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>de</code> ↔ <code>ger</code> (lesen auch <code>deu</code>, <code>de</code>)</li>
+<li><code>en</code> ↔ <code>eng</code> (lesen auch <code>en</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>; ohne Angabe oder ohne Treffer <code>de</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:language</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>de</code> ↔ <code>http://publications.europa.eu/resource/authority/language/DEU</code></li>
+<li><code>en</code> ↔ <code>http://publications.europa.eu/resource/authority/language/ENG</code></li>
+</ul>
+
+<blockquote>
+  <p>Sprache der Ressource. Lesen: auch die Literale <code>de</code>, <code>deu</code>, <code>ger</code>, <code>en</code>, <code>eng</code>; ohne Angabe <code>de</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_language"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_language"
+            ></a>
+        </div>
         
 
         
@@ -1305,7 +1708,50 @@
             />
         </svg>
     <a href="#allOf_i0_contacts" onclick="anchorLink('allOf_i0_contacts')">contacts</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Kontakt ein <code>gmd:CI_ResponsibleParty</code>; die Art des Kontakts ergibt sich nur aus <code>role</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: zusätzlich die Kontakte zum Metadatensatz (<code>gmd:contact/gmd:CI_ResponsibleParty</code>), nach denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.</p>
+  
+  <p>Schreiben: <code>gmd:contact</code> (Pflicht) erhält die Kontakte mit <code>role</code> <code>pointOfContact</code>, sonst den ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und zum Metadatensatz.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt <code>role</code> (siehe dort)</li>
+<li><code>dcat:contactPoint</code> als <code>vcard:Kind</code>, alle anderen als <code>foaf:Agent</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: auch <code>prov:qualifiedAttribution/prov:agent</code>; gleiche Kontakte werden nicht zusammengeführt.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts"
+            ></a>
+        </div>
         
 
         
@@ -1402,7 +1848,46 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_role" onclick="anchorLink('allOf_i0_contacts_items_role')">role</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_role">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue</code></p>
+
+<blockquote>
+  <p>Wert unverändert (<code>CI_RoleCode</code>, z. B. <code>pointOfContact</code>, <code>custodian</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p>Die Property, über die der Kontakt an der Ressource angegeben ist.</p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>pointOfContact</code> ↔ <code>dcat:contactPoint</code></li>
+<li><code>publisher</code> ↔ <code>dct:publisher</code></li>
+<li><code>author</code> ↔ <code>dct:creator</code></li>
+<li><code>owner</code> ↔ <code>dct:rightsHolder</code></li>
+<li><code>originator</code> ↔ <code>dcatde:originator</code></li>
+<li><code>custodian</code> ↔ <code>dcatde:maintainer</code></li>
+</ul>
+
+<blockquote>
+  <p>Andere Rollen über <code>prov:qualifiedAttribution</code> mit <code>dcat:hadRole</code> (IRI der INSPIRE-Codeliste <code>ResponsiblePartyRole</code>, letzter Pfadabschnitt = Rolle).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_role"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_role"
+            ></a>
+        </div>
         
 
         
@@ -1463,7 +1948,35 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_name" onclick="anchorLink('allOf_i0_contacts_items_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_name">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: ohne Organisation der Personenname (<code>gmd:individualName</code>). Geschrieben wird immer <code>gmd:organisationName</code>, da das Indexformat nicht zwischen Person und Organisation unterscheidet.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:fn</code></p>
+
+<blockquote>
+  <p>Bei <code>foaf:Agent</code> <code>foaf:name</code>. Lesen: bei <code>dcat:contactPoint</code> zuerst <code>vcard:organization-name</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_name"
+            ></a>
+        </div>
         
 
         
@@ -1524,7 +2037,52 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_communications" onclick="anchorLink('allOf_i0_contacts_items_communications')">communications</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_communications">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>email</code> ↔ <code>gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString</code></li>
+<li><code>phone</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString</code></li>
+<li><code>fax</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString</code></li>
+<li><code>website</code> ↔ <code>gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL</code></li>
+</ul>
+
+<blockquote>
+  <p><code>social</code> und <code>other</code> haben kein Gegenstück. Schreiben: nur die erste <code>website</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>email</code> ↔ <code>vcard:hasEmail</code> (<code>foaf:mbox</code>)</li>
+<li><code>phone</code> ↔ <code>vcard:hasTelephone</code> (<code>foaf:phone</code>)</li>
+<li><code>website</code> ↔ <code>vcard:hasURL</code> (<code>foaf:homepage</code>)</li>
+</ul>
+
+<blockquote>
+  <p>In Klammern die Form bei <code>foaf:Agent</code>. E-Mail als <code>mailto:</code>-IRI, Telefon als <code>tel:</code>-IRI. Lesen: Telefon auch als <code>vcard:hasTelephone/vcard:hasValue</code>. <code>fax</code>, <code>social</code> und <code>other</code> haben kein Gegenstück.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_communications"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_communications"
+            ></a>
+        </div>
         
 
         
@@ -1794,7 +2352,35 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_street" onclick="anchorLink('allOf_i0_contacts_items_street')">street</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_street">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:street-address</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_street"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_street"
+            ></a>
+        </div>
         
 
         
@@ -1855,7 +2441,31 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_code" onclick="anchorLink('allOf_i0_contacts_items_code')">code</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_code">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:postal-code</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_code"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_code"
+            ></a>
+        </div>
         
 
         
@@ -1916,7 +2526,23 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_pocode" onclick="anchorLink('allOf_i0_contacts_items_pocode')">pocode</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pocode">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des Postfachs.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pocode"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_pocode"
+            ></a>
+        </div>
         
 
         
@@ -1977,7 +2603,29 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_pobox" onclick="anchorLink('allOf_i0_contacts_items_pobox')">pobox</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pobox">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:post-office-box</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pobox"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_pobox"
+            ></a>
+        </div>
         
 
         
@@ -2038,7 +2686,31 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_locality" onclick="anchorLink('allOf_i0_contacts_items_locality')">locality</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_locality">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:locality</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_locality"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_locality"
+            ></a>
+        </div>
         
 
         
@@ -2099,7 +2771,35 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_country" onclick="anchorLink('allOf_i0_contacts_items_country')">country</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_country">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Wert unverändert, ohne Normalisierung auf einen Ländercode.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:country-name</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_country"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_country"
+            ></a>
+        </div>
         
 
         
@@ -2160,7 +2860,31 @@
             />
         </svg>
     <a href="#allOf_i0_contacts_items_administrative_area" onclick="anchorLink('allOf_i0_contacts_items_administrative_area')">administrative_area</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_administrative_area">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:region</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_administrative_area"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_administrative_area"
+            ></a>
+        </div>
         
 
         
@@ -2213,8 +2937,49 @@
             />
         </svg>
     <a href="#allOf_i0_spatials" onclick="anchorLink('allOf_i0_spatials')">spatials</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Dieser Bereich enthält Informationen über den Raumbezug.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials">
+            <p>Dieser Bereich enthält Informationen über den Raumbezug.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Eintrag ein <code>gmd:geographicElement</code></li>
+<li><code>bbox</code> und <code>geometry</code> ↔ <code>gmd:EX_GeographicBoundingBox</code></li>
+<li><code>geometry</code> ↔ <code>gmd:EX_BoundingPolygon</code></li>
+<li><code>toponym</code> ↔ <code>gmd:EX_GeographicDescription</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd &gt; Nord) werden verworfen. Schreiben: alle in einem <code>gmd:EX_Extent</code>, je Wert in <code>toponym</code> ein eigenes <code>gmd:geographicElement</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial | dcatde:politicalGeocodingURI</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>geometry</code>, <code>bbox</code>, <code>toponym</code> ↔ je ein <code>dct:spatial</code> (<code>dct:Location</code> oder IRI eines Gazetteers)</li>
+<li><code>administrative</code> ↔ je ein <code>dcatde:politicalGeocodingURI</code></li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials"
+            ></a>
+        </div>
         
 
         
@@ -2564,8 +3329,25 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_name" onclick="anchorLink('allOf_i0_spatials_items_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Kann einen Namen oder eine ID gür eine Geometrie enthalten.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_name">
+            <p>Kann einen Namen oder eine ID gür eine Geometrie enthalten.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_name"
+            ></a>
+        </div>
         
 
         
@@ -2630,8 +3412,41 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_geometry" onclick="anchorLink('allOf_i0_spatials_items_geometry')">geometry</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_geometry">
+            <h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>GeoJSON ↔ GML-Geometrie</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString). Schreiben: nur, wenn <code>geometry</code> nicht das Rechteck aus <code>bbox</code> ist.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/locn:geometry</code></p>
+
+<blockquote>
+  <p>Als GeoJSON-Literal (<code>gsp:geoJSONLiteral</code>). Lesen: auch WKT (<code>gsp:wktLiteral</code>); ohne <code>locn:geometry</code> aus <code>dcat:bbox</code>, sonst aus <code>dcat:centroid</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_geometry"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_geometry"
+            ></a>
+        </div>
 
     <div class="one-of-value" id="allOf_i0_spatials_items_geometry_oneOf"><h2 class="handle">
   <label>One of</label>
@@ -6302,8 +7117,39 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_bbox" onclick="anchorLink('allOf_i0_spatials_items_bbox')">bbox</a></div><h4>Bounding Box</h4><span class="badge badge-dark value-type">Type: array of number</span><br/>
-<span class="description"><p>Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist <code>[min Longitude west, min Latitude south, max Longitude east, max Latitude north]</code>.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_bbox">
+            <p>Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist <code>[min Longitude west, min Latitude south, max Longitude east, max Latitude north]</code>.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>[west, south, east, north]</code> ↔ <code>gmd:westBoundLongitude</code>, <code>gmd:southBoundLatitude</code>, <code>gmd:eastBoundLongitude</code>, <code>gmd:northBoundLatitude</code> (je <code>gco:Decimal</code>)</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/dcat:bbox</code></p>
+
+<blockquote>
+  <p>Als WKT-Polygon (<code>gsp:wktLiteral</code>). Lesen: ohne <code>dcat:bbox</code> das umschließende Rechteck von <code>locn:geometry</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_bbox"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_bbox"
+            ></a>
+        </div>
         
 
         
@@ -6420,8 +7266,35 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_wkt" onclick="anchorLink('allOf_i0_spatials_items_wkt')">wkt</a></div><h4>Well-known text</h4><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Angabe eines Well-known text-Formats.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_wkt">
+            <p>Angabe eines Well-known text-Formats.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen</h5>
+
+<p><code>dct:spatial/(locn:geometry | dcat:bbox)</code></p>
+
+<blockquote>
+  <p>Nur ein WKT-Literal, unverändert.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_wkt"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_wkt"
+            ></a>
+        </div>
         
 
         
@@ -6482,7 +7355,35 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_toponym" onclick="anchorLink('allOf_i0_spatials_items_toponym')">toponym</a></div><h4>Toponym</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_toponym">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/skos:prefLabel</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>rdfs:label</code> und <code>locn:geographicName</code>; bei der IRI eines Gazetteers deren Label.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_toponym"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_toponym"
+            ></a>
+        </div>
         
 
         
@@ -6606,8 +7507,38 @@
             />
         </svg>
     <a href="#allOf_i0_spatials_items_administrative" onclick="anchorLink('allOf_i0_spatials_items_administrative')">administrative</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Administrative Zuordnung</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_administrative">
+            <p>Administrative Zuordnung</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcatde:politicalGeocodingURI</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>regional_key</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/regionalKey/&lt;schlüssel&gt;</code></li>
+<li><code>state</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/stateKey/&lt;schlüssel&gt;</code></li>
+</ul>
+
+<blockquote>
+  <p>DCAT-AP.de-Erweiterung.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_administrative"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_administrative"
+            ></a>
+        </div>
         
 
         
@@ -6860,8 +7791,47 @@
             />
         </svg>
     <a href="#allOf_i0_crs" onclick="anchorLink('allOf_i0_crs')">crs</a></div><h4>Referenzsystem</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Koordinatenreferenzsystem(e) des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_crs">
+            <p>Koordinatenreferenzsystem(e) des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Wert ein <code>gmd:referenceSystemInfo</code></li>
+<li><code>&lt;codeSpace&gt;:&lt;code&gt;</code> (z. B. <code>EPSG:25832</code>) ↔ <code>gmd:codeSpace/gco:CharacterString</code> und <code>gmd:code/gco:CharacterString</code></li>
+<li>URI ↔ nur <code>gmd:code</code></li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>EPSG:&lt;code&gt;</code> ↔ <code>http://www.opengis.net/def/crs/EPSG/0/&lt;code&gt;</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_crs"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_crs"
+            ></a>
+        </div>
         
 
         
@@ -7007,7 +7977,54 @@
             />
         </svg>
     <a href="#allOf_i0_temporal_data_temporal" onclick="anchorLink('allOf_i0_temporal_data_temporal')">data_temporal</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_temporal_data_temporal">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>date_range</code> ↔ <code>gml:TimePeriod</code> (<code>gte</code> ↔ <code>gml:beginPosition</code>, <code>lte</code> ↔ <code>gml:endPosition</code>)</li>
+<li><code>date</code> ↔ <code>gml:TimeInstant/gml:timePosition</code></li>
+<li><code>date</code> mit <code>date_type</code> ↔ <code>gmd:CI_Date</code>: <code>created</code> ↔ <code>creation</code>, <code>last_updated</code> ↔ <code>revision</code>, <code>first_published</code> ↔ <code>publication</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: auch GML 3.2 (<code>gml32:</code>) und <code>gml:begin/gml:TimeInstant/gml:timePosition</code>; <code>indeterminatePosition</code> (<code>now</code>, <code>unknown</code>) lässt die Grenze offen; ungültige Werte → <code>date_text</code>.</p>
+  
+  <p>Schreiben: offene Grenze als leeres Element mit <code>indeterminatePosition="unknown"</code>; <code>gml:TimePeriod</code> mit <code>gml:id</code>; <code>date_text</code> wird nicht geschrieben.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:temporal | dct:issued | dct:modified | dct:created</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>date_range</code> ↔ <code>dct:temporal</code> (<code>dct:PeriodOfTime</code>; <code>gte</code> ↔ <code>dcat:startDate</code>, <code>lte</code> ↔ <code>dcat:endDate</code>)</li>
+<li><code>date</code> mit <code>date_type</code>: <code>first_published</code> ↔ <code>dct:issued</code>, <code>last_updated</code> ↔ <code>dct:modified</code>, <code>created</code> ↔ <code>dct:created</code></li>
+</ul>
+
+<blockquote>
+  <p>Schreiben: <code>date</code> ohne <code>date_type</code> als <code>dct:temporal</code> mit gleichem Start- und Enddatum; <code>date_text</code> wird nicht geschrieben.</p>
+  
+  <p>DCAT-AP 1.x / DCAT-AP.de 1.x: <code>schema:startDate</code>/<code>schema:endDate</code> statt <code>dcat:startDate</code>/<code>dcat:endDate</code> (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich <code>time:hasBeginning</code>/<code>time:hasEnd</code> (nur lesen).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_temporal_data_temporal"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_temporal_data_temporal"
+            ></a>
+        </div>
         
 
         
@@ -7754,7 +8771,64 @@
             />
         </svg>
     <a href="#allOf_i0_keywords" onclick="anchorLink('allOf_i0_keywords')">keywords</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_keywords">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>term</code> ↔ Text von <code>gmd:keyword</code>, <code>id</code> ↔ <code>gmx:Anchor/@xlink:href</code></li>
+<li><code>source</code> ↔ Titel des Thesaurus (<code>gmd:thesaurusName/gmd:CI_Citation/gmd:title</code>):
+<ul>
+<li><code>inspire</code> ↔ <code>GEMET - INSPIRE themes, version 1.0</code></li>
+<li><code>gemet</code> ↔ <code>GEMET - Concepts, version 2.1</code></li>
+<li><code>umthes</code> ↔ <code>UMTHES Thesaurus</code></li>
+<li><code>frei</code> ↔ ohne Thesaurus</li>
+</ul></li>
+<li><code>term</code> mit <code>source</code> <code>iso_topic</code> ↔ <code>gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode</code> (nur Datensätze)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal. Schreiben: ein <code>gmd:MD_Keywords</code> je <code>source</code>; Keyword mit <code>id</code> als <code>gmx:Anchor</code>; Thesaurus <code>inspire</code> mit Datum 2008-06-01 (<code>publication</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>term</code> mit <code>source</code> <code>frei</code> ↔ <code>dcat:keyword</code></li>
+<li><code>id</code> und <code>term</code> ↔ <code>dcat:theme</code> (IRI; <code>term</code> aus <code>skos:prefLabel</code>, sonst letzter Pfadabschnitt); <code>source</code> nach dem Anfang der IRI:
+<ul>
+<li><code>inspire</code> ↔ <code>http://inspire.ec.europa.eu/theme/</code></li>
+<li><code>gemet</code> ↔ <code>http://www.eionet.europa.eu/gemet/concept/</code></li>
+<li><code>umthes</code> ↔ <code>https://sns.uba.de/umthes/</code></li>
+<li><code>data-theme</code> ↔ <code>http://publications.europa.eu/resource/authority/data-theme/</code></li>
+</ul></li>
+<li><code>source</code> <code>iso_topic</code> ↔ <code>dct:subject</code> mit IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/</code></li>
+<li><code>source</code> <code>hvd</code> ↔ <code>dcatap:hvdCategory</code> mit IRI aus <code>http://data.europa.eu/bna/</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal; ein Literal statt einer IRI wird <code>term</code> mit <code>source</code> <code>frei</code>. UNKLAR: Die Kennungen <code>data-theme</code> und <code>hvd</code> sind noch abzustimmen.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_keywords"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_keywords"
+            ></a>
+        </div>
         
 
         
@@ -8041,8 +9115,55 @@
             />
         </svg>
     <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_references">
+            <p>Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>url</code> ↔ <code>gmd:linkage/gmd:URL</code>, <code>title</code> ↔ <code>gmd:name</code>, <code>explanation</code> ↔ <code>gmd:description</code></li>
+<li><code>type.value</code> ↔ <code>gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue</code>; <code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zum Code</li>
+<li><code>type.value</code> <code>previewGraphic</code> ↔ <code>gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic</code> (<code>url</code> ↔ <code>gmd:fileName</code>, <code>explanation</code> ↔ <code>gmd:fileDescription</code>)</li>
+<li><code>type.key</code> <code>3600</code> (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes (<code>srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: jede URL nur einmal. Schreiben: <code>3600</code> wird nicht als <code>gmd:onLine</code> geschrieben, die URL gehört zu <code>ingrid.service.operations</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:landingPage | foaf:page | dcat:distribution</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>url</code> ↔ <code>dcat:landingPage</code> bzw. <code>foaf:page</code>, <code>title</code> ↔ dessen <code>dct:title</code>; <code>type.value</code> <code>information</code></li>
+<li><code>url</code> ↔ <code>dcat:distribution/dcat:downloadURL</code> (<code>type.value</code> <code>download</code>), sonst <code>dcat:accessURL</code> (<code>type.value</code> <code>information</code>); <code>title</code> ↔ <code>dct:title</code>, <code>explanation</code> ↔ <code>dct:description</code></li>
+<li><code>type.value</code> <code>previewGraphic</code> → <code>foaf:depiction</code></li>
+<li><code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zu <code>type.value</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: jede URL nur einmal. Schreiben: <code>download</code> mit <code>dcat:downloadURL</code> und <code>dcat:accessURL</code>; andere Typen außer <code>information</code> als <code>dcat:distribution</code> mit <code>dcat:accessURL</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_references"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_references"
+            ></a>
+        </div>
         
 
         
@@ -8513,8 +9634,25 @@
             />
         </svg>
     <a href="#allOf_i0_fulltext" onclick="anchorLink('allOf_i0_fulltext')">fulltext</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_fulltext">
+            <p>Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_fulltext"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_fulltext"
+            ></a>
+        </div>
         
 
         
@@ -8727,8 +9865,31 @@
             />
         </svg>
     <a href="#allOf_i1_exports_rdf" onclick="anchorLink('allOf_i1_exports_rdf')">rdf</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält das vollständige RDF-Dokument im XML-Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_exports_rdf">
+            <p>Enthält das vollständige RDF-Dokument im XML-Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen</h5>
+
+<p><code>.</code></p>
+
+<blockquote>
+  <p>Der vollständige Quelldatensatz als RDF/XML.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; der Datensatz entsteht aus den übrigen Feldern.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_exports_rdf"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_exports_rdf"
+            ></a>
+        </div>
         
 
         
@@ -8739,6 +9900,78 @@
         </div>
     </div>
 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordionallOf_i1_references">
+    <div class="card">
+        <div class="card-header" id="headingallOf_i1_references">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i1_references"
+                        aria-expanded="" aria-controls="allOf_i1_references" onclick="setAnchor('#allOf_i1_references')"><span class="property-name">references</span></button>
+            </h2>
+        </div>
+
+        <div id="allOf_i1_references"
+             class="collapse property-definition-div" aria-labelledby="headingallOf_i1_references"
+             data-parent="#accordionallOf_i1_references">
+            <div class="card-body pl-5">
+
+    <div class="breadcrumbs">root
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1" onclick="anchorLink('allOf_i1')">OpenData</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1_references" onclick="anchorLink('allOf_i1_references')">references</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_references">
+            <h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>foaf:page</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>url</code> ↔ <code>foaf:page</code>, <code>title</code> ↔ dessen <code>dct:title</code>; <code>type.value</code> <code>information</code>, <code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 dazu</li>
+<li><code>type.value</code> <code>previewGraphic</code> → <code>foaf:depiction</code></li>
+</ul>
+
+<blockquote>
+  <p>In <code>index-opendata</code> stehen Landingpage und Distributionen in <code>dcat.landing_page</code> bzw. <code>distributions</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_references"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_references"
+            ></a>
+        </div>
+        
+
+        
+        
+
+        
             </div>
         </div>
     </div>
@@ -8829,7 +10062,21 @@
             />
         </svg>
     <a href="#allOf_i1_dcat_landing_page" onclick="anchorLink('allOf_i1_dcat_landing_page')">landing_page</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_dcat_landing_page">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:landingPage</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_dcat_landing_page"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_dcat_landing_page"
+            ></a>
+        </div>
         
 
         
@@ -8880,7 +10127,25 @@
             />
         </svg>
     <a href="#allOf_i1_legal_basis" onclick="anchorLink('allOf_i1_legal_basis')">legal_basis</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_legal_basis">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcatde:legalBasis</code></p>
+
+<blockquote>
+  <p>DCAT-AP.de-Erweiterung.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_legal_basis"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_legal_basis"
+            ></a>
+        </div>
         
 
         
@@ -8927,7 +10192,25 @@
             />
         </svg>
     <a href="#allOf_i1_distributions" onclick="anchorLink('allOf_i1_distributions')">distributions</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution</code></p>
+
+<blockquote>
+  <p>Eine <code>dcat:Distribution</code> je Eintrag.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions"
+            ></a>
+        </div>
         
 
         
@@ -9024,7 +10307,31 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_format" onclick="anchorLink('allOf_i1_distributions_items_format')">format</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_format">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:format</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>format</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://publications.europa.eu/resource/authority/file-type/</code> (z. B. <code>CSV</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: auch <code>dcat:mediaType</code> (IANA-Medientyp, z. B. <code>text/csv</code>), ein Literal oder das Label eines Knotens; <code>dct:format</code> vor <code>dcat:mediaType</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_format"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_format"
+            ></a>
+        </div>
         
 
         
@@ -9085,7 +10392,21 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_access_url" onclick="anchorLink('allOf_i1_distributions_items_access_url')">access_url</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_access_url">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dcat:accessURL</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_access_url"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_access_url"
+            ></a>
+        </div>
         
 
         
@@ -9146,7 +10467,21 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_modified" onclick="anchorLink('allOf_i1_distributions_items_modified')">modified</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_modified">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:modified</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_modified"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_modified"
+            ></a>
+        </div>
         
 
         
@@ -9207,7 +10542,21 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_title" onclick="anchorLink('allOf_i1_distributions_items_title')">title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_title">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:title</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_title"
+            ></a>
+        </div>
         
 
         
@@ -9268,7 +10617,21 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_description" onclick="anchorLink('allOf_i1_distributions_items_description')">description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_description">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:description</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_description"
+            ></a>
+        </div>
         
 
         
@@ -9329,7 +10692,25 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_license" onclick="anchorLink('allOf_i1_distributions_items_license')">license</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_license">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:license</code></p>
+
+<blockquote>
+  <p>Eine Lizenz je Distribution.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_license"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_license"
+            ></a>
+        </div>
         
 
         
@@ -9393,7 +10774,25 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_license_url" onclick="anchorLink('allOf_i1_distributions_items_license_url')">url</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_license_url">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:license</code></p>
+
+<blockquote>
+  <p>IRI der Lizenz (z. B. <code>http://dcat-ap.de/def/licenses/cc-by/4.0</code>).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_license_url"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_license_url"
+            ></a>
+        </div>
         
 
         
@@ -9461,7 +10860,29 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_license_name" onclick="anchorLink('allOf_i1_distributions_items_license_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_license_name">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen</h5>
+
+<p><code>dcat:distribution/dct:license/dct:title</code></p>
+
+<blockquote>
+  <p>Auch <code>rdfs:label</code> oder <code>skos:prefLabel</code>; ohne Angabe der Titel aus der Lizenzliste von DCAT-AP.de.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; die Lizenz ist über <code>url</code> bestimmt.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_license_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_license_name"
+            ></a>
+        </div>
         
 
         
@@ -9529,7 +10950,25 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_license_attribution_by_text" onclick="anchorLink('allOf_i1_distributions_items_license_attribution_by_text')">attribution_by_text</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_license_attribution_by_text">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dcatde:licenseAttributionByText</code></p>
+
+<blockquote>
+  <p>DCAT-AP.de-Erweiterung.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_license_attribution_by_text"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_license_attribution_by_text"
+            ></a>
+        </div>
         
 
         
@@ -9597,7 +11036,27 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_license_languages" onclick="anchorLink('allOf_i1_distributions_items_license_languages')">languages</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_license_languages">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dct:language</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Wert ↔ letzter Pfadabschnitt der IRI aus <code>http://publications.europa.eu/resource/authority/language/</code> (z. B. <code>DEU</code>)</li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_license_languages"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_license_languages"
+            ></a>
+        </div>
         
 
         
@@ -9725,7 +11184,27 @@
             />
         </svg>
     <a href="#allOf_i1_distributions_items_availability" onclick="anchorLink('allOf_i1_distributions_items_availability')">availability</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_distributions_items_availability">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/dcatap:availability</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>availability</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://publications.europa.eu/resource/authority/planned-availability/</code> (z. B. <code>STABLE</code>)</li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_distributions_items_availability"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_distributions_items_availability"
+            ></a>
+        </div>
         
 
         
@@ -9778,7 +11257,25 @@
             />
         </svg>
     <a href="#allOf_i1_political_geocoding_level_uri" onclick="anchorLink('allOf_i1_political_geocoding_level_uri')">political_geocoding_level_uri</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_political_geocoding_level_uri">
+            <h3>Transformation</h3>
 
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcatde:politicalGeocodingLevelURI</code></p>
+
+<blockquote>
+  <p>DCAT-AP.de-Erweiterung.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_political_geocoding_level_uri"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_political_geocoding_level_uri"
+            ></a>
+        </div>
         
 
         
@@ -9798,6 +11295,6 @@
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-05 at 12:59:30 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-08 at 12:39:40 +0000</p>
     </footer></body>
 </html>

@@ -14,6 +14,17 @@
         
     
     <title>InGrid Index - InGrid</title>
+<style>
+  blockquote {
+    margin: .5rem 0 1rem;
+    padding: .4rem .9rem;
+    border-left: 4px solid #ced4da;
+    background: #f8f9fa;
+    color: #495057;
+    font-size: .95em;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+</style>
 </head>
 <body onload="anchorOnLoad();" id="root"><nav style="font-size:.875rem; margin-bottom:1.5rem;"><a href="https://schema.ingrid-oss.eu/">schema</a> / <a href="https://schema.ingrid-oss.eu/index/">index</a> / <a href="https://schema.ingrid-oss.eu/index/draft/">draft</a></nav>
 
@@ -28,6 +39,52 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li>Codeliste 2000</li>
 <li>previewGraphic</li>
 </ul></li>
+</ul>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen Beschreibung.</p>
+
+<h5>Lesen</h5>
+
+<ul>
+<li>Text auch als <code>gmx:Anchor</code> (dann gilt der Textinhalt) statt <code>gco:CharacterString</code>; Übersetzungen (<code>gmd:PT_FreeText</code>) werden nicht übernommen.</li>
+<li><code>gmd:identificationInfo/*</code> ist die erste Identifikation (<code>gmd:identificationInfo[1]</code>), Datensatz (<code>gmd:MD_DataIdentification</code>) oder Dienst (<code>srv:SV_ServiceIdentification</code>); bei Diensten <code>srv:extent</code> statt <code>gmd:extent</code>.</li>
+<li>Bei Einzelwerten gilt das erste Vorkommen; Codelistenwerte stehen in <code>@codeListValue</code>.</li>
+<li>Wahrheitswerte (<code>gco:Boolean</code>): <code>true</code> und <code>1</code> ergeben <code>true</code>, <code>false</code> und <code>0</code> ergeben <code>false</code>.</li>
+</ul>
+
+<h5>Schreiben</h5>
+
+<ul>
+<li>Genau ein <code>gmd:identificationInfo</code>; <code>gmd:identificationInfo/*</code> ist <code>gmd:MD_DataIdentification</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> <code>srv:SV_ServiceIdentification</code> (dann <code>srv:extent</code> statt <code>gmd:extent</code>).</li>
+<li><code>gmd:spatialRepresentationInfo/*</code> und <code>gmd:report/*</code> stehen für das Element, das <code>ingrid.spatial_representation[].type</code> bzw. <code>ingrid.data_quality.qualities[].type</code> festlegt.</li>
+<li>Text als <code>gco:CharacterString</code>; Codelistenwerte in <code>@codeListValue</code> und als Elementinhalt, <code>@codeList</code> verweist auf das ISO-Codelisten-Register (<code>http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#&lt;Codeliste&gt;</code>).</li>
+<li>Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert erhalten <code>gco:nilReason="missing"</code>.</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0. Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.</p>
+
+<h5>Lesen</h5>
+
+<ul>
+<li>Bei mehreren Sprachfassungen eines Literals gilt das mit Sprach-Tag <code>de</code>, sonst das ohne Sprach-Tag, sonst das erste.</li>
+<li>Ist der Wert ein Knoten statt eines Literals, gilt sein Label (<code>rdfs:label</code>, <code>skos:prefLabel</code> bzw. <code>dct:title</code>), bei einer IRI ohne Label die IRI selbst.</li>
+<li>E-Mail-Adressen und Telefonnummern ohne <code>mailto:</code> bzw. <code>tel:</code>; bei Einzelwerten das erste Vorkommen; Werte, die kein gültiges Datum sind, werden bei Datumsfeldern nicht übernommen.</li>
+<li><code>^foaf:primaryTopic</code> führt zum <code>dcat:CatalogRecord</code> der Ressource (Angaben zum Metadatensatz).</li>
+</ul>
+
+<h5>Schreiben</h5>
+
+<ul>
+<li>Eine Ressource vom Typ <code>dcat:Dataset</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> vom Typ <code>dcat:DataService</code>.</li>
+<li>Textliterale mit dem Sprach-Tag der Ressourcensprache (<code>language</code>), Datumswerte als <code>xsd:date</code> bzw. <code>xsd:dateTime</code>.</li>
+<li>Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate, Frequenzen und Zugriffsrechte, DCAT-AP.de-Lizenzen).</li>
+<li>Zwischenknoten (<code>dct:Location</code>, <code>dct:PeriodOfTime</code>, <code>vcard:Kind</code>, <code>foaf:Agent</code>, <code>dct:Standard</code> …) als Blank Nodes mit passendem <code>rdf:type</code>; <code>^foaf:primaryTopic</code> als <code>dcat:CatalogRecord</code>, dessen <code>foaf:primaryTopic</code> die Ressource ist.</li>
 </ul>
 
         </div>
@@ -112,8 +169,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_id" onclick="anchorLink('allOf_i0_id')">id</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die ID des Datensatzes. Die ID <strong>muss</strong> eindeutig im Index sein.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_id">
+            <p>Die ID des Datensatzes. Die ID <strong>muss</strong> eindeutig im Index sein.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:fileIdentifier/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:identifier</code></p>
+
+<blockquote>
+  <p>Lesen: ohne <code>dct:identifier</code> die IRI der Ressource.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_id"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_id"
+            ></a>
+        </div>
         
 
         
@@ -166,8 +248,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_schema" onclick="anchorLink('allOf_i0_schema')">$schema</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_schema">
+            <p>Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_schema"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_schema"
+            ></a>
+        </div>
         
 
         
@@ -271,8 +370,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_data_type" onclick="anchorLink('allOf_i0_metadata_data_type')">data_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_data_type">
+            <p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (<code>index-ingrid</code>: <code>INGRID</code>).</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_data_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_data_type"
+            ></a>
+        </div>
         
 
         
@@ -334,8 +446,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_document_type" onclick="anchorLink('allOf_i0_metadata_document_type')">document_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_document_type">
+            <p>Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>rdf:type</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>InGridGeoService</code> ↔ <code>dcat:DataService</code></li>
+<li><code>InGridGeoDataset</code> ↔ <code>dcat:Dataset</code> (lesen auch <code>dcat:DatasetSeries</code>)</li>
+<li>alle anderen → <code>dcat:Dataset</code></li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_document_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_document_type"
+            ></a>
+        </div>
         
 
         
@@ -395,8 +530,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_created" onclick="anchorLink('allOf_i0_metadata_created')">created</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_created">
+            <p>Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_created"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_created"
+            ></a>
+        </div>
         
 
         
@@ -456,8 +608,37 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_modified" onclick="anchorLink('allOf_i0_metadata_modified')">modified</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_modified">
+            <p>Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dateStamp/gco:DateTime</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>gco:Date</code>; ein reines Datum gilt als 00:00 UTC.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:modified</code></p>
+
+<blockquote>
+  <p>Lesen: ohne <code>dcat:CatalogRecord</code> das <code>dct:modified</code> der Ressource.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_modified"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_modified"
+            ></a>
+        </div>
         
 
         
@@ -517,8 +698,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_issued" onclick="anchorLink('allOf_i0_metadata_issued')">issued</a></div><span class="badge badge-dark value-type">Type: string or null</span><span class="badge badge-info value-type">Format: date-time</span><br/>
-<span class="description"><p>Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_issued">
+            <p>Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des Metadatensatzes; das der Ressource steht in <code>temporal.data_temporal</code> (<code>first_published</code>).</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:issued</code></p>
+
+<blockquote>
+  <p>Aufnahme in den Katalog laut <code>dcat:CatalogRecord</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_issued"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_issued"
+            ></a>
+        </div>
         
 
         
@@ -572,8 +776,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_partner" onclick="anchorLink('allOf_i0_metadata_partner')">partner</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Partner der Datenquelle als Kürzel.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_partner">
+            <p>Der Partner der Datenquelle als Kürzel.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_partner"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_partner"
+            ></a>
+        </div>
         
 
         
@@ -633,8 +854,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_provider" onclick="anchorLink('allOf_i0_metadata_provider')">provider</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Anbieter der Datenquelle.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_provider">
+            <p>Der Anbieter der Datenquelle.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_provider"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_provider"
+            ></a>
+        </div>
         
 
         
@@ -694,8 +932,49 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')">language</a></div><h4>language</h4><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält die Sprache des Metadatensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_language">
+            <p>Enthält die Sprache des Metadatensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:language/gmd:LanguageCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. <code>ger</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>. Schreiben: <code>@codeList</code> <code>http://www.loc.gov/standards/iso639-2/</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>^foaf:primaryTopic/dct:language</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO 639-2)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache des Metadatensatzes.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_language"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_language"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -873,7 +1152,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_datasource" onclick="anchorLink('allOf_i0_metadata_datasource')">datasource</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_metadata_datasource">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_datasource"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_datasource"
+            ></a>
+        </div>
         
 
         
@@ -1130,8 +1425,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_sort_uuid" onclick="anchorLink('allOf_i0_sort_uuid')">sort_uuid</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_sort_uuid">
+            <p>Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_sort_uuid"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_sort_uuid"
+            ></a>
+        </div>
         
 
         
@@ -1178,8 +1490,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_title" onclick="anchorLink('allOf_i0_title')">title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Der Titel des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_title">
+            <p>Der Titel des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:title</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_title"
+            ></a>
+        </div>
         
 
         
@@ -1226,8 +1559,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_description" onclick="anchorLink('allOf_i0_description')">description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Die Beschreibung des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_description">
+            <p>Die Beschreibung des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:abstract/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:description</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_description"
+            ></a>
+        </div>
         
 
         
@@ -1274,8 +1628,51 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_language" onclick="anchorLink('allOf_i0_language')">language</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Welches Format hat die Sprache, wo wird es verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_language">
+            <p>Welches Format hat die Sprache, wo wird es verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>de</code> ↔ <code>ger</code> (lesen auch <code>deu</code>, <code>de</code>)</li>
+<li><code>en</code> ↔ <code>eng</code> (lesen auch <code>en</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>; ohne Angabe oder ohne Treffer <code>de</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:language</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>de</code> ↔ <code>http://publications.europa.eu/resource/authority/language/DEU</code></li>
+<li><code>en</code> ↔ <code>http://publications.europa.eu/resource/authority/language/ENG</code></li>
+</ul>
+
+<blockquote>
+  <p>Sprache der Ressource. Lesen: auch die Literale <code>de</code>, <code>deu</code>, <code>ger</code>, <code>en</code>, <code>eng</code>; ohne Angabe <code>de</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_language"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_language"
+            ></a>
+        </div>
         
 
         
@@ -1322,7 +1719,50 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts" onclick="anchorLink('allOf_i0_contacts')">contacts</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Kontakt ein <code>gmd:CI_ResponsibleParty</code>; die Art des Kontakts ergibt sich nur aus <code>role</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: zusätzlich die Kontakte zum Metadatensatz (<code>gmd:contact/gmd:CI_ResponsibleParty</code>), nach denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.</p>
+  
+  <p>Schreiben: <code>gmd:contact</code> (Pflicht) erhält die Kontakte mit <code>role</code> <code>pointOfContact</code>, sonst den ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und zum Metadatensatz.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt <code>role</code> (siehe dort)</li>
+<li><code>dcat:contactPoint</code> als <code>vcard:Kind</code>, alle anderen als <code>foaf:Agent</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: auch <code>prov:qualifiedAttribution/prov:agent</code>; gleiche Kontakte werden nicht zusammengeführt.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts"
+            ></a>
+        </div>
         
 
         
@@ -1419,7 +1859,46 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_role" onclick="anchorLink('allOf_i0_contacts_items_role')">role</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_role">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue</code></p>
+
+<blockquote>
+  <p>Wert unverändert (<code>CI_RoleCode</code>, z. B. <code>pointOfContact</code>, <code>custodian</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p>Die Property, über die der Kontakt an der Ressource angegeben ist.</p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>pointOfContact</code> ↔ <code>dcat:contactPoint</code></li>
+<li><code>publisher</code> ↔ <code>dct:publisher</code></li>
+<li><code>author</code> ↔ <code>dct:creator</code></li>
+<li><code>owner</code> ↔ <code>dct:rightsHolder</code></li>
+<li><code>originator</code> ↔ <code>dcatde:originator</code></li>
+<li><code>custodian</code> ↔ <code>dcatde:maintainer</code></li>
+</ul>
+
+<blockquote>
+  <p>Andere Rollen über <code>prov:qualifiedAttribution</code> mit <code>dcat:hadRole</code> (IRI der INSPIRE-Codeliste <code>ResponsiblePartyRole</code>, letzter Pfadabschnitt = Rolle).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_role"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_role"
+            ></a>
+        </div>
         
 
         
@@ -1480,7 +1959,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_name" onclick="anchorLink('allOf_i0_contacts_items_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_name">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: ohne Organisation der Personenname (<code>gmd:individualName</code>). Geschrieben wird immer <code>gmd:organisationName</code>, da das Indexformat nicht zwischen Person und Organisation unterscheidet.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:fn</code></p>
+
+<blockquote>
+  <p>Bei <code>foaf:Agent</code> <code>foaf:name</code>. Lesen: bei <code>dcat:contactPoint</code> zuerst <code>vcard:organization-name</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_name"
+            ></a>
+        </div>
         
 
         
@@ -1541,7 +2048,52 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_communications" onclick="anchorLink('allOf_i0_contacts_items_communications')">communications</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_communications">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>email</code> ↔ <code>gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString</code></li>
+<li><code>phone</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString</code></li>
+<li><code>fax</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString</code></li>
+<li><code>website</code> ↔ <code>gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL</code></li>
+</ul>
+
+<blockquote>
+  <p><code>social</code> und <code>other</code> haben kein Gegenstück. Schreiben: nur die erste <code>website</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>email</code> ↔ <code>vcard:hasEmail</code> (<code>foaf:mbox</code>)</li>
+<li><code>phone</code> ↔ <code>vcard:hasTelephone</code> (<code>foaf:phone</code>)</li>
+<li><code>website</code> ↔ <code>vcard:hasURL</code> (<code>foaf:homepage</code>)</li>
+</ul>
+
+<blockquote>
+  <p>In Klammern die Form bei <code>foaf:Agent</code>. E-Mail als <code>mailto:</code>-IRI, Telefon als <code>tel:</code>-IRI. Lesen: Telefon auch als <code>vcard:hasTelephone/vcard:hasValue</code>. <code>fax</code>, <code>social</code> und <code>other</code> haben kein Gegenstück.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_communications"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_communications"
+            ></a>
+        </div>
         
 
         
@@ -1811,7 +2363,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_street" onclick="anchorLink('allOf_i0_contacts_items_street')">street</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_street">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:street-address</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_street"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_street"
+            ></a>
+        </div>
         
 
         
@@ -1872,7 +2452,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_code" onclick="anchorLink('allOf_i0_contacts_items_code')">code</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_code">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:postal-code</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_code"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_code"
+            ></a>
+        </div>
         
 
         
@@ -1933,7 +2537,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_pocode" onclick="anchorLink('allOf_i0_contacts_items_pocode')">pocode</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pocode">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des Postfachs.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pocode"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_pocode"
+            ></a>
+        </div>
         
 
         
@@ -1994,7 +2614,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_pobox" onclick="anchorLink('allOf_i0_contacts_items_pobox')">pobox</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pobox">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:post-office-box</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pobox"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_pobox"
+            ></a>
+        </div>
         
 
         
@@ -2055,7 +2697,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_locality" onclick="anchorLink('allOf_i0_contacts_items_locality')">locality</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_locality">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:locality</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_locality"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_locality"
+            ></a>
+        </div>
         
 
         
@@ -2116,7 +2782,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_country" onclick="anchorLink('allOf_i0_contacts_items_country')">country</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_country">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Wert unverändert, ohne Normalisierung auf einen Ländercode.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:country-name</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_country"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_country"
+            ></a>
+        </div>
         
 
         
@@ -2177,7 +2871,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_contacts_items_administrative_area" onclick="anchorLink('allOf_i0_contacts_items_administrative_area')">administrative_area</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_administrative_area">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:contactPoint/vcard:hasAddress/vcard:region</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_administrative_area"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_administrative_area"
+            ></a>
+        </div>
         
 
         
@@ -2230,8 +2948,49 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials" onclick="anchorLink('allOf_i0_spatials')">spatials</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Dieser Bereich enthält Informationen über den Raumbezug.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials">
+            <p>Dieser Bereich enthält Informationen über den Raumbezug.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Eintrag ein <code>gmd:geographicElement</code></li>
+<li><code>bbox</code> und <code>geometry</code> ↔ <code>gmd:EX_GeographicBoundingBox</code></li>
+<li><code>geometry</code> ↔ <code>gmd:EX_BoundingPolygon</code></li>
+<li><code>toponym</code> ↔ <code>gmd:EX_GeographicDescription</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd &gt; Nord) werden verworfen. Schreiben: alle in einem <code>gmd:EX_Extent</code>, je Wert in <code>toponym</code> ein eigenes <code>gmd:geographicElement</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial | dcatde:politicalGeocodingURI</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>geometry</code>, <code>bbox</code>, <code>toponym</code> ↔ je ein <code>dct:spatial</code> (<code>dct:Location</code> oder IRI eines Gazetteers)</li>
+<li><code>administrative</code> ↔ je ein <code>dcatde:politicalGeocodingURI</code></li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials"
+            ></a>
+        </div>
         
 
         
@@ -2581,8 +3340,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_name" onclick="anchorLink('allOf_i0_spatials_items_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Kann einen Namen oder eine ID gür eine Geometrie enthalten.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_name">
+            <p>Kann einen Namen oder eine ID gür eine Geometrie enthalten.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_name"
+            ></a>
+        </div>
         
 
         
@@ -2647,8 +3423,41 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_geometry" onclick="anchorLink('allOf_i0_spatials_items_geometry')">geometry</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_geometry">
+            <h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>GeoJSON ↔ GML-Geometrie</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString). Schreiben: nur, wenn <code>geometry</code> nicht das Rechteck aus <code>bbox</code> ist.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/locn:geometry</code></p>
+
+<blockquote>
+  <p>Als GeoJSON-Literal (<code>gsp:geoJSONLiteral</code>). Lesen: auch WKT (<code>gsp:wktLiteral</code>); ohne <code>locn:geometry</code> aus <code>dcat:bbox</code>, sonst aus <code>dcat:centroid</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_geometry"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_geometry"
+            ></a>
+        </div>
 
     <div class="one-of-value" id="allOf_i0_spatials_items_geometry_oneOf"><h2 class="handle">
   <label>One of</label>
@@ -6319,8 +7128,39 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_bbox" onclick="anchorLink('allOf_i0_spatials_items_bbox')">bbox</a></div><h4>Bounding Box</h4><span class="badge badge-dark value-type">Type: array of number</span><br/>
-<span class="description"><p>Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist <code>[min Longitude west, min Latitude south, max Longitude east, max Latitude north]</code>.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_bbox">
+            <p>Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist <code>[min Longitude west, min Latitude south, max Longitude east, max Latitude north]</code>.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>[west, south, east, north]</code> ↔ <code>gmd:westBoundLongitude</code>, <code>gmd:southBoundLatitude</code>, <code>gmd:eastBoundLongitude</code>, <code>gmd:northBoundLatitude</code> (je <code>gco:Decimal</code>)</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/dcat:bbox</code></p>
+
+<blockquote>
+  <p>Als WKT-Polygon (<code>gsp:wktLiteral</code>). Lesen: ohne <code>dcat:bbox</code> das umschließende Rechteck von <code>locn:geometry</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_bbox"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_bbox"
+            ></a>
+        </div>
         
 
         
@@ -6437,8 +7277,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_wkt" onclick="anchorLink('allOf_i0_spatials_items_wkt')">wkt</a></div><h4>Well-known text</h4><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Angabe eines Well-known text-Formats.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_wkt">
+            <p>Angabe eines Well-known text-Formats.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen</h5>
+
+<p><code>dct:spatial/(locn:geometry | dcat:bbox)</code></p>
+
+<blockquote>
+  <p>Nur ein WKT-Literal, unverändert.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_wkt"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_wkt"
+            ></a>
+        </div>
         
 
         
@@ -6499,7 +7366,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_toponym" onclick="anchorLink('allOf_i0_spatials_items_toponym')">toponym</a></div><h4>Toponym</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_toponym">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:spatial/skos:prefLabel</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>rdfs:label</code> und <code>locn:geographicName</code>; bei der IRI eines Gazetteers deren Label.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_toponym"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_toponym"
+            ></a>
+        </div>
         
 
         
@@ -6623,8 +7518,38 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_spatials_items_administrative" onclick="anchorLink('allOf_i0_spatials_items_administrative')">administrative</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Administrative Zuordnung</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_administrative">
+            <p>Administrative Zuordnung</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcatde:politicalGeocodingURI</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>regional_key</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/regionalKey/&lt;schlüssel&gt;</code></li>
+<li><code>state</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/stateKey/&lt;schlüssel&gt;</code></li>
+</ul>
+
+<blockquote>
+  <p>DCAT-AP.de-Erweiterung.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_administrative"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_spatials_items_administrative"
+            ></a>
+        </div>
         
 
         
@@ -6877,8 +7802,47 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_crs" onclick="anchorLink('allOf_i0_crs')">crs</a></div><h4>Referenzsystem</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Koordinatenreferenzsystem(e) des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_crs">
+            <p>Koordinatenreferenzsystem(e) des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Wert ein <code>gmd:referenceSystemInfo</code></li>
+<li><code>&lt;codeSpace&gt;:&lt;code&gt;</code> (z. B. <code>EPSG:25832</code>) ↔ <code>gmd:codeSpace/gco:CharacterString</code> und <code>gmd:code/gco:CharacterString</code></li>
+<li>URI ↔ nur <code>gmd:code</code></li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>EPSG:&lt;code&gt;</code> ↔ <code>http://www.opengis.net/def/crs/EPSG/0/&lt;code&gt;</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_crs"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_crs"
+            ></a>
+        </div>
         
 
         
@@ -7024,7 +7988,54 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_temporal_data_temporal" onclick="anchorLink('allOf_i0_temporal_data_temporal')">data_temporal</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_temporal_data_temporal">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>date_range</code> ↔ <code>gml:TimePeriod</code> (<code>gte</code> ↔ <code>gml:beginPosition</code>, <code>lte</code> ↔ <code>gml:endPosition</code>)</li>
+<li><code>date</code> ↔ <code>gml:TimeInstant/gml:timePosition</code></li>
+<li><code>date</code> mit <code>date_type</code> ↔ <code>gmd:CI_Date</code>: <code>created</code> ↔ <code>creation</code>, <code>last_updated</code> ↔ <code>revision</code>, <code>first_published</code> ↔ <code>publication</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: auch GML 3.2 (<code>gml32:</code>) und <code>gml:begin/gml:TimeInstant/gml:timePosition</code>; <code>indeterminatePosition</code> (<code>now</code>, <code>unknown</code>) lässt die Grenze offen; ungültige Werte → <code>date_text</code>.</p>
+  
+  <p>Schreiben: offene Grenze als leeres Element mit <code>indeterminatePosition="unknown"</code>; <code>gml:TimePeriod</code> mit <code>gml:id</code>; <code>date_text</code> wird nicht geschrieben.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:temporal | dct:issued | dct:modified | dct:created</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>date_range</code> ↔ <code>dct:temporal</code> (<code>dct:PeriodOfTime</code>; <code>gte</code> ↔ <code>dcat:startDate</code>, <code>lte</code> ↔ <code>dcat:endDate</code>)</li>
+<li><code>date</code> mit <code>date_type</code>: <code>first_published</code> ↔ <code>dct:issued</code>, <code>last_updated</code> ↔ <code>dct:modified</code>, <code>created</code> ↔ <code>dct:created</code></li>
+</ul>
+
+<blockquote>
+  <p>Schreiben: <code>date</code> ohne <code>date_type</code> als <code>dct:temporal</code> mit gleichem Start- und Enddatum; <code>date_text</code> wird nicht geschrieben.</p>
+  
+  <p>DCAT-AP 1.x / DCAT-AP.de 1.x: <code>schema:startDate</code>/<code>schema:endDate</code> statt <code>dcat:startDate</code>/<code>dcat:endDate</code> (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich <code>time:hasBeginning</code>/<code>time:hasEnd</code> (nur lesen).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_temporal_data_temporal"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_temporal_data_temporal"
+            ></a>
+        </div>
         
 
         
@@ -7771,7 +8782,64 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_keywords" onclick="anchorLink('allOf_i0_keywords')">keywords</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i0_keywords">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>term</code> ↔ Text von <code>gmd:keyword</code>, <code>id</code> ↔ <code>gmx:Anchor/@xlink:href</code></li>
+<li><code>source</code> ↔ Titel des Thesaurus (<code>gmd:thesaurusName/gmd:CI_Citation/gmd:title</code>):
+<ul>
+<li><code>inspire</code> ↔ <code>GEMET - INSPIRE themes, version 1.0</code></li>
+<li><code>gemet</code> ↔ <code>GEMET - Concepts, version 2.1</code></li>
+<li><code>umthes</code> ↔ <code>UMTHES Thesaurus</code></li>
+<li><code>frei</code> ↔ ohne Thesaurus</li>
+</ul></li>
+<li><code>term</code> mit <code>source</code> <code>iso_topic</code> ↔ <code>gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode</code> (nur Datensätze)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal. Schreiben: ein <code>gmd:MD_Keywords</code> je <code>source</code>; Keyword mit <code>id</code> als <code>gmx:Anchor</code>; Thesaurus <code>inspire</code> mit Datum 2008-06-01 (<code>publication</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>term</code> mit <code>source</code> <code>frei</code> ↔ <code>dcat:keyword</code></li>
+<li><code>id</code> und <code>term</code> ↔ <code>dcat:theme</code> (IRI; <code>term</code> aus <code>skos:prefLabel</code>, sonst letzter Pfadabschnitt); <code>source</code> nach dem Anfang der IRI:
+<ul>
+<li><code>inspire</code> ↔ <code>http://inspire.ec.europa.eu/theme/</code></li>
+<li><code>gemet</code> ↔ <code>http://www.eionet.europa.eu/gemet/concept/</code></li>
+<li><code>umthes</code> ↔ <code>https://sns.uba.de/umthes/</code></li>
+<li><code>data-theme</code> ↔ <code>http://publications.europa.eu/resource/authority/data-theme/</code></li>
+</ul></li>
+<li><code>source</code> <code>iso_topic</code> ↔ <code>dct:subject</code> mit IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/</code></li>
+<li><code>source</code> <code>hvd</code> ↔ <code>dcatap:hvdCategory</code> mit IRI aus <code>http://data.europa.eu/bna/</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal; ein Literal statt einer IRI wird <code>term</code> mit <code>source</code> <code>frei</code>. UNKLAR: Die Kennungen <code>data-theme</code> und <code>hvd</code> sind noch abzustimmen.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_keywords"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_keywords"
+            ></a>
+        </div>
         
 
         
@@ -8058,8 +9126,55 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_references" onclick="anchorLink('allOf_i0_references')">references</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_references">
+            <p>Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>url</code> ↔ <code>gmd:linkage/gmd:URL</code>, <code>title</code> ↔ <code>gmd:name</code>, <code>explanation</code> ↔ <code>gmd:description</code></li>
+<li><code>type.value</code> ↔ <code>gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue</code>; <code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zum Code</li>
+<li><code>type.value</code> <code>previewGraphic</code> ↔ <code>gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic</code> (<code>url</code> ↔ <code>gmd:fileName</code>, <code>explanation</code> ↔ <code>gmd:fileDescription</code>)</li>
+<li><code>type.key</code> <code>3600</code> (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes (<code>srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: jede URL nur einmal. Schreiben: <code>3600</code> wird nicht als <code>gmd:onLine</code> geschrieben, die URL gehört zu <code>ingrid.service.operations</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:landingPage | foaf:page | dcat:distribution</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>url</code> ↔ <code>dcat:landingPage</code> bzw. <code>foaf:page</code>, <code>title</code> ↔ dessen <code>dct:title</code>; <code>type.value</code> <code>information</code></li>
+<li><code>url</code> ↔ <code>dcat:distribution/dcat:downloadURL</code> (<code>type.value</code> <code>download</code>), sonst <code>dcat:accessURL</code> (<code>type.value</code> <code>information</code>); <code>title</code> ↔ <code>dct:title</code>, <code>explanation</code> ↔ <code>dct:description</code></li>
+<li><code>type.value</code> <code>previewGraphic</code> → <code>foaf:depiction</code></li>
+<li><code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zu <code>type.value</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: jede URL nur einmal. Schreiben: <code>download</code> mit <code>dcat:downloadURL</code> und <code>dcat:accessURL</code>; andere Typen außer <code>information</code> als <code>dcat:distribution</code> mit <code>dcat:accessURL</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_references"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_references"
+            ></a>
+        </div>
         
 
         
@@ -8530,8 +9645,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_fulltext" onclick="anchorLink('allOf_i0_fulltext')">fulltext</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i0_fulltext">
+            <p>Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_fulltext"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_fulltext"
+            ></a>
+        </div>
         
 
         
@@ -9145,7 +10277,12 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_metadata_allOf_i1_data_type" onclick="anchorLink('allOf_i1_metadata_allOf_i1_data_type')">data_type</a></div><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<div class="enum-value" id="allOf_i1_metadata_allOf_i1_data_type_enum">
+<span class="description"><h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>Kein Gegenstück in ISO 19139:2007. Konstant <code>INGRID</code>.</p>
+</span><div class="enum-value" id="allOf_i1_metadata_allOf_i1_data_type_enum">
             <h4>Must be one of:</h4>
             <ul class="list-group"><li class="list-group-item enum-item">"INGRID"</li><li class="list-group-item enum-item">"UMWELTNAVI"</li></ul>
             </div>
@@ -9216,8 +10353,39 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_metadata_allOf_i1_document_type" onclick="anchorLink('allOf_i1_metadata_allOf_i1_document_type')">document_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den Typ des Metadatensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_metadata_allOf_i1_document_type">
+            <p>Beschreibt den Typ des Metadatensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>InGridGeoDataset</code> ↔ <code>dataset</code> (lesen auch <code>series</code> und ohne Angabe)</li>
+<li><code>InGridGeoService</code> ↔ <code>service</code></li>
+<li><code>InGridInformationSystem</code> ↔ <code>application</code></li>
+<li><code>InGridSpecialisedTask</code> ↔ <code>nonGeographicDataset</code> mit <code>gmd:hierarchyLevelName</code> <code>job</code></li>
+<li><code>InGridPublication</code> ↔ <code>nonGeographicDataset</code> mit <code>gmd:hierarchyLevelName</code> <code>document</code></li>
+<li><code>InGridProject</code> ↔ <code>nonGeographicDataset</code> mit <code>gmd:hierarchyLevelName</code> <code>project</code></li>
+<li><code>InGridDataCollection</code> ↔ <code>nonGeographicDataset</code> mit <code>gmd:hierarchyLevelName</code> <code>database</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: <code>nonGeographicDataset</code> mit anderem <code>gmd:hierarchyLevelName</code> → <code>InGridGeoDataset</code>. Schreiben: <code>series</code> lässt sich nicht unterscheiden und wird <code>dataset</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_metadata_allOf_i1_document_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_metadata_allOf_i1_document_type"
+            ></a>
+        </div>
         
 
         
@@ -9645,8 +10813,34 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_temporal_allOf_i1_status" onclick="anchorLink('allOf_i1_temporal_allOf_i1_status')">status</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_temporal_allOf_i1_status">
+            <p>In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:status/gmd:MD_ProgressCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Code</li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 523 zum Code</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_temporal_allOf_i1_status"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_temporal_allOf_i1_status"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -9844,8 +11038,58 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_temporal_allOf_i1_maintenance_frequency" onclick="anchorLink('allOf_i1_temporal_allOf_i1_maintenance_frequency')">maintenance_frequency</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_temporal_allOf_i1_maintenance_frequency">
+            <p>Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:maintenanceAndUpdateFrequency/gmd:MD_MaintenanceFrequencyCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Code</li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 518 zum Code</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:accrualPeriodicity</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<p><code>value</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://publications.europa.eu/resource/authority/frequency/</code>:</p>
+
+<ul>
+<li><code>continual</code> ↔ <code>UPDATE_CONT</code> (lesen auch <code>CONT</code>)</li>
+<li><code>daily</code> ↔ <code>DAILY</code></li>
+<li><code>weekly</code> ↔ <code>WEEKLY</code></li>
+<li><code>fortnightly</code> ↔ <code>BIWEEKLY</code></li>
+<li><code>monthly</code> ↔ <code>MONTHLY</code></li>
+<li><code>quarterly</code> ↔ <code>QUARTERLY</code></li>
+<li><code>biannually</code> ↔ <code>ANNUAL_2</code></li>
+<li><code>annually</code> ↔ <code>ANNUAL</code></li>
+<li><code>irregular</code> ↔ <code>IRREG</code></li>
+<li><code>notPlanned</code> ↔ <code>NEVER</code></li>
+<li><code>unknown</code> ↔ <code>UNKNOWN</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: <code>key</code> = ID des Eintrags der InGrid-Codeliste 518 zum Wert.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_temporal_allOf_i1_maintenance_frequency"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_temporal_allOf_i1_maintenance_frequency"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -10045,8 +11289,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec" onclick="anchorLink('allOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec')">user_defined_maintenance_frequency_in_sec</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält das benutzerdefinierte Pflegeintervall des Datensatzes in Sekunden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec">
+            <p>Enthält das benutzerdefinierte Pflegeintervall des Datensatzes in Sekunden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:userDefinedMaintenanceFrequency/gts:TM_PeriodDuration</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>Sekunden ↔ ISO-8601-Dauer (z. B. <code>P1D</code> = 86400; geschrieben als <code>PT&lt;n&gt;S</code>)</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec"
+            ></a>
+        </div>
         
 
         
@@ -10158,8 +11427,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_exports_iso" onclick="anchorLink('allOf_i1_exports_iso')">iso</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält das vollständige ISO-19139-Dokument im XML-Format.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_exports_iso">
+            <p>Enthält das vollständige ISO-19139-Dokument im XML-Format.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen</h5>
+
+<p><code>.</code></p>
+
+<blockquote>
+  <p>Der vollständige Quelldatensatz (<code>gmd:MD_Metadata</code>) als XML-String.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; das ISO-Dokument entsteht aus den übrigen Feldern.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP. Nur bei Datensätzen im Format ISO 19139:2007.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_exports_iso"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_exports_iso"
+            ></a>
+        </div>
         
 
         
@@ -10260,8 +11556,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_alternate_title" onclick="anchorLink('allOf_i1_ingrid_alternate_title')">alternate_title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_alternate_title">
+            <p>Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:alternateTitle/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: alle Vorkommen, mit Leerzeichen verbunden. Schreiben: als ein <code>gmd:alternateTitle</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:alternative</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_alternate_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_alternate_title"
+            ></a>
+        </div>
         
 
         
@@ -10315,8 +11636,54 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_licenses" onclick="anchorLink('allOf_i1_ingrid_licenses')">licenses</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Liste der Nutzungsbedingungen oder Einschränkungen für die Verwendung der externen Ressource oder Download.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_licenses">
+            <p>Liste der Nutzungsbedingungen oder Einschränkungen für die Verwendung der externen Ressource oder Download.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:resourceConstraints</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>useLimitations</code> ↔ <code>gmd:MD_Constraints/gmd:useLimitation</code></li>
+<li><code>useConstraints</code> ↔ <code>gmd:MD_LegalConstraints</code> mit <code>gmd:useConstraints</code> = <code>otherRestrictions</code>, je Wert ein <code>gmd:otherConstraints</code></li>
+<li><code>accessConstraints</code> ↔ <code>gmd:MD_LegalConstraints</code> mit <code>gmd:accessConstraints</code> = <code>otherRestrictions</code>, je Wert ein <code>gmd:otherConstraints</code>; <code>key</code> ← ID des Eintrags der InGrid-Codeliste 6010 zum Wert</li>
+<li><code>source</code> ↔ Zeile <code>Quellenvermerk: &lt;source&gt;</code> bei <code>useConstraints</code></li>
+</ul>
+
+<blockquote>
+  <p>Lesen: höchstens ein Eintrag je <code>type</code>; <code>source</code> auch aus dem Feld <code>quelle</code> eines JSON-Texts (GDI-DE-Konvention), der selbst kein <code>item</code> wird; Codes außer <code>otherRestrictions</code> werden als <code>item</code> übernommen.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:license | dct:accessRights | dcat:distribution/dct:rights</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>useConstraints</code> ↔ <code>dct:license</code> (<code>key</code> = IRI, <code>value</code> = Titel der Lizenz); <code>source</code> ↔ <code>dcat:distribution/dcatde:licenseAttributionByText</code></li>
+<li><code>accessConstraints</code> ↔ <code>dct:accessRights</code> (<code>key</code> = IRI, <code>value</code> = Label)</li>
+<li><code>useLimitations</code> ↔ <code>dcat:distribution/dct:rights</code> (<code>dct:RightsStatement</code>, <code>value</code> = <code>rdfs:label</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Lesen: höchstens ein Eintrag je <code>type</code>; Lizenzen der Ressource und aller Distributionen ohne Duplikate. Schreiben: Lizenzen und <code>dct:rights</code> an jeder Distribution. UNKLAR: Werte ohne IRI (<code>key</code>) bei <code>useConstraints</code> und <code>accessConstraints</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_licenses"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_licenses"
+            ></a>
+        </div>
         
 
         
@@ -10870,8 +12237,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_parent_identifier" onclick="anchorLink('allOf_i1_ingrid_parent_identifier')">parent_identifier</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>UUID des übergeordneten Datensatzes. Kann für die Strukturierung von Datensätzen verwendet werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_parent_identifier">
+            <p>UUID des übergeordneten Datensatzes. Kann für die Strukturierung von Datensätzen verwendet werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:parentIdentifier/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:inSeries</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>dct:isPartOf</code>; <code>dct:identifier</code> der übergeordneten Ressource, sonst ihre IRI. UNKLAR: Schreiben braucht die IRI der Serie, das Indexformat enthält nur die UUID.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_parent_identifier"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_parent_identifier"
+            ></a>
+        </div>
         
 
         
@@ -10925,8 +12317,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_datasource_identifier" onclick="anchorLink('allOf_i1_ingrid_datasource_identifier')">datasource_identifier</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Enthält den Identifikator der Datenquelle. Dieser muss eine auflösbare URL sein, die den Direktzugriff auf das XML des Daten-Metadatensatzes ermöglicht.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_datasource_identifier">
+            <p>Enthält den Identifikator der Datenquelle. Dieser muss eine auflösbare URL sein, die den Direktzugriff auf das XML des Daten-Metadatensatzes ermöglicht.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>adms:identifier/skos:notation</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_datasource_identifier"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_datasource_identifier"
+            ></a>
+        </div>
         
 
         
@@ -10984,7 +12401,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation" onclick="anchorLink('allOf_i1_ingrid_spatial_representation')">spatial_representation</a></div><h4>Digitale Repräsentation</h4><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo</code></p>
+
+<blockquote>
+  <p>Ein <code>gmd:spatialRepresentationInfo</code> je Eintrag; das Element darunter bestimmt <code>type</code> (siehe dort).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/adms:representationTechnique</code></p>
+
+<blockquote>
+  <p>Lesen: ein Eintrag je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle Typen an jeder Distribution.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation"
+            ></a>
+        </div>
         
 
         
@@ -11041,8 +12486,53 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_type" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_type')">type</a></div><h4>Typ</h4><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<span class="description"><p>Beschreibt den Typ der Repräsentation</p>
-</span><div class="enum-value" id="allOf_i1_ingrid_spatial_representation_type_enum">
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_type">
+            <p>Beschreibt den Typ der Repräsentation</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>vector</code> ↔ <code>gmd:MD_VectorSpatialRepresentation</code></li>
+<li><code>grid</code> ↔ <code>gmd:MD_Georectified</code> (wenn <code>grid.rectified</code> gesetzt ist), <code>gmd:MD_Georeferenceable</code> (wenn <code>grid.referenced</code> gesetzt ist), sonst <code>gmd:MD_GridSpatialRepresentation</code></li>
+</ul>
+
+<blockquote>
+  <p><code>text</code>, <code>tin</code>, <code>video</code> und <code>stereomodel</code> haben kein Gegenstück.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:distribution/adms:representationTechnique</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<p>Letzter Pfadabschnitt der IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/</code>:</p>
+
+<ul>
+<li><code>vector</code> ↔ <code>vector</code></li>
+<li><code>grid</code> ↔ <code>grid</code></li>
+<li><code>text</code> ↔ <code>textTable</code></li>
+<li><code>tin</code> ↔ <code>tin</code></li>
+<li><code>stereomodel</code> ↔ <code>stereoModel</code></li>
+<li><code>video</code> ↔ <code>video</code></li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_type"
+            ></a>
+        </div><div class="enum-value" id="allOf_i1_ingrid_spatial_representation_type_enum">
             <h4>Must be one of:</h4>
             <ul class="list-group"><li class="list-group-item enum-item">"text"</li><li class="list-group-item enum-item">"vector"</li><li class="list-group-item enum-item">"tin"</li><li class="list-group-item enum-item">"video"</li><li class="list-group-item enum-item">"stereomodel"</li><li class="list-group-item enum-item">"grid"</li></ul>
             </div>
@@ -11106,8 +12596,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_vector" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_vector')">vector</a></div><h4>Vector</h4><span class="badge badge-dark value-type">Type: array</span><br/>
-<span class="description"><p>Beschreibt die digitale Repräsentation als eine Liste von Vektor-Daten.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_vector">
+            <p>Beschreibt die digitale Repräsentation als eine Liste von Vektor-Daten.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_VectorSpatialRepresentation</code>; ein <code>gmd:MD_GeometricObjects</code> je Eintrag.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_vector"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_vector"
+            ></a>
+        </div>
         
 
         
@@ -11232,8 +12745,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_vector_items_topology" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_vector_items_topology')">topology</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt die Topologie des Vektor-Datensatzes</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_topology">
+            <p>Beschreibt die Topologie des Vektor-Datensatzes</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:topologyLevel/gmd:MD_TopologyLevelCode/@codeListValue</code></p>
+
+<blockquote>
+  <p>Gilt für die ganze Repräsentation. Schreiben: aus dem ersten Eintrag.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_topology"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_vector_items_topology"
+            ></a>
+        </div>
         
 
         
@@ -11308,8 +12840,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_vector_items_geometry_type" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_vector_items_geometry_type')">geometry_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den Typ der Geometrie</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_geometry_type">
+            <p>Beschreibt den Typ der Geometrie</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects/gmd:geometricObjectType/gmd:MD_GeometricObjectTypeCode/@codeListValue</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_geometry_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_vector_items_geometry_type"
+            ></a>
+        </div>
         
 
         
@@ -11384,8 +12931,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_vector_items_number" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_vector_items_number')">number</a></div><span class="badge badge-dark value-type">Type: integer</span><br/>
-<span class="description"><p>Beschreibt die Anzahl der Punkt- oder Vektortypelemente im Datensatz</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_number">
+            <p>Beschreibt die Anzahl der Punkt- oder Vektortypelemente im Datensatz</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects/gmd:geometricObjectCount/gco:Integer</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_vector_items_number"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_vector_items_number"
+            ></a>
+        </div>
         
 
         
@@ -11517,7 +13079,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_axes" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_axes')">axes</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension</code></p>
+
+<blockquote>
+  <p>Bei allen Raster-Elementen.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_axes"
+            ></a>
+        </div>
         
 
         
@@ -11656,8 +13240,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_axes_items_label" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_axes_items_label')">label</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt den Namen der Achse</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_label">
+            <p>Beschreibt den Namen der Achse</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension/gmd:dimensionName/gmd:MD_DimensionNameTypeCode/@codeListValue</code></p>
+
+<blockquote>
+  <p>Wert unverändert (z. B. <code>row</code>, <code>column</code>, <code>vertical</code>).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_label"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_axes_items_label"
+            ></a>
+        </div>
         
 
         
@@ -11739,8 +13342,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_axes_items_number" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_axes_items_number')">number</a></div><span class="badge badge-dark value-type">Type: integer</span><br/>
-<span class="description"><p>Beschreibt die Anzahl der Achsen im Raster</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_number">
+            <p>Beschreibt die Anzahl der Achsen im Raster</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension/gmd:dimensionSize/gco:Integer</code></p>
+
+<blockquote>
+  <p>Anzahl der Elemente entlang dieser Achse.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_number"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_axes_items_number"
+            ></a>
+        </div>
         
 
         
@@ -11822,8 +13444,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_axes_items_resolution" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_axes_items_resolution')">resolution</a></div><span class="badge badge-dark value-type">Type: integer</span><br/>
-<span class="description"><p>Beschreibt die Auflösung der Achsen im Raster in Metern</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_resolution">
+            <p>Beschreibt die Auflösung der Achsen im Raster in Metern</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension/gmd:resolution/gco:Length</code></p>
+
+<blockquote>
+  <p>In Meter, geschrieben mit <code>@uom="m"</code>. Lesen: jede Maßangabe (<code>gmd:resolution/*</code>), umgerechnet nach <code>@uom</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_axes_items_resolution"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_axes_items_resolution"
+            ></a>
+        </div>
         
 
         
@@ -11897,8 +13538,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_available_parameters" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_available_parameters')">available_parameters</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Beschreibt, ob Parameter für das Raster verfügbar sind</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_available_parameters">
+            <p>Beschreibt, ob Parameter für das Raster verfügbar sind</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:transformationParameterAvailability/gco:Boolean</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_available_parameters"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_available_parameters"
+            ></a>
+        </div>
         
 
         
@@ -11966,8 +13626,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_number_dimensions" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_number_dimensions')">number_dimensions</a></div><span class="badge badge-dark value-type">Type: integer</span><br/>
-<span class="description"><p>Beschreibt die Anzahl der unabhängigen räumlich-zeitlichen Achsen</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_number_dimensions">
+            <p>Beschreibt die Anzahl der unabhängigen räumlich-zeitlichen Achsen</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:numberOfDimensions/gco:Integer</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_number_dimensions"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_number_dimensions"
+            ></a>
+        </div>
         
 
         
@@ -12035,8 +13714,34 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_cell_geometry" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_cell_geometry')">cell_geometry</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Angabe, ob die Rasterdatenzelle einen Punkt oder eine Fläche beschreibt. Hier wird die Codeliste 509 verwendet.</p>
-</span><a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')" class="ref-link">Same definition as language</a>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_cell_geometry">
+            <p>Angabe, ob die Rasterdatenzelle einen Punkt oder eine Fläche beschreibt. Hier wird die Codeliste 509 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:cellGeometry/gmd:MD_CellGeometryCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Code</li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 509 zum Code</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_cell_geometry"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_cell_geometry"
+            ></a>
+        </div><a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')" class="ref-link">Same definition as language</a>
             </div>
         </div>
     </div>
@@ -12169,8 +13874,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability')">checkpoint_availability</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Beschreibt, ob die Punkte für die Rasterdatenzelle geprüft werden.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability">
+            <p>Beschreibt, ob die Punkte für die Rasterdatenzelle geprüft werden.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:checkPointAvailability/gco:Boolean</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georectified</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability"
+            ></a>
+        </div>
         
 
         
@@ -12245,8 +13973,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_description" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_description')">checkpoint_description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibt die Beschreibung der Punkte, die für die Rasterdatenzelle verwendet werden. Hier wird die Codeliste 510 verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_description">
+            <p>Beschreibt die Beschreibung der Punkte, die für die Rasterdatenzelle verwendet werden. Hier wird die Codeliste 510 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:checkPointDescription/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georectified</code>. Freitext.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_description"
+            ></a>
+        </div>
         
 
         
@@ -12321,7 +14072,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_rectified_corner_points" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_rectified_corner_points')">corner_points</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_corner_points">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:cornerPoints</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Eckpunkt (durch Komma getrennt) ↔ <code>gml:Point/gml:pos</code> (mit <code>gml:id</code>)</li>
+</ul>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georectified</code>. Lesen: auch GML 3.2 (<code>gml32:</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_corner_points"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_rectified_corner_points"
+            ></a>
+        </div>
         
 
         
@@ -12396,8 +14175,38 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_rectified_point_in_pixel" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_rectified_point_in_pixel')">point_in_pixel</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält den Punkt im Pixel, an welchem der Bezug zur Erde besteht. Hier wird die Codeliste 2100 verwendet.</p>
-</span><a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')" class="ref-link">Same definition as language</a>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_point_in_pixel">
+            <p>Enthält den Punkt im Pixel, an welchem der Bezug zur Erde besteht. Hier wird die Codeliste 2100 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:pointInPixel/gmd:MD_PixelOrientationCode</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Wert (z. B. <code>center</code>)</li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 2100 zum Wert</li>
+</ul>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georectified</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_point_in_pixel"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_rectified_point_in_pixel"
+            ></a>
+        </div><a href="#allOf_i0_metadata_language" onclick="anchorLink('allOf_i0_metadata_language')" class="ref-link">Same definition as language</a>
             </div>
         </div>
     </div>
@@ -12534,8 +14343,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability')">orientation_parameter_availability</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Angabe, ob Orientierungsparameter verfügbar sind.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability">
+            <p>Angabe, ob Orientierungsparameter verfügbar sind.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:orientationParameterAvailability/gco:Boolean</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georeferenceable</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability"
+            ></a>
+        </div>
         
 
         
@@ -12610,8 +14442,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_referenced_control_point_availability" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_referenced_control_point_availability')">control_point_availability</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Angabe, ob Passpunkte existieren.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_control_point_availability">
+            <p>Angabe, ob Passpunkte existieren.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:controlPointAvailability/gco:Boolean</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georeferenceable</code>. Der Feldname im Indexformat weicht in der Schreibweise vom ISO-Element ab.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_control_point_availability"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_referenced_control_point_availability"
+            ></a>
+        </div>
         
 
         
@@ -12686,8 +14541,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid_referenced_parameters" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid_referenced_parameters')">parameters</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Parameter, die die Georeferenzierung der Rasterdaten ermöglichen</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_parameters">
+            <p>Parameter, die die Georeferenzierung der Rasterdaten ermöglichen</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*/gmd:georeferencedParameters/gco:Record</code></p>
+
+<blockquote>
+  <p>Nur bei <code>gmd:MD_Georeferenceable</code>. Lesen: ohne <code>gmd:georeferencedParameters</code> der Titel der ersten <code>gmd:parameterCitation</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_parameters"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid_referenced_parameters"
+            ></a>
+        </div>
         
 
         
@@ -12753,7 +14631,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_resolution_scale" onclick="anchorLink('allOf_i1_ingrid_spatial_resolution_scale')">spatial_resolution_scale</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_resolution_scale">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution</code></p>
+
+<blockquote>
+  <p>Nur Datensätze. Ein <code>gmd:MD_Resolution</code> enthält entweder <code>gmd:equivalentScale</code> oder <code>gmd:distance</code>. Schreiben: ein <code>gmd:MD_Resolution</code> je gesetztem Unterfeld.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:spatialResolutionInMeters</code></p>
+
+<blockquote>
+  <p>Nur <code>resolution_ground</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_resolution_scale"
+            ></a>
+        </div>
         
 
         
@@ -12810,8 +14716,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_resolution_scale_scale" onclick="anchorLink('allOf_i1_ingrid_spatial_resolution_scale_scale')">scale</a></div><span class="badge badge-dark value-type">Type: integer</span><br/>
-<span class="description"><p>Angabe des Erstellungsmaßstabs</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_scale">
+            <p>Angabe des Erstellungsmaßstabs</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_scale"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_resolution_scale_scale"
+            ></a>
+        </div>
         
 
         
@@ -12876,8 +14801,33 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_resolution_scale_resolution_ground" onclick="anchorLink('allOf_i1_ingrid_spatial_resolution_scale_resolution_ground')">resolution_ground</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
-<span class="description"><p>Bodenauflösung in Metern</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_resolution_ground">
+            <p>Bodenauflösung in Metern</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance</code></p>
+
+<blockquote>
+  <p>In Meter, geschrieben mit <code>@uom="m"</code>. Lesen: <code>gco:Distance</code> mit anderer Einheit als <code>dpi</code>, umgerechnet nach <code>@uom</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:spatialResolutionInMeters</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_resolution_ground"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_resolution_scale_resolution_ground"
+            ></a>
+        </div>
         
 
         
@@ -12938,8 +14888,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_resolution_scale_resolution_scan" onclick="anchorLink('allOf_i1_ingrid_spatial_resolution_scale_resolution_scan')">resolution_scan</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
-<span class="description"><p>Scan-Auflösung in DPI</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_resolution_scan">
+            <p>Scan-Auflösung in DPI</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance</code></p>
+
+<blockquote>
+  <p>In dpi: <code>gco:Distance</code> mit <code>@uom="dpi"</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_resolution_scan"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_resolution_scale_resolution_scan"
+            ></a>
+        </div>
         
 
         
@@ -12997,7 +14970,49 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_cross_references" onclick="anchorLink('allOf_i1_ingrid_cross_references')">cross_references</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_cross_references">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:operatesOn</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je gekoppeltem Datensatz ein Eintrag mit <code>direction</code> <code>OUT</code> und <code>reference_type</code> <code>Basisdaten</code></li>
+<li><code>uuid</code> ↔ <code>@uuidref</code></li>
+</ul>
+
+<blockquote>
+  <p>Nur bei Diensten. Lesen: <code>uuid</code> auch aus <code>@xlink:href</code> (Parameter <code>id</code> oder letzter Pfadabschnitt) und aus <code>srv:coupledResource/srv:SV_CoupledResource/srv:identifier</code>; die eigene UUID wird ignoriert. <code>name</code>, <code>document_type</code> und <code>description</code> stammen aus dem gekoppelten Datensatz, dort entsteht auch der Eintrag mit <code>direction</code> <code>IN</code>. Schreiben: nur Einträge mit <code>direction</code> <code>OUT</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:servesDataset</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li>je Datensatz ein Eintrag mit <code>direction</code> <code>OUT</code> und <code>reference_type</code> <code>Basisdaten</code></li>
+<li><code>uuid</code> ↔ <code>dct:identifier</code> des Datensatzes, sonst seine IRI</li>
+</ul>
+
+<blockquote>
+  <p>Nur bei <code>dcat:DataService</code>. <code>name</code>, <code>document_type</code> und <code>description</code> stammen aus dem gekoppelten Datensatz. Schreiben: nur Einträge mit <code>direction</code> <code>OUT</code>. UNKLAR: Bildung der IRI aus der UUID.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_cross_references"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_cross_references"
+            ></a>
+        </div>
         
 
         
@@ -13511,8 +15526,37 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_lineage" onclick="anchorLink('allOf_i1_ingrid_lineage')">lineage</a></div><h4>Datenherkunft</h4><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Angaben zur Herkunft und Entstehung der Daten (Lineage)</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_lineage">
+            <p>Angaben zur Herkunft und Entstehung der Daten (Lineage)</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage</code></p>
+
+<blockquote>
+  <p>Schreiben: im gemeinsamen <code>gmd:DQ_DataQuality</code> (siehe <code>ingrid.data_quality</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:provenance</code></p>
+
+<blockquote>
+  <p>Ein <code>dct:ProvenanceStatement</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_lineage"
+            ></a>
+        </div>
         
 
         
@@ -13569,8 +15613,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_lineage_statement" onclick="anchorLink('allOf_i1_ingrid_lineage_statement')">statement</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Allgemeine Beschreibung der Datenherkunft/Prozesskette</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_lineage_statement">
+            <p>Allgemeine Beschreibung der Datenherkunft/Prozesskette</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:provenance/rdfs:label</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage_statement"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_lineage_statement"
+            ></a>
+        </div>
         
 
         
@@ -13631,8 +15696,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_lineage_source" onclick="anchorLink('allOf_i1_ingrid_lineage_source')">source</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibung der Ausgangsdaten</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_lineage_source">
+            <p>Beschreibung der Ausgangsdaten</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Lesen: alle <code>gmd:LI_Source</code>, durch Zeilenumbruch getrennt. Schreiben: als ein <code>gmd:LI_Source</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage_source"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_lineage_source"
+            ></a>
+        </div>
         
 
         
@@ -13693,8 +15781,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_lineage_process_step" onclick="anchorLink('allOf_i1_ingrid_lineage_process_step')">process_step</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibung der Bearbeitungsschritte</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_lineage_process_step">
+            <p>Beschreibung der Bearbeitungsschritte</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Alle Bearbeitungsschritte, durch Zeilenumbruch getrennt.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; die Bearbeitungsschritte stehen in <code>ingrid.process_step_description</code>.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage_process_step"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_lineage_process_step"
+            ></a>
+        </div>
         
 
         
@@ -13752,8 +15867,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_process_step_description" onclick="anchorLink('allOf_i1_ingrid_process_step_description')">process_step_description</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_process_step_description">
+            <p>Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString</code></p>
+
+<blockquote>
+  <p>Ein <code>gmd:LI_ProcessStep</code> je Wert.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_process_step_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_process_step_description"
+            ></a>
+        </div>
         
 
         
@@ -13856,8 +15994,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_symbol_catalogue" onclick="anchorLink('allOf_i1_ingrid_symbol_catalogue')">symbol_catalogue</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_symbol_catalogue">
+            <p>Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je <code>gmd:CI_Citation</code>. Schreiben: ein <code>gmd:portrayalCatalogueInfo</code> je Eintrag.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_symbol_catalogue"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_symbol_catalogue"
+            ></a>
+        </div>
         
 
         
@@ -13968,8 +16129,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_symbol_catalogue_items_title" onclick="anchorLink('allOf_i1_ingrid_symbol_catalogue_items_title')">title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Titel des Symbolkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_title">
+            <p>Titel des Symbolkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_symbol_catalogue_items_title"
+            ></a>
+        </div>
         
 
         
@@ -14037,8 +16213,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_symbol_catalogue_items_date" onclick="anchorLink('allOf_i1_ingrid_symbol_catalogue_items_date')">date</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Datum des Symbolkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_date">
+            <p>Datum des Symbolkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date</code></p>
+
+<blockquote>
+  <p>Lesen: erstes Datum, auch <code>gco:DateTime</code>. Schreiben: mit <code>gmd:dateType</code> <code>publication</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_date"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_symbol_catalogue_items_date"
+            ></a>
+        </div>
         
 
         
@@ -14106,8 +16301,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_symbol_catalogue_items_version" onclick="anchorLink('allOf_i1_ingrid_symbol_catalogue_items_version')">version</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Version des Symbolkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_version">
+            <p>Version des Symbolkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation/gmd:edition/gco:CharacterString</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_symbol_catalogue_items_version"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_symbol_catalogue_items_version"
+            ></a>
+        </div>
         
 
         
@@ -14167,8 +16377,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_codelist_reference" onclick="anchorLink('allOf_i1_ingrid_codelist_reference')">codelist_reference</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_codelist_reference">
+            <p>An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je <code>gmd:CI_Citation</code>. Schreiben: alle in einem <code>gmd:MD_FeatureCatalogueDescription</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_codelist_reference"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_codelist_reference"
+            ></a>
+        </div>
         
 
         
@@ -14279,8 +16512,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_codelist_reference_items_title" onclick="anchorLink('allOf_i1_ingrid_codelist_reference_items_title')">title</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Titel des Schlüsselkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_codelist_reference_items_title">
+            <p>Titel des Schlüsselkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_codelist_reference_items_title"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_codelist_reference_items_title"
+            ></a>
+        </div>
         
 
         
@@ -14348,8 +16596,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_codelist_reference_items_date" onclick="anchorLink('allOf_i1_ingrid_codelist_reference_items_date')">date</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Datum des Schlüsselkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_codelist_reference_items_date">
+            <p>Datum des Schlüsselkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date</code></p>
+
+<blockquote>
+  <p>Lesen: erstes Datum, auch <code>gco:DateTime</code>. Schreiben: mit <code>gmd:dateType</code> <code>publication</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_codelist_reference_items_date"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_codelist_reference_items_date"
+            ></a>
+        </div>
         
 
         
@@ -14417,8 +16684,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_codelist_reference_items_version" onclick="anchorLink('allOf_i1_ingrid_codelist_reference_items_version')">version</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Version des Schlüsselkataloges</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_codelist_reference_items_version">
+            <p>Version des Schlüsselkataloges</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:edition/gco:CharacterString</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_codelist_reference_items_version"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_codelist_reference_items_version"
+            ></a>
+        </div>
         
 
         
@@ -14478,8 +16760,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_attribute_description" onclick="anchorLink('allOf_i1_ingrid_attribute_description')">attribute_description</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<span class="description"><p>Angabe der mit der Geo-Information/Karte verbundenen Sachdaten.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_attribute_description">
+            <p>Angabe der mit der Geo-Information/Karte verbundenen Sachdaten.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_attribute_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_attribute_description"
+            ></a>
+        </div>
         
 
         
@@ -14639,8 +16938,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_description" onclick="anchorLink('allOf_i1_ingrid_spatial_description')">description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Erläuterung zu den Raumbezügen</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_description">
+            <p>Erläuterung zu den Raumbezügen</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:description/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_description"
+            ></a>
+        </div>
         
 
         
@@ -14766,8 +17084,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_vertical_extent_minimum" onclick="anchorLink('allOf_i1_ingrid_spatial_vertical_extent_minimum')">minimum</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
-<span class="description"><p>Minimaler Wert der vertikalen Ausdehnung</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_minimum">
+            <p>Minimaler Wert der vertikalen Ausdehnung</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue/gco:Real</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_minimum"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_vertical_extent_minimum"
+            ></a>
+        </div>
         
 
         
@@ -14835,8 +17172,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_vertical_extent_maximum" onclick="anchorLink('allOf_i1_ingrid_spatial_vertical_extent_maximum')">maximum</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
-<span class="description"><p>Maximaler Wert der vertikalen Ausdehnung</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_maximum">
+            <p>Maximaler Wert der vertikalen Ausdehnung</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue/gco:Real</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_maximum"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_vertical_extent_maximum"
+            ></a>
+        </div>
         
 
         
@@ -14904,8 +17260,38 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_vertical_extent_unit" onclick="anchorLink('allOf_i1_ingrid_spatial_vertical_extent_unit')">unit</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_unit">
+            <p>Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalCS/gml:VerticalCS/gml:axis/gml:CoordinateSystemAxis/@uom</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ <code>@uom</code></li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 102 zum Wert</li>
+</ul>
+
+<blockquote>
+  <p>Schreiben: <code>gml:VerticalCRS</code> mit <code>gml:id</code> und den übrigen Pflichtangaben der GML-Elemente.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_unit"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_vertical_extent_unit"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -15097,8 +17483,34 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_vertical_extent_vdatum" onclick="anchorLink('allOf_i1_ingrid_spatial_vertical_extent_vdatum')">vdatum</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_vdatum">
+            <p>Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalDatum/gml:VerticalDatum/gml:identifier</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Text von <code>gml:identifier</code></li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 101 zum Wert</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_vdatum"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_vertical_extent_vdatum"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -15284,7 +17696,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_specific_usage" onclick="anchorLink('allOf_i1_ingrid_specific_usage')">specific_usage</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_specific_usage">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:resourceSpecificUsage/gmd:MD_Usage/gmd:specificUsage/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_specific_usage"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_specific_usage"
+            ></a>
+        </div>
         
 
         
@@ -15338,7 +17768,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_purpose" onclick="anchorLink('allOf_i1_ingrid_purpose')">purpose</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_purpose">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:purpose/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_purpose"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_purpose"
+            ></a>
+        </div>
         
 
         
@@ -15392,7 +17840,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_conformance_result" onclick="anchorLink('allOf_i1_ingrid_conformance_result')">conformance_result</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_conformance_result">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult</code></p>
+
+<blockquote>
+  <p>Lesen: aus allen Prüfberichten (<code>gmd:report/*</code>). Schreiben: ein <code>gmd:report</code> (<code>gmd:DQ_DomainConsistency</code>) je Eintrag.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je Spezifikation, außer Koordinatenreferenzsystemen (siehe <code>crs</code>) und, bei <code>dcat:DataService</code>, Dienst-Standards (siehe <code>ingrid.service.versions</code>). Schreiben: nur Einträge mit <code>pass</code> <code>conformant</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_conformance_result"
+            ></a>
+        </div>
         
 
         
@@ -15503,7 +17979,39 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_conformance_result_items_pass" onclick="anchorLink('allOf_i1_ingrid_conformance_result_items_pass')">pass</a></div><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<div class="enum-value" id="allOf_i1_ingrid_conformance_result_items_pass_enum">
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_conformance_result_items_pass">
+            <h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:pass/gco:Boolean</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>conformant</code> ↔ <code>true</code></li>
+<li><code>not-conformant</code> ↔ <code>false</code></li>
+<li><code>not-evaluated</code> ↔ ohne Wert (<code>gco:nilReason="unknown"</code>)</li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo</code></p>
+
+<blockquote>
+  <p>Lesen: immer <code>conformant</code>, DCAT-AP nennt nur erfüllte Spezifikationen. Schreiben: Einträge mit <code>not-conformant</code> oder <code>not-evaluated</code> werden nicht geschrieben.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_pass"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_conformance_result_items_pass"
+            ></a>
+        </div><div class="enum-value" id="allOf_i1_ingrid_conformance_result_items_pass_enum">
             <h4>Must be one of:</h4>
             <ul class="list-group"><li class="list-group-item enum-item">"conformant"</li><li class="list-group-item enum-item">"not-conformant"</li><li class="list-group-item enum-item">"not-evaluated"</li></ul>
             </div>
@@ -15574,7 +18082,45 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_conformance_result_items_specification" onclick="anchorLink('allOf_i1_ingrid_conformance_result_items_specification')">specification</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_conformance_result_items_specification">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Titel</li>
+<li><code>key</code> ↔ <code>@xlink:href</code> eines <code>gmx:Anchor</code>; ohne <code>key</code> als <code>gco:CharacterString</code></li>
+</ul>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>key</code> ↔ IRI der Spezifikation</li>
+<li><code>value</code> ↔ <code>dct:title</code> (lesen auch <code>rdfs:label</code>, sonst die IRI)</li>
+</ul>
+
+<blockquote>
+  <p>Schreiben: ohne <code>key</code> ein Blank Node <code>dct:Standard</code> mit <code>dct:title</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_specification"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_conformance_result_items_specification"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -15766,7 +18312,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_conformance_result_items_publication_date" onclick="anchorLink('allOf_i1_ingrid_conformance_result_items_publication_date')">publication_date</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_conformance_result_items_publication_date">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date</code></p>
+
+<blockquote>
+  <p>Datum mit <code>gmd:dateType</code> <code>publication</code>. Lesen: auch <code>gco:DateTime</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo/dct:issued</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_publication_date"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_conformance_result_items_publication_date"
+            ></a>
+        </div>
         
 
         
@@ -15834,7 +18404,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_conformance_result_items_explanation" onclick="anchorLink('allOf_i1_ingrid_conformance_result_items_explanation')">explanation</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_conformance_result_items_explanation">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:explanation/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_explanation"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_conformance_result_items_explanation"
+            ></a>
+        </div>
         
 
         
@@ -15894,7 +18482,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_order_info" onclick="anchorLink('allOf_i1_ingrid_order_info')">order_info</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_order_info">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor/gmd:MD_Distributor/gmd:distributionOrderProcess/gmd:MD_StandardOrderProcess/gmd:orderingInstructions/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_order_info"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_order_info"
+            ></a>
+        </div>
         
 
         
@@ -15948,7 +18554,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality" onclick="anchorLink('allOf_i1_ingrid_data_quality')">data_quality</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality</code></p>
+
+<blockquote>
+  <p>Lesen: Prüfberichte aller <code>gmd:DQ_DataQuality</code>. Schreiben: ein gemeinsames <code>gmd:DQ_DataQuality</code> für <code>data_quality</code>, <code>conformance_result</code> und <code>lineage</code>, mit <code>gmd:scope/gmd:DQ_Scope/gmd:level</code> = <code>gmd:hierarchyLevel</code> (siehe <code>metadata.document_type</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality"
+            ></a>
+        </div>
         
 
         
@@ -16005,7 +18633,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_completeness_omission" onclick="anchorLink('allOf_i1_ingrid_data_quality_completeness_omission')">completeness_omission</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_completeness_omission">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessOmission/gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_completeness_omission"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_completeness_omission"
+            ></a>
+        </div>
         
 
         
@@ -16130,7 +18772,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_positional_accuracy_horizontal" onclick="anchorLink('allOf_i1_ingrid_data_quality_positional_accuracy_horizontal')">horizontal</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_positional_accuracy_horizontal">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_AbsoluteExternalPositionalAccuracy/gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_positional_accuracy_horizontal"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_positional_accuracy_horizontal"
+            ></a>
+        </div>
         
 
         
@@ -16198,7 +18854,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_positional_accuracy_vertical" onclick="anchorLink('allOf_i1_ingrid_data_quality_positional_accuracy_vertical')">vertical</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_positional_accuracy_vertical">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_RelativeInternalPositionalAccuracy/gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record</code></p>
+
+<blockquote>
+  <p>Prüfbericht mit <code>gmd:measureDescription/gco:CharacterString</code> = <code>vertical</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_positional_accuracy_vertical"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_positional_accuracy_vertical"
+            ></a>
+        </div>
         
 
         
@@ -16263,7 +18937,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_qualities" onclick="anchorLink('allOf_i1_ingrid_data_quality_qualities')">qualities</a></div><span class="badge badge-dark value-type">Type: array of object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_qualities">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je Prüfbericht mit <code>gmd:DQ_QuantitativeResult</code>, dessen Element in <code>type</code> vorkommt.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_qualities"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_qualities"
+            ></a>
+        </div>
         
 
         
@@ -16388,7 +19080,40 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_qualities_items_type" onclick="anchorLink('allOf_i1_ingrid_data_quality_qualities_items_type')">type</a></div><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<div class="enum-value" id="allOf_i1_ingrid_data_quality_qualities_items_type_enum">
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_type">
+            <h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*</code></p>
+
+<h6>Mapping (lookup)</h6>
+
+<ul>
+<li><code>completenessComission</code> ↔ <code>gmd:DQ_CompletenessCommission</code></li>
+<li><code>conceptualConsistency</code> ↔ <code>gmd:DQ_ConceptualConsistency</code></li>
+<li><code>domainConsistency</code> ↔ <code>gmd:DQ_DomainConsistency</code></li>
+<li><code>formatConsistency</code> ↔ <code>gmd:DQ_FormatConsistency</code></li>
+<li><code>topologicalConsistency</code> ↔ <code>gmd:DQ_TopologicalConsistency</code></li>
+<li><code>temporalConsistency</code> ↔ <code>gmd:DQ_TemporalConsistency</code></li>
+<li><code>thematicClassificationCorrectness</code> ↔ <code>gmd:DQ_ThematicClassificationCorrectness</code></li>
+<li><code>nonQuantitativeAttributeAccuracy</code> ↔ <code>gmd:DQ_NonQuantitativeAttributeAccuracy</code></li>
+<li><code>quantitativeAttributeAccuracy</code> ↔ <code>gmd:DQ_QuantitativeAttributeAccuracy</code></li>
+<li><code>relativeInternalPositionalAccuracy</code> ↔ <code>gmd:DQ_RelativeInternalPositionalAccuracy</code></li>
+</ul>
+
+<blockquote>
+  <p>Der Wert bestimmt das Element unter <code>gmd:report</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_qualities_items_type"
+            ></a>
+        </div><div class="enum-value" id="allOf_i1_ingrid_data_quality_qualities_items_type_enum">
             <h4>Must be one of:</h4>
             <ul class="list-group"><li class="list-group-item enum-item">"completenessComission"</li><li class="list-group-item enum-item">"conceptualConsistency"</li><li class="list-group-item enum-item">"domainConsistency"</li><li class="list-group-item enum-item">"formatConsistency"</li><li class="list-group-item enum-item">"topologicalConsistency"</li><li class="list-group-item enum-item">"temporalConsistency"</li><li class="list-group-item enum-item">"thematicClassificationCorrectness"</li><li class="list-group-item enum-item">"nonQuantitativeAttributeAccuracy"</li><li class="list-group-item enum-item">"quantitativeAttributeAccuracy"</li><li class="list-group-item enum-item">"relativeInternalPositionalAccuracy"</li></ul>
             </div>
@@ -16466,7 +19191,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_qualities_items_measure_type" onclick="anchorLink('allOf_i1_ingrid_data_quality_qualities_items_measure_type')">measure_type</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_measure_type">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*/gmd:nameOfMeasure/gco:CharacterString</code></p>
+
+<blockquote>
+  <p><code>value</code> = Name des Maßes, <code>key</code> leer.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_measure_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_qualities_items_measure_type"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -16665,7 +19408,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_qualities_items_value" onclick="anchorLink('allOf_i1_ingrid_data_quality_qualities_items_value')">value</a></div><span class="badge badge-dark value-type">Type: number</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_value">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*/gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_value"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_qualities_items_value"
+            ></a>
+        </div>
         
 
         
@@ -16740,7 +19497,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_data_quality_qualities_items_parameter" onclick="anchorLink('allOf_i1_ingrid_data_quality_qualities_items_parameter')">parameter</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_parameter">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*/gmd:measureDescription/gco:CharacterString</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_data_quality_qualities_items_parameter"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_data_quality_qualities_items_parameter"
+            ></a>
+        </div>
         
 
         
@@ -16804,8 +19575,38 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_character_set" onclick="anchorLink('allOf_i1_ingrid_character_set')">character_set</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_character_set">
+            <p>Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:characterSet/gmd:MD_CharacterSetCode/@codeListValue</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>value</code> ↔ Code</li>
+<li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 510 zum Code</li>
+</ul>
+
+<blockquote>
+  <p>Nur Datensätze.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_character_set"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_character_set"
+            ></a>
+        </div>
 
      <span class="badge badge-info no-additional">No Additional Properties</span>
         
@@ -16983,8 +19784,37 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service" onclick="anchorLink('allOf_i1_ingrid_service')">service</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Angaben zu einem Geodaten-Dienst</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service">
+            <p>Angaben zu einem Geodaten-Dienst</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*</code></p>
+
+<blockquote>
+  <p>Nur bei Diensten (<code>srv:SV_ServiceIdentification</code>, <code>metadata.document_type</code> <code>InGridGeoService</code>).</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>.</code></p>
+
+<blockquote>
+  <p>Nur bei <code>dcat:DataService</code> (<code>metadata.document_type</code> <code>InGridGeoService</code>).</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service"
+            ></a>
+        </div>
         
 
         
@@ -17041,8 +19871,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_type" onclick="anchorLink('allOf_i1_ingrid_service_type')">type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Art des Dienstes</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_type">
+            <p>Art des Dienstes</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:serviceType/gco:LocalName</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:type</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>type</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/</code> (z. B. <code>view</code>, <code>download</code>)</li>
+</ul>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_type"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_type"
+            ></a>
+        </div>
         
 
         
@@ -17103,7 +19960,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_classifications" onclick="anchorLink('allOf_i1_ingrid_service_classifications')">classifications</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_classifications">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_classifications"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_classifications"
+            ></a>
+        </div>
         
 
         
@@ -17224,7 +20097,31 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_versions" onclick="anchorLink('allOf_i1_ingrid_service_versions')">versions</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_versions">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:serviceTypeVersion/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dct:conformsTo/dct:title</code></p>
+
+<blockquote>
+  <p>Je Wert ein <code>dct:Standard</code> mit <code>dct:title</code> (z. B. <code>OGC WMS 1.3.0</code>). Lesen: auch <code>rdfs:label</code>, sonst die IRI.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_versions"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_versions"
+            ></a>
+        </div>
         
 
         
@@ -17345,7 +20242,35 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_operations" onclick="anchorLink('allOf_i1_ingrid_service_operations')">operations</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_operations">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je <code>srv:SV_OperationMetadata</code>.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:endpointURL</code></p>
+
+<blockquote>
+  <p>Ein Eintrag je <code>dcat:endpointURL</code>.</p>
+</blockquote>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_operations"
+            ></a>
+        </div>
         
 
         
@@ -17470,8 +20395,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_operations_items_name" onclick="anchorLink('allOf_i1_ingrid_service_operations_items_name')">name</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Name der Operation</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_operations_items_name">
+            <p>Name der Operation</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationName/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations_items_name"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_operations_items_name"
+            ></a>
+        </div>
         
 
         
@@ -17546,8 +20490,27 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_operations_items_description" onclick="anchorLink('allOf_i1_ingrid_service_operations_items_description')">description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Beschreibung der Operation</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_operations_items_description">
+            <p>Beschreibung der Operation</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationDescription/gco:CharacterString</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations_items_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_operations_items_description"
+            ></a>
+        </div>
         
 
         
@@ -17622,8 +20585,29 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_operations_items_access_url" onclick="anchorLink('allOf_i1_ingrid_service_operations_items_access_url')">access_url</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>URL zur Operation</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_operations_items_access_url">
+            <p>URL zur Operation</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL</code></p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>dcat:endpointURL</code></p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations_items_access_url"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_operations_items_access_url"
+            ></a>
+        </div>
         
 
         
@@ -17690,8 +20674,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_environment_description" onclick="anchorLink('allOf_i1_ingrid_service_environment_description')">environment_description</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_environment_description">
+            <p>Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_environment_description"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_environment_description"
+            ></a>
+        </div>
         
 
         
@@ -17752,8 +20753,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_service_history" onclick="anchorLink('allOf_i1_ingrid_service_service_history')">service_history</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Angaben zur Implementierungsgeschichte des Dienstes.</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_service_history">
+            <p>Angaben zur Implementierungsgeschichte des Dienstes.</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_service_history"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_service_history"
+            ></a>
+        </div>
         
 
         
@@ -17814,8 +20832,25 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_additional_information" onclick="anchorLink('allOf_i1_ingrid_service_additional_information')">additional_information</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Zusätzliche Informationen zum Dienst</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_additional_information">
+            <p>Zusätzliche Informationen zum Dienst</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_additional_information"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_additional_information"
+            ></a>
+        </div>
         
 
         
@@ -17876,8 +20911,53 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_has_access_constraints" onclick="anchorLink('allOf_i1_ingrid_service_has_access_constraints')">has_access_constraints</a></div><span class="badge badge-dark value-type">Type: boolean</span><br/>
-<span class="description"><p>Ist der Zugriff auf den Dienst eingeschränkt?</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_has_access_constraints">
+            <p>Ist der Zugriff auf den Dienst eingeschränkt?</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen</h5>
+
+<p><code>gmd:identificationInfo/*/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>true</code>, wenn eine Zugriffsbeschränkung angegeben ist, sonst <code>false</code></li>
+</ul>
+
+<blockquote>
+  <p>UNKLAR: ob <code>otherRestrictions</code> mit dem Hinweis „keine Beschränkungen“ (INSPIRE <code>noLimitations</code>) als Beschränkung zählt.</p>
+</blockquote>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; ergibt sich aus <code>ingrid.licenses</code> (<code>accessConstraints</code>).</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<h5>Lesen</h5>
+
+<p><code>dct:accessRights</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>true</code>, wenn <code>dct:accessRights</code> angegeben und nicht <code>PUBLIC</code> (EU-Normdatei access-right) ist, sonst <code>false</code></li>
+</ul>
+
+<h5>Schreiben</h5>
+
+<p>Wird nicht geschrieben; ergibt sich aus <code>ingrid.licenses</code> (<code>accessConstraints</code>).</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_has_access_constraints"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_has_access_constraints"
+            ></a>
+        </div>
         
 
         
@@ -17938,7 +21018,23 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_doi" onclick="anchorLink('allOf_i1_ingrid_service_doi')">doi</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_doi">
+            <h3>Transformation</h3>
 
+<h4>ISO 19139:2007</h4>
+
+<p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_doi"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_doi"
+            ></a>
+        </div>
         
 
         
@@ -19216,6 +22312,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-05 at 12:59:29 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-10-08 at 12:39:39 +0000</p>
     </footer></body>
 </html>

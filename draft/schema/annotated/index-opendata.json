@@ -1,0 +1,1505 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schema.ingrid-oss.eu/index/draft/schema/annotated/index-opendata.json",
+  "title": "InGrid Index - OpenData",
+  "type": "object",
+  "allOf": [
+    {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "title": "Root fields",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Die ID des Datensatzes. Die ID **muss** eindeutig im Index sein.",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:fileIdentifier/gco:CharacterString`\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:identifier`\n\n> Lesen: ohne `dct:identifier` die IRI der Ressource.\n"
+          },
+          "examples": [
+            "Für UMWELTNAVI <oid>-<part> i.e. 'nlwkn-dsk-4922-21000-0'",
+            "For InGrid Editor i.e. 'd43dad1f-a19f-4043-bca4-447cf5e7cabb'"
+          ]
+        },
+        "$schema": {
+          "type": "string",
+          "description": "Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.",
+          "x-transform": {
+            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Enthält die `$id` des Index-Schemas, gegen das das Dokument\nvalidiert wird.\n",
+            "dcat-ap": "Kein Gegenstück in DCAT-AP. Enthält die `$id` des Index-Schemas, gegen das das Dokument validiert\nwird.\n"
+          },
+          "examples": [
+            "https://example.com/schemas/order/v2.1.0/schema.json"
+          ]
+        },
+        "metadata": {
+          "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
+          "type": "object",
+          "properties": {
+            "data_type": {
+              "type": "string",
+              "x-transform": {
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
+              },
+              "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
+              "examples": [
+                "UmweltNAVI Datensatz ['UMWELTNAVI']",
+                "InGrid Datensatz ['INGRID']",
+                "UVP Datensatz ['UVP']"
+              ]
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
+              },
+              "examples": [
+                "InGridGeoDataset",
+                "InGridGeoService"
+              ]
+            },
+            "created": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
+              },
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "modified": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
+              },
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "issued": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
+              }
+            },
+            "partner": {
+              "type": "string",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
+              },
+              "examples": [
+                "bb",
+                "st"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "description": "Der Anbieter der Datenquelle.",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
+              },
+              "examples": [
+                "ni_gll",
+                "bw_mj"
+              ]
+            },
+            "language": {
+              "title": "language",
+              "description": "Enthält die Sprache des Metadatensatzes.",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
+              },
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "datasource": {
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
+              },
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Die ID der Datenquelle."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Der Name der Datenquelle."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Der Typ der Datenquelle.",
+                  "$comment": "Anforderung kommt aus Harvester.",
+                  "examples": [
+                    "csw",
+                    "wfs",
+                    "ckan",
+                    "json",
+                    "dcat",
+                    "dcatapplu",
+                    "GENESIS",
+                    "sparql",
+                    "oai_iso19139"
+                  ]
+                }
+              }
+            }
+          },
+          "required": [
+            "data_type",
+            "created",
+            "modified"
+          ]
+        },
+        "sort_uuid": {
+          "description": "Sortier-UUID für die Sortierung von Datensätzen, die bei einer leeren Suche durchmischt angezeigt werden sollen. Außerdem wird hiermit gewährt, dass die Reihenfolge der Datensätze beim Paging erhalten bleibt. Hier wird eine UUID verwendet, die über alle Indizes einmalig sein sollte.",
+          "x-transform": {
+            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben\nwird.\n",
+            "dcat-ap": "Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.\n"
+          },
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "description": "Der Titel des Datensatzes.\n",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString`\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:title`\n"
+          }
+        },
+        "description": {
+          "description": "Die Beschreibung des Datensatzes.\n",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:abstract/gco:CharacterString`\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:description`\n"
+          },
+          "type": "string"
+        },
+        "language": {
+          "type": "string",
+          "description": "Welches Format hat die Sprache, wo wird es verwendet.",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `de` ↔ `ger` (lesen auch `deu`, `de`)\n- `en` ↔ `eng` (lesen auch `en`)\n\n> Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als `gco:CharacterString`; ohne\n> Angabe oder ohne Treffer `de`.\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:language`\n\n## Mapping (lookup)\n\n- `de` ↔ `http://publications.europa.eu/resource/authority/language/DEU`\n- `en` ↔ `http://publications.europa.eu/resource/authority/language/ENG`\n\n> Sprache der Ressource. Lesen: auch die Literale `de`, `deu`, `ger`, `en`, `eng`; ohne Angabe `de`.\n"
+          }
+        },
+        "contacts": {
+          "type": "array",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty`\n\n## Mapping (logic)\n\n- je Kontakt ein `gmd:CI_ResponsibleParty`; die Art des Kontakts ergibt sich nur aus `role`\n\n> Lesen: zusätzlich die Kontakte zum Metadatensatz (`gmd:contact/gmd:CI_ResponsibleParty`), nach\n> denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.\n>\n> Schreiben: `gmd:contact` (Pflicht) erhält die Kontakte mit `role` `pointOfContact`, sonst den\n> ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und\n> zum Metadatensatz.\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer`\n\n## Mapping (logic)\n\n- je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt `role` (siehe dort)\n- `dcat:contactPoint` als `vcard:Kind`, alle anderen als `foaf:Agent`\n\n> Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.\n"
+          },
+          "items": {
+            "properties": {
+              "role": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue`\n\n> Wert unverändert (`CI_RoleCode`, z. B. `pointOfContact`, `custodian`).\n",
+                  "dcat-ap": "# Lesen & schreiben\n\nDie Property, über die der Kontakt an der Ressource angegeben ist.\n\n## Mapping (lookup)\n\n- `pointOfContact` ↔ `dcat:contactPoint`\n- `publisher` ↔ `dct:publisher`\n- `author` ↔ `dct:creator`\n- `owner` ↔ `dct:rightsHolder`\n- `originator` ↔ `dcatde:originator`\n- `custodian` ↔ `dcatde:maintainer`\n\n> Andere Rollen über `prov:qualifiedAttribution` mit `dcat:hadRole` (IRI der INSPIRE-Codeliste\n> `ResponsiblePartyRole`, letzter Pfadabschnitt = Rolle).\n"
+                }
+              },
+              "name": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString`\n\n> Lesen: ohne Organisation der Personenname (`gmd:individualName`). Geschrieben wird immer\n> `gmd:organisationName`, da das Indexformat nicht zwischen Person und Organisation unterscheidet.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:fn`\n\n> Bei `foaf:Agent` `foaf:name`. Lesen: bei `dcat:contactPoint` zuerst `vcard:organization-name`.\n"
+                }
+              },
+              "communications": {
+                "type": "array",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact`\n\n## Mapping (logic)\n\n- `email` ↔ `gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString`\n- `phone` ↔ `gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString`\n- `fax` ↔ `gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString`\n- `website` ↔ `gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL`\n\n> `social` und `other` haben kein Gegenstück. Schreiben: nur die erste `website`.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint`\n\n## Mapping (logic)\n\n- `email` ↔ `vcard:hasEmail` (`foaf:mbox`)\n- `phone` ↔ `vcard:hasTelephone` (`foaf:phone`)\n- `website` ↔ `vcard:hasURL` (`foaf:homepage`)\n\n> In Klammern die Form bei `foaf:Agent`. E-Mail als `mailto:`-IRI, Telefon als `tel:`-IRI. Lesen:\n> Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein\n> Gegenstück.\n"
+                },
+                "items": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "email",
+                        "phone",
+                        "fax",
+                        "website",
+                        "social",
+                        "other"
+                      ]
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "street": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString`\n\n> Lesen: mehrere `gmd:deliveryPoint` mit Komma verbunden.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:street-address`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              },
+              "code": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString`\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:postal-code`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              },
+              "pocode": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für die Postleitzahl des\nPostfachs.\n",
+                  "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                }
+              },
+              "pobox": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 hat kein Element für das Postfach.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:post-office-box`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              },
+              "locality": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString`\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:locality`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              },
+              "country": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString`\n\n> Wert unverändert, ohne Normalisierung auf einen Ländercode.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:country-name`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              },
+              "administrative_area": {
+                "type": "string",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString`\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint/vcard:hasAddress/vcard:region`\n\n> Nur bei `dcat:contactPoint`. Lesen: auch direkt am Kontaktpunkt ohne `vcard:hasAddress`.\n"
+                }
+              }
+            }
+          }
+        },
+        "spatials": {
+          "type": "array",
+          "description": "Dieser Bereich enthält Informationen über den Raumbezug.",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement`\n\n## Mapping (logic)\n\n- je Eintrag ein `gmd:geographicElement`\n- `bbox` und `geometry` ↔ `gmd:EX_GeographicBoundingBox`\n- `geometry` ↔ `gmd:EX_BoundingPolygon`\n- `toponym` ↔ `gmd:EX_GeographicDescription`\n\n> Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd > Nord)\n> werden verworfen. Schreiben: alle in einem `gmd:EX_Extent`, je Wert in `toponym` ein eigenes\n> `gmd:geographicElement`.\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial | dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `geometry`, `bbox`, `toponym` ↔ je ein `dct:spatial` (`dct:Location` oder IRI eines Gazetteers)\n- `administrative` ↔ je ein `dcatde:politicalGeocodingURI`\n"
+          },
+          "items": {
+            "type": "object",
+            "title": "Spatial Core",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
+                  "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                },
+                "examples": [
+                  "<oid>-<geometrie-id> (für UMWELTNAVI)"
+                ]
+              },
+              "geometry": {
+                "type": "object",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon`\n\n## Mapping (logic)\n\n- GeoJSON ↔ GML-Geometrie\n\n> Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString).\n> Schreiben: nur, wenn `geometry` nicht das Rechteck aus `bbox` ist.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/locn:geometry`\n\n> Als GeoJSON-Literal (`gsp:geoJSONLiteral`). Lesen: auch WKT (`gsp:wktLiteral`); ohne\n> `locn:geometry` aus `dcat:bbox`, sonst aus `dcat:centroid`.\n"
+                },
+                "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
+                "oneOf": [
+                  {
+                    "title": "GeoJSON Point",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Point"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "number"
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "GeoJSON LineString",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "LineString"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "GeoJSON Polygon",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Polygon"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "GeoJSON MultiPoint",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "MultiPoint"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "GeoJSON MultiLineString",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "MultiLineString"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "title": "GeoJSON MultiPolygon",
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "coordinates"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "MultiPolygon"
+                        ]
+                      },
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "bbox": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "bbox": {
+                "type": "array",
+                "title": "Bounding Box",
+                "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox`\n\n## Mapping (logic)\n\n- `[west, south, east, north]` ↔ `gmd:westBoundLongitude`, `gmd:southBoundLatitude`,\n  `gmd:eastBoundLongitude`, `gmd:northBoundLatitude` (je `gco:Decimal`)\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/dcat:bbox`\n\n> Als WKT-Polygon (`gsp:wktLiteral`). Lesen: ohne `dcat:bbox` das umschließende Rechteck von\n> `locn:geometry`.\n"
+                },
+                "items": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180,
+                  "minItems": 4,
+                  "maxItems": 4
+                }
+              },
+              "wkt": {
+                "type": "string",
+                "title": "Well-known text",
+                "description": "Angabe eines Well-known text-Formats.",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in `geometry` bzw. `bbox`.\n",
+                  "dcat-ap": "# Lesen\n\n`dct:spatial/(locn:geometry | dcat:bbox)`\n\n> Nur ein WKT-Literal, unverändert.\n\n# Schreiben\n\nWird nicht geschrieben; die Geometrie steht in `geometry` bzw. `bbox`.\n"
+                }
+              },
+              "toponym": {
+                "type": "array",
+                "title": "Toponym",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/skos:prefLabel`\n\n> Lesen: auch `rdfs:label` und `locn:geographicName`; bei der IRI eines Gazetteers deren Label.\n"
+                },
+                "items": {
+                  "type": "string",
+                  "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
+                  "examples": [
+                    "Frankfurt am Main",
+                    "Hamburg"
+                  ]
+                },
+                "minItems": 0
+              },
+              "administrative": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "Land (z.B. ni, sh, rp)"
+                    },
+                    "minItems": 0
+                  },
+                  "regional_key": {
+                    "type": "string"
+                  }
+                },
+                "description": "Administrative Zuordnung",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `regional_key` ↔ `http://dcat-ap.de/def/politicalGeocoding/regionalKey/<schlüssel>`\n- `state` ↔ `http://dcat-ap.de/def/politicalGeocoding/stateKey/<schlüssel>`\n\n> DCAT-AP.de-Erweiterung.\n"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "bbox"
+                ]
+              },
+              {
+                "required": [
+                  "wkt"
+                ]
+              },
+              {
+                "required": [
+                  "toponym"
+                ]
+              },
+              {
+                "required": [
+                  "administrative"
+                ]
+              }
+            ]
+          },
+          "$comment": "Ehemaliges Indexfeld: layer"
+        },
+        "crs": {
+          "type": "array",
+          "title": "Referenzsystem",
+          "description": "Koordinatenreferenzsystem(e) des Datensatzes.",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier`\n\n## Mapping (logic)\n\n- je Wert ein `gmd:referenceSystemInfo`\n- `<codeSpace>:<code>` (z. B. `EPSG:25832`) ↔ `gmd:codeSpace/gco:CharacterString` und\n  `gmd:code/gco:CharacterString`\n- URI ↔ nur `gmd:code`\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo`\n\n## Mapping (logic)\n\n- `EPSG:<code>` ↔ `http://www.opengis.net/def/crs/EPSG/0/<code>`\n\n> Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.\n"
+          },
+          "items": {
+            "type": "string",
+            "examples": [
+              "EPSG:25832"
+            ]
+          }
+        },
+        "temporal": {
+          "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
+          "$comment": "Ehemaliges Indexfeld: object_date",
+          "type": "object",
+          "properties": {
+            "data_temporal": {
+              "type": "array",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date`\n\n## Mapping (logic)\n\n- `date_range` ↔ `gml:TimePeriod` (`gte` ↔ `gml:beginPosition`, `lte` ↔ `gml:endPosition`)\n- `date` ↔ `gml:TimeInstant/gml:timePosition`\n- `date` mit `date_type` ↔ `gmd:CI_Date`: `created` ↔ `creation`, `last_updated` ↔ `revision`,\n  `first_published` ↔ `publication`\n\n> Lesen: auch GML 3.2 (`gml32:`) und `gml:begin/gml:TimeInstant/gml:timePosition`;\n> `indeterminatePosition` (`now`, `unknown`) lässt die Grenze offen; ungültige Werte → `date_text`.\n>\n> Schreiben: offene Grenze als leeres Element mit `indeterminatePosition=\"unknown\"`;\n> `gml:TimePeriod` mit `gml:id`; `date_text` wird nicht geschrieben.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dct:temporal | dct:issued | dct:modified | dct:created`\n\n## Mapping (logic)\n\n- `date_range` ↔ `dct:temporal` (`dct:PeriodOfTime`; `gte` ↔ `dcat:startDate`, `lte` ↔\n  `dcat:endDate`)\n- `date` mit `date_type`: `first_published` ↔ `dct:issued`, `last_updated` ↔ `dct:modified`,\n  `created` ↔ `dct:created`\n\n> Schreiben: `date` ohne `date_type` als `dct:temporal` mit gleichem Start- und Enddatum;\n> `date_text` wird nicht geschrieben.\n>\n> DCAT-AP 1.x / DCAT-AP.de 1.x: `schema:startDate`/`schema:endDate` statt\n> `dcat:startDate`/`dcat:endDate` (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich\n> `time:hasBeginning`/`time:hasEnd` (nur lesen).\n"
+              },
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Datum des Ereignisses"
+                  },
+                  "date_range": {
+                    "type": "object",
+                    "title": "Zeitabschnitt",
+                    "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                    "properties": {
+                      "gte": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Startdatum der Zeitangabe"
+                      },
+                      "lte": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Enddatum der Zeitangabe"
+                      }
+                    }
+                  },
+                  "date_text": {
+                    "type": "string",
+                    "description": "Wird verwendet, wenn der Wert nicht in eine gültige DateRange Übertragbar ist",
+                    "examples": [
+                      "Sommer 2010"
+                    ]
+                  },
+                  "date_type": {
+                    "type": "string",
+                    "description": "Typ der Zeitangabe",
+                    "enum": [
+                      "created",
+                      "last_updated",
+                      "first_published"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "required": [
+                      "date"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "date_range"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "date_text"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "keywords": {
+          "type": "array",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords`\n\n## Mapping (logic)\n\n- `term` ↔ Text von `gmd:keyword`, `id` ↔ `gmx:Anchor/@xlink:href`\n- `source` ↔ Titel des Thesaurus (`gmd:thesaurusName/gmd:CI_Citation/gmd:title`):\n    - `inspire` ↔ `GEMET - INSPIRE themes, version 1.0`\n    - `gemet` ↔ `GEMET - Concepts, version 2.1`\n    - `umthes` ↔ `UMTHES Thesaurus`\n    - `frei` ↔ ohne Thesaurus\n- `term` mit `source` `iso_topic` ↔\n  `gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode` (nur\n  Datensätze)\n\n> Lesen: gleiche Einträge (`term`, `source`) nur einmal. Schreiben: ein `gmd:MD_Keywords` je\n> `source`; Keyword mit `id` als `gmx:Anchor`; Thesaurus `inspire` mit Datum 2008-06-01\n> (`publication`).\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory`\n\n## Mapping (logic)\n\n- `term` mit `source` `frei` ↔ `dcat:keyword`\n- `id` und `term` ↔ `dcat:theme` (IRI; `term` aus `skos:prefLabel`, sonst letzter Pfadabschnitt);\n  `source` nach dem Anfang der IRI:\n    - `inspire` ↔ `http://inspire.ec.europa.eu/theme/`\n    - `gemet` ↔ `http://www.eionet.europa.eu/gemet/concept/`\n    - `umthes` ↔ `https://sns.uba.de/umthes/`\n    - `data-theme` ↔ `http://publications.europa.eu/resource/authority/data-theme/`\n- `source` `iso_topic` ↔ `dct:subject` mit IRI aus\n  `http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/`\n- `source` `hvd` ↔ `dcatap:hvdCategory` mit IRI aus `http://data.europa.eu/bna/`\n\n> Lesen: gleiche Einträge (`term`, `source`) nur einmal; ein Literal statt einer IRI wird `term` mit\n> `source` `frei`. UNKLAR: Die Kennungen `data-theme` und `hvd` sind noch abzustimmen.\n"
+          },
+          "items": {
+            "type": "object",
+            "title": "item",
+            "properties": {
+              "term": {
+                "type": "string",
+                "description": "Name des Keywords"
+              },
+              "id": {
+                "type": "string",
+                "description": "Eindeutiger Identifier des Keywords bezüglich der Quelle oder auch  URL-freundliche Form des Keywords (Slug)",
+                "examples": [
+                  "wk000680"
+                ]
+              },
+              "source": {
+                "type": "string",
+                "description": "Quelle des Keywords",
+                "examples": [
+                  "gemet",
+                  "umthes",
+                  "iso_topic"
+                ]
+              }
+            },
+            "required": [
+              "term"
+            ]
+          }
+        },
+        "references": {
+          "type": "array",
+          "description": "Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource`\n\n## Mapping (logic)\n\n- `url` ↔ `gmd:linkage/gmd:URL`, `title` ↔ `gmd:name`, `explanation` ↔ `gmd:description`\n- `type.value` ↔ `gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue`; `type.key` ← ID des\n  Eintrags der InGrid-Codeliste 2000 zum Code\n- `type.value` `previewGraphic` ↔\n  `gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic` (`url` ↔ `gmd:fileName`,\n  `explanation` ↔ `gmd:fileDescription`)\n- `type.key` `3600` (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes\n  (`srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint`)\n\n> Lesen: jede URL nur einmal. Schreiben: `3600` wird nicht als `gmd:onLine` geschrieben, die URL\n> gehört zu `ingrid.service.operations`.\n",
+            "dcat-ap": "# Lesen & schreiben\n\n`dcat:landingPage | foaf:page | dcat:distribution`\n\n## Mapping (logic)\n\n- `url` ↔ `dcat:landingPage` bzw. `foaf:page`, `title` ↔ dessen `dct:title`; `type.value`\n  `information`\n- `url` ↔ `dcat:distribution/dcat:downloadURL` (`type.value` `download`), sonst `dcat:accessURL`\n  (`type.value` `information`); `title` ↔ `dct:title`, `explanation` ↔ `dct:description`\n- `type.value` `previewGraphic` → `foaf:depiction`\n- `type.key` ← ID des Eintrags der InGrid-Codeliste 2000 zu `type.value`\n\n> Lesen: jede URL nur einmal. Schreiben: `download` mit `dcat:downloadURL` und `dcat:accessURL`;\n> andere Typen außer `information` als `dcat:distribution` mit `dcat:accessURL`.\n"
+          },
+          "items": {
+            "type": "object",
+            "title": "item",
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "Die URL zur externen Ressource oder Download."
+              },
+              "type": {
+                "type": "object",
+                "title": "type",
+                "description": "Gibt den Typ der externen Ressource oder Download an.",
+                "examples": [
+                  "3600 - Gekoppelte Daten",
+                  "5304 - Bestellung",
+                  "3535 - Schlüsselkatalog"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "key": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "title": {
+                "type": "string",
+                "description": "Ein Titel der externen Ressource oder Download."
+              },
+              "explanation": {
+                "type": "string",
+                "description": "Eine Beschreibung der externen Ressource oder Download."
+              }
+            }
+          }
+        },
+        "fulltext": {
+          "type": "array",
+          "description": "Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.",
+          "$comment": "Früher content-Feld",
+          "x-transform": {
+            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.\n",
+            "dcat-ap": "Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.\n"
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "exports": {
+          "type": "object",
+          "description": "Hier werden die zusätzlichen Export-Formate gehalten, die mit dem Datensatz ausgeliefert werden. Die Export-Formate können z.B. CSV, JSON oder andere Formate sein."
+        }
+      },
+      "required": [
+        "id",
+        "$schema",
+        "metadata",
+        "title"
+      ],
+      "$defs": {
+        "SpatialItem": {
+          "title": "Spatial Core",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Kann einen Namen oder eine ID gür eine Geometrie enthalten.",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+              },
+              "examples": [
+                "<oid>-<geometrie-id> (für UMWELTNAVI)"
+              ]
+            },
+            "geometry": {
+              "type": "object",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon`\n\n## Mapping (logic)\n\n- GeoJSON ↔ GML-Geometrie\n\n> Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString).\n> Schreiben: nur, wenn `geometry` nicht das Rechteck aus `bbox` ist.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/locn:geometry`\n\n> Als GeoJSON-Literal (`gsp:geoJSONLiteral`). Lesen: auch WKT (`gsp:wktLiteral`); ohne\n> `locn:geometry` aus `dcat:bbox`, sonst aus `dcat:centroid`.\n"
+              },
+              "description": "Enthält die GeoJSON-Repräsentation, die für eine optimierte Suche benötigt wird. Siehe auch https://de.wikipedia.org/wiki/GeoJSON",
+              "oneOf": [
+                {
+                  "title": "GeoJSON Point",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Point"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                {
+                  "title": "GeoJSON LineString",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "LineString"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                {
+                  "title": "GeoJSON Polygon",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Polygon"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                {
+                  "title": "GeoJSON MultiPoint",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "MultiPoint"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                {
+                  "title": "GeoJSON MultiLineString",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "MultiLineString"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                {
+                  "title": "GeoJSON MultiPolygon",
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "MultiPolygon"
+                      ]
+                    },
+                    "coordinates": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "bbox": {
+              "type": "array",
+              "title": "Bounding Box",
+              "description": "Umschließende BBOX der Geometrie. Die Reihenfolge der Koordinaten ist `[min Longitude west, min Latitude south, max Longitude east, max Latitude north]`.",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox`\n\n## Mapping (logic)\n\n- `[west, south, east, north]` ↔ `gmd:westBoundLongitude`, `gmd:southBoundLatitude`,\n  `gmd:eastBoundLongitude`, `gmd:northBoundLatitude` (je `gco:Decimal`)\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/dcat:bbox`\n\n> Als WKT-Polygon (`gsp:wktLiteral`). Lesen: ohne `dcat:bbox` das umschließende Rechteck von\n> `locn:geometry`.\n"
+              },
+              "items": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "minItems": 4,
+                "maxItems": 4
+              }
+            },
+            "wkt": {
+              "type": "string",
+              "title": "Well-known text",
+              "description": "Angabe eines Well-known text-Formats.",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in `geometry` bzw. `bbox`.\n",
+                "dcat-ap": "# Lesen\n\n`dct:spatial/(locn:geometry | dcat:bbox)`\n\n> Nur ein WKT-Literal, unverändert.\n\n# Schreiben\n\nWird nicht geschrieben; die Geometrie steht in `geometry` bzw. `bbox`.\n"
+              }
+            },
+            "toponym": {
+              "type": "array",
+              "title": "Toponym",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dct:spatial/skos:prefLabel`\n\n> Lesen: auch `rdfs:label` und `locn:geographicName`; bei der IRI eines Gazetteers deren Label.\n"
+              },
+              "items": {
+                "type": "string",
+                "description": "Textueller Raumbezug (wie Stadtnamen oder Flussnamen)",
+                "examples": [
+                  "Frankfurt am Main",
+                  "Hamburg"
+                ]
+              },
+              "minItems": 0
+            },
+            "administrative": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "Land (z.B. ni, sh, rp)"
+                  },
+                  "minItems": 0
+                },
+                "regional_key": {
+                  "type": "string"
+                }
+              },
+              "description": "Administrative Zuordnung",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingURI`\n\n## Mapping (logic)\n\n- `regional_key` ↔ `http://dcat-ap.de/def/politicalGeocoding/regionalKey/<schlüssel>`\n- `state` ↔ `http://dcat-ap.de/def/politicalGeocoding/stateKey/<schlüssel>`\n\n> DCAT-AP.de-Erweiterung.\n"
+              }
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "bbox"
+              ]
+            },
+            {
+              "required": [
+                "wkt"
+              ]
+            },
+            {
+              "required": [
+                "toponym"
+              ]
+            },
+            {
+              "required": [
+                "administrative"
+              ]
+            }
+          ]
+        },
+        "Metadata": {
+          "type": "object",
+          "properties": {
+            "data_type": {
+              "type": "string",
+              "x-transform": {
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
+              },
+              "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
+              "examples": [
+                "UmweltNAVI Datensatz ['UMWELTNAVI']",
+                "InGrid Datensatz ['INGRID']",
+                "UVP Datensatz ['UVP']"
+              ]
+            },
+            "document_type": {
+              "type": "string",
+              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
+              },
+              "examples": [
+                "InGridGeoDataset",
+                "InGridGeoService"
+              ]
+            },
+            "created": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
+              },
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "modified": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
+              },
+              "examples": [
+                "2026-04-22T12:00:00Z",
+                "2026-04-22T12:00:00+01:00"
+              ]
+            },
+            "issued": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
+              }
+            },
+            "partner": {
+              "type": "string",
+              "description": "Der Partner der Datenquelle als Kürzel.\n",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
+              },
+              "examples": [
+                "bb",
+                "st"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "description": "Der Anbieter der Datenquelle.",
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
+              },
+              "examples": [
+                "ni_gll",
+                "bw_mj"
+              ]
+            },
+            "language": {
+              "title": "language",
+              "description": "Enthält die Sprache des Metadatensatzes.",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
+              },
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "datasource": {
+              "x-transform": {
+                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
+                "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
+              },
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Die ID der Datenquelle."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Der Name der Datenquelle."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Der Typ der Datenquelle.",
+                  "$comment": "Anforderung kommt aus Harvester.",
+                  "examples": [
+                    "csw",
+                    "wfs",
+                    "ckan",
+                    "json",
+                    "dcat",
+                    "dcatapplu",
+                    "GENESIS",
+                    "sparql",
+                    "oai_iso19139"
+                  ]
+                }
+              }
+            }
+          },
+          "required": [
+            "data_type",
+            "created",
+            "modified"
+          ]
+        },
+        "ReferenceItem": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Die URL zur externen Ressource oder Download."
+            },
+            "type": {
+              "type": "object",
+              "title": "type",
+              "description": "Gibt den Typ der externen Ressource oder Download an.",
+              "examples": [
+                "3600 - Gekoppelte Daten",
+                "5304 - Bestellung",
+                "3535 - Schlüsselkatalog"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "title": {
+              "type": "string",
+              "description": "Ein Titel der externen Ressource oder Download."
+            },
+            "explanation": {
+              "type": "string",
+              "description": "Eine Beschreibung der externen Ressource oder Download."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "title": "OpenData",
+      "properties": {
+        "exports": {
+          "unevaluatedProperties": false,
+          "properties": {
+            "rdf": {
+              "type": "string",
+              "description": "Enthält das vollständige RDF-Dokument im XML-Format.",
+              "x-transform": {
+                "dcat-ap": "# Lesen\n\n`.`\n\n> Der vollständige Quelldatensatz als RDF/XML.\n\n# Schreiben\n\nWird nicht geschrieben; der Datensatz entsteht aus den übrigen Feldern.\n"
+              }
+            }
+          }
+        },
+        "references": {
+          "x-transform": {
+            "dcat-ap": "# Lesen & schreiben\n\n`foaf:page`\n\n## Mapping (logic)\n\n- `url` ↔ `foaf:page`, `title` ↔ dessen `dct:title`; `type.value` `information`, `type.key` ← ID des\n  Eintrags der InGrid-Codeliste 2000 dazu\n- `type.value` `previewGraphic` → `foaf:depiction`\n\n> In `index-opendata` stehen Landingpage und Distributionen in `dcat.landing_page` bzw.\n> `distributions`.\n"
+          }
+        },
+        "dcat": {
+          "type": "object",
+          "properties": {
+            "landing_page": {
+              "type": "string",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`dcat:landingPage`\n"
+              }
+            }
+          }
+        },
+        "legal_basis": {
+          "type": "string",
+          "x-transform": {
+            "dcat-ap": "# Lesen & schreiben\n\n`dcatde:legalBasis`\n\n> DCAT-AP.de-Erweiterung.\n"
+          }
+        },
+        "distributions": {
+          "type": "array",
+          "x-transform": {
+            "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution`\n\n> Eine `dcat:Distribution` je Eintrag.\n"
+          },
+          "items": {
+            "type": "object",
+            "properties": {
+              "format": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:format`\n\n## Mapping (logic)\n\n- `format` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/file-type/` (z. B. `CSV`)\n\n> Lesen: auch `dcat:mediaType` (IANA-Medientyp, z. B. `text/csv`), ein Literal oder das Label eines\n> Knotens; `dct:format` vor `dcat:mediaType`.\n"
+                }
+              },
+              "access_url": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcat:accessURL`\n"
+                }
+              },
+              "modified": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:modified`\n"
+                }
+              },
+              "title": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:title`\n"
+                }
+              },
+              "description": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:description`\n"
+                }
+              },
+              "license": {
+                "type": "object",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> Eine Lizenz je Distribution.\n"
+                },
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> IRI der Lizenz (z. B. `http://dcat-ap.de/def/licenses/cc-by/4.0`).\n"
+                    }
+                  },
+                  "name": {
+                    "type": "string",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen\n\n`dcat:distribution/dct:license/dct:title`\n\n> Auch `rdfs:label` oder `skos:prefLabel`; ohne Angabe der Titel aus der Lizenzliste von DCAT-AP.de.\n\n# Schreiben\n\nWird nicht geschrieben; die Lizenz ist über `url` bestimmt.\n"
+                    }
+                  },
+                  "attribution_by_text": {
+                    "type": "string",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatde:licenseAttributionByText`\n\n> DCAT-AP.de-Erweiterung.\n"
+                    }
+                  },
+                  "languages": {
+                    "type": "array",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:language`\n\n## Mapping (logic)\n\n- je Wert ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)\n"
+                    },
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "availability": {
+                "type": "string",
+                "x-transform": {
+                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatap:availability`\n\n## Mapping (logic)\n\n- `availability` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/planned-availability/` (z. B. `STABLE`)\n"
+                }
+              }
+            }
+          }
+        },
+        "political_geocoding_level_uri": {
+          "type": "string",
+          "x-transform": {
+            "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingLevelURI`\n\n> DCAT-AP.de-Erweiterung.\n"
+          }
+        }
+      }
+    }
+  ]
+}
