@@ -1,0 +1,49 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: InGrid Index - Adresse
+description: |
+  Dies ist das JSON-Schema für Adressen im InGrid-Index.
+
+type: object
+unevaluatedProperties: false
+allOf:
+  - $ref: ./parts/core.yaml
+  - $ref: "#/$defs/Address"
+$defs:
+  Address:
+    type: object
+    title: Address
+    properties:
+      address:
+        type: object
+        properties:
+          position_name:
+            type: string
+            title: Aufgaben
+            description: |
+              Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form
+              sollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.
+            $comment: 'InGrid-Domain 377'
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`
+
+                > Position oder Funktion der zuständigen Person. Gilt ebenso für jedes andere
+                > `gmd:CI_ResponsibleParty` (z. B. `gmd:contact`), das die Adresse beschreibt.
+            examples:
+              - Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG
+          hours_of_service:
+            type: string
+            title: Servicezeiten
+            description: |
+              Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden
+              kann.
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`
+
+                > Gilt ebenso für jedes andere `gmd:CI_ResponsibleParty` (z. B. `gmd:contact`), das die Adresse
+                > beschreibt.

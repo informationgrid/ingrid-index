@@ -6,7 +6,7 @@
 iso19139-2007:
   title: ISO 19139:2007
   pathLanguage: XPath 2.0 (Pfadausdrücke), vollständig ab gmd:MD_Metadata bzw. gmi:MI_Metadata
-  schemas: [index-ingrid, index-opendata]
+  schemas: [index-ingrid, index-opendata, index-ingrid-address]
   description: |
     Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die
     allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen
