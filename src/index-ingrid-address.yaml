@@ -54,27 +54,12 @@ $defs:
             # Lesen & schreiben
 
             `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/@uuid`
-      title:
-        x-transform:
-          iso19139-2007: |
-            # Lesen & schreiben
-
-            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/(gmd:organisationName | gmd:individualName)/gco:CharacterString`
-
-            ## Mapping (logic)
-
-            - `metadata.document_type` `InGridOrganisationDoc` ↔ `gmd:organisationName`
-            - `metadata.document_type` `InGridPersonDoc` ↔ `gmd:individualName`
-
-            > Schreiben bei Personen: aus `address.last_name`, `address.first_name` und
-            > `address.academic_title` (siehe dort), nur ohne diese Angaben aus `title`.
       metadata:
         description: Angaben zur Adresse statt zum Metadatensatz.
+        required: [ document_type ]
         properties:
           data_type:
             description: "UNKLAR: Der Wert für Adressen ist noch festzulegen."
-          created:
-            description: Erstellungsdatum der Adresse. ISO 8601 Format.
           document_type:
             type: string
             description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
@@ -96,11 +81,27 @@ $defs:
 
                 Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
                 `gmd:organisationName` geschrieben wird.
+          created:
+            description: Erstellungsdatum der Adresse. ISO 8601 Format.
           modified:
             description: Änderungsdatum der Adresse. ISO 8601 Format.
             x-transform:
               iso19139-2007: |
                 Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.
+      title:
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
+
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/(gmd:organisationName | gmd:individualName)/gco:CharacterString`
+
+            ## Mapping (logic)
+
+            - `metadata.document_type` `InGridOrganisationDoc` ↔ `gmd:organisationName`
+            - `metadata.document_type` `InGridPersonDoc` ↔ `gmd:individualName`
+
+            > Schreiben bei Personen: aus `address.last_name`, `address.first_name` und
+            > `address.academic_title` (siehe dort), nur ohne diese Angaben aus `title`.
       contacts:
         description: |
           Anschrift und Kommunikation der Adresse selbst stehen in genau einem Eintrag mit `role` `self`
@@ -129,10 +130,15 @@ $defs:
                     minLength: 1
                 required: [ type, value ]
           required: [ role, administrative_area, communications ]
+          anyOf:
+            - required: [ street ]
+            - required: [ pobox ]
         items:
           properties:
             role:
               description: "`self` für den Eintrag der Adresse selbst."
+              examples:
+                - self
               x-transform:
                 iso19139-2007: |
                   Kein Gegenstück in ISO 19139:2007. Der Eintrag der Adresse hat immer `role` `self`;
@@ -140,6 +146,13 @@ $defs:
                   Adresse.
             name:
               description: Im Eintrag `self` wie `title`.
+            communications:
+              title: Kommunikation
+              description: |
+                Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,
+                `Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die
+                zugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag
+                `self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).
             street:
               title: Straße/Hausnummer
               description: |
@@ -153,18 +166,18 @@ $defs:
               $comment: 'InGrid-Domain 384'
               examples:
                 - '30169'
-            pobox:
-              title: Postfach
-              description: Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.
-              $comment: 'InGrid-Domain 381'
-              examples:
-                - '30151'
             pocode:
               title: PLZ (Postfach)
               description: Postleitzahl des Postfachs (`pobox`).
               $comment: 'InGrid-Domain 384'
               examples:
                 - '8977'
+            pobox:
+              title: Postfach
+              description: Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.
+              $comment: 'InGrid-Domain 381'
+              examples:
+                - '30151'
             locality:
               title: Ort
               description: |
@@ -173,6 +186,11 @@ $defs:
               $comment: 'InGrid-Domain 382'
               examples:
                 - Bruchsal
+            country:
+              title: Staat
+              description: Wert der InGrid-Codeliste 6200.
+              examples:
+                - Deutschland
             administrative_area:
               title: Verwaltungsgebiet
               description: |
@@ -180,18 +198,6 @@ $defs:
                 bestimmten Bundeslandes. Pflicht im Eintrag `self`.
               examples:
                 - Niedersachsen
-            country:
-              title: Staat
-              description: Wert der InGrid-Codeliste 6200.
-              examples:
-                - Deutschland
-            communications:
-              title: Kommunikation
-              description: |
-                Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,
-                `Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die
-                zugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag
-                `self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).
       address:
         type: object
         description: |
