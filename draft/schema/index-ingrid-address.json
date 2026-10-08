@@ -1218,12 +1218,12 @@
       "properties": {
         "metadata": {
           "description": "Angaben zur Adresse statt zum Metadatensatz.",
+          "required": [
+            "document_type"
+          ],
           "properties": {
             "data_type": {
               "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
-            },
-            "created": {
-              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
             },
             "document_type": {
               "type": "string",
@@ -1232,6 +1232,9 @@
                 "InGridPersonDoc",
                 "InGridOrganisationDoc"
               ]
+            },
+            "created": {
+              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
             },
             "modified": {
               "description": "Änderungsdatum der Adresse. ISO 8601 Format."
@@ -1266,15 +1269,34 @@
               "role",
               "administrative_area",
               "communications"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "street"
+                ]
+              },
+              {
+                "required": [
+                  "pobox"
+                ]
+              }
             ]
           },
           "items": {
             "properties": {
               "role": {
-                "description": "`self` für den Eintrag der Adresse selbst."
+                "description": "`self` für den Eintrag der Adresse selbst.",
+                "examples": [
+                  "self"
+                ]
               },
               "name": {
                 "description": "Im Eintrag `self` wie `title`."
+              },
+              "communications": {
+                "title": "Kommunikation",
+                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
               },
               "street": {
                 "title": "Straße/Hausnummer",
@@ -1292,20 +1314,20 @@
                   "30169"
                 ]
               },
-              "pobox": {
-                "title": "Postfach",
-                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
-                "$comment": "InGrid-Domain 381",
-                "examples": [
-                  "30151"
-                ]
-              },
               "pocode": {
                 "title": "PLZ (Postfach)",
                 "description": "Postleitzahl des Postfachs (`pobox`).",
                 "$comment": "InGrid-Domain 384",
                 "examples": [
                   "8977"
+                ]
+              },
+              "pobox": {
+                "title": "Postfach",
+                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "30151"
                 ]
               },
               "locality": {
@@ -1316,13 +1338,6 @@
                   "Bruchsal"
                 ]
               },
-              "administrative_area": {
-                "title": "Verwaltungsgebiet",
-                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
-                "examples": [
-                  "Niedersachsen"
-                ]
-              },
               "country": {
                 "title": "Staat",
                 "description": "Wert der InGrid-Codeliste 6200.",
@@ -1330,9 +1345,12 @@
                   "Deutschland"
                 ]
               },
-              "communications": {
-                "title": "Kommunikation",
-                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
+              "administrative_area": {
+                "title": "Verwaltungsgebiet",
+                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
+                "examples": [
+                  "Niedersachsen"
+                ]
               }
             }
           }
@@ -1519,12 +1537,12 @@
       "properties": {
         "metadata": {
           "description": "Angaben zur Adresse statt zum Metadatensatz.",
+          "required": [
+            "document_type"
+          ],
           "properties": {
             "data_type": {
               "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
-            },
-            "created": {
-              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
             },
             "document_type": {
               "type": "string",
@@ -1533,6 +1551,9 @@
                 "InGridPersonDoc",
                 "InGridOrganisationDoc"
               ]
+            },
+            "created": {
+              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
             },
             "modified": {
               "description": "Änderungsdatum der Adresse. ISO 8601 Format."
@@ -1567,15 +1588,34 @@
               "role",
               "administrative_area",
               "communications"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "street"
+                ]
+              },
+              {
+                "required": [
+                  "pobox"
+                ]
+              }
             ]
           },
           "items": {
             "properties": {
               "role": {
-                "description": "`self` für den Eintrag der Adresse selbst."
+                "description": "`self` für den Eintrag der Adresse selbst.",
+                "examples": [
+                  "self"
+                ]
               },
               "name": {
                 "description": "Im Eintrag `self` wie `title`."
+              },
+              "communications": {
+                "title": "Kommunikation",
+                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
               },
               "street": {
                 "title": "Straße/Hausnummer",
@@ -1593,20 +1633,20 @@
                   "30169"
                 ]
               },
-              "pobox": {
-                "title": "Postfach",
-                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
-                "$comment": "InGrid-Domain 381",
-                "examples": [
-                  "30151"
-                ]
-              },
               "pocode": {
                 "title": "PLZ (Postfach)",
                 "description": "Postleitzahl des Postfachs (`pobox`).",
                 "$comment": "InGrid-Domain 384",
                 "examples": [
                   "8977"
+                ]
+              },
+              "pobox": {
+                "title": "Postfach",
+                "description": "Nummer des Postfachs. Pflicht, sofern keine Hausadresse angegeben ist.",
+                "$comment": "InGrid-Domain 381",
+                "examples": [
+                  "30151"
                 ]
               },
               "locality": {
@@ -1617,13 +1657,6 @@
                   "Bruchsal"
                 ]
               },
-              "administrative_area": {
-                "title": "Verwaltungsgebiet",
-                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
-                "examples": [
-                  "Niedersachsen"
-                ]
-              },
               "country": {
                 "title": "Staat",
                 "description": "Wert der InGrid-Codeliste 6200.",
@@ -1631,9 +1664,12 @@
                   "Deutschland"
                 ]
               },
-              "communications": {
-                "title": "Kommunikation",
-                "description": "Alle Kommunikationsmittel außer der Post. `type` nach InGrid-Codeliste 4430: `E-Mail` → `email`,\n`Telefon` → `phone`, `Fax` → `fax`, `URL` → `website`, andere → `other`. `value` ist die\nzugehörige Verbindung (E-Mail-Adresse, Telefon- oder Faxnummer, URL). Pflicht ist im Eintrag\n`self` mindestens ein Eintrag mit `type` `email` und `value` (INSPIRE).\n"
+              "administrative_area": {
+                "title": "Verwaltungsgebiet",
+                "description": "Wert der InGrid-Codeliste 6250, z. B. ein Bundesland. Dient der Recherche nach Ressourcen eines\nbestimmten Bundeslandes. Pflicht im Eintrag `self`.\n",
+                "examples": [
+                  "Niedersachsen"
+                ]
               }
             }
           }
