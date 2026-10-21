@@ -1411,79 +1411,259 @@ $defs:
 
           publication:
             type: object
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `.`
+
+                > Nur bei `metadata.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
+                > `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource
+                > (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).
             properties:
               author:
                 type: string
                 description: Name des Autors
+                x-transform:
+                  iso19139-2007: |
+                    UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+
+                    > Der InGrid Editor schreibt den Autor als
+                    > `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName`
+                    > mit `gmd:role` `originator`; Adressen mit derselben Rolle stehen im selben Element.
               publisher:
                 type: string
                 description: Name des Verlage
+                x-transform:
+                  iso19139-2007: |
+                    UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+
+                    > Der InGrid Editor schreibt den Herausgeber als
+                    > `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName`
+                    > mit `gmd:role` `publisher` (ohne Herausgeber, aber mit `place_of_publication`: Platzhalter
+                    > `Location of the editor`); Adressen mit derselben Rolle stehen im selben Element.
               published_in:
                 type: string
                 description: Name des Verlags
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:name/gco:CharacterString`
               place_of_publication:
                 type: string
                 description: Ort des Verlags
+                x-transform:
+                  iso19139-2007: |
+                    UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+
+                    > Der InGrid Editor schreibt den Ort als `gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city`
+                    > des Herausgebers (siehe `publisher`).
               volume:
                 type: string
                 description: Name des Volumens
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:issueIdentification/gco:CharacterString`
               pages:
                 type: string
                 description: Seitennummern
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:page/gco:CharacterString`
               publication_date:
                 type: string
                 description: Datum der Veröffentlichung
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:editionDate/gco:Date`
               location:
                 type: string
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:contactInstructions/gco:CharacterString`
+
+                    > Nur `gmd:CI_ResponsibleParty` mit `gmd:role` `resourceProvider` und `gmd:organisationName` =
+                    > `Contact instructions for the location of resource`.
               isbn:
                 type: string
                 description: ISBN des Dokumentes
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:ISBN/gco:CharacterString`
               publishing_house:
                 type: string
                 description: Name des Verlagsgesellschaften
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString`
+
+                    > Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `distribute`
+                    > (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`).
               document_type:
                 type: object
                 $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                x-transform:
+                  iso19139-2007: |
+                    UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+
+                    > Der InGrid Editor schreibt den englischen Wert der InGrid-Codeliste 3385 als
+                    > `gmd:identificationInfo/*/gmd:resourceFormat/gmd:MD_Format/gmd:name/gco:CharacterString`, aber nicht
+                    > bei aktivem DOI.
               base_data_text:
                 type: string
                 description: Basisdaten des Dokumentes
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`
+
+                    > Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im
+                    > gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie
+                    > `ingrid.lineage.source`.
               bibliographic_data:
                 type: string
                 description: Bibliographische Daten des Dokumentes
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails/gco:CharacterString`
               explanation:
                 type: string
                 description: Erläuterungen
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`
           project:
             type: object
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `gmd:identificationInfo/*`
+
+                > Nur bei `metadata.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
+                > `gmd:hierarchyLevelName` `project`).
             properties:
               participants:
                 type: string
                 description: Namen der Beteiligten
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
+
+                    > Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `projectParticipant`
+                    > (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`). Lesen: alle Vorkommen, durch
+                    > Zeilenumbruch getrennt. Schreiben: als ein `gmd:citedResponsibleParty`.
               manager:
                 type: string
                 description: Name des Projektleiters
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
+
+                    > Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `projectManager`
+                    > (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`). Lesen: alle Vorkommen, durch
+                    > Zeilenumbruch getrennt. Schreiben: als ein `gmd:citedResponsibleParty`.
               explanation:
                 type: string
                 description: Erläuterungen
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`
           database_collection:
             type: object
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `.`
+
+                > Nur bei `metadata.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`
+                > mit `gmd:hierarchyLevelName` `database`).
             properties:
               catalog_categories:
                 type: array
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation`
+
+                    > Ein Eintrag je `gmd:CI_Citation`. Gleiche Quelle wie `ingrid.codelist_reference`. Lesen: der
+                    > Platzhalter mit Titel `unknown` wird übersprungen. Schreiben: alle in einem
+                    > `gmd:MD_FeatureCatalogueDescription`; ohne Eintrag ein Platzhalter (Titel `unknown`, Datum
+                    > `2006-05-01`, `gmd:dateType` `publication`), da `gmd:featureCatalogueCitation` Pflicht ist.
                 items:
                   type: object
                   properties:
                     title:
                       type: string
                       description: Titel der Kategorie
+                      x-transform:
+                        iso19139-2007: |
+                          # Lesen & schreiben
+
+                          `gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:title/gco:CharacterString`
+
+                          > Wert der InGrid-Codeliste 3535.
                     date:
                       type: string
                       description: Datum der Kategorie
+                      x-transform:
+                        iso19139-2007: |
+                          # Lesen & schreiben
+
+                          `gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:DateTime`
+
+                          > Lesen: erstes Datum, auch `gco:Date`. Schreiben: mit `gmd:dateType` `creation`; ohne Wert
+                          > `gmd:date` mit `gco:nilReason="missing"`.
                     edition:
                       type: string
                       description: Ausgabe der Kategorie
+                      x-transform:
+                        iso19139-2007: |
+                          # Lesen & schreiben
+
+                          `gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:edition/gco:CharacterString`
               database_content:
                 type: array
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureTypes/gco:LocalName`
+
+                    ## Mapping (logic)
+
+                    - je Eintrag ein `gmd:featureTypes` mit dem Text `<parameter> (<more_info>)`
+                    - `parameter` ↔ Text ohne die abschließende Klammer
+                    - `more_info` ↔ Inhalt der abschließenden Klammer
+
+                    > Lesen: ohne abschließende Klammer wird der ganze Text `parameter`. UNKLAR: ein `parameter`, der
+                    > selbst auf eine Klammer endet, ist ohne `more_info` nicht zu unterscheiden.
                 items:
                   type: object
                   properties:
@@ -1496,38 +1676,110 @@ $defs:
               method:
                 type: string
                 description: Beschreibung der Methode/Datengrundlage
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`
+
+                    > Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im
+                    > gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie
+                    > `ingrid.lineage.source`.
               explanation:
                 type: string
                 description: Erläuterungen
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`
           information_system:
             type: object
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `gmd:identificationInfo/*`
+
+                > Nur bei `metadata.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),
+                > als `gmd:MD_DataIdentification`.
             properties:
               service_type:
                 type: string
                 description: Typ des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    Kein Gegenstück in ISO 19139:2007.
+
+                    > `srv:serviceType` gibt es nur in `srv:SV_ServiceIdentification` (siehe `ingrid.service.type`).
               version:
                 type: array
                 description: Versionen des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    Kein Gegenstück in ISO 19139:2007.
+
+                    > `srv:serviceTypeVersion` gibt es nur in `srv:SV_ServiceIdentification` (siehe
+                    > `ingrid.service.versions`).
                 items:
                   type: string
               information_system:
                 type: string
                 description: Informations-System
+                x-transform:
+                  iso19139-2007: |
+                    Kein Gegenstück in ISO 19139:2007.
               system_environment:
                 type: string
                 description: Umgebung des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:environmentDescription/gco:CharacterString`
               history:
                 type: string
                 description: Historie des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`
+
+                    > Lesen: alle Bearbeitungsschritte, durch Zeilenumbruch getrennt. Schreiben: als ein
+                    > `gmd:LI_ProcessStep` im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche
+                    > Quelle wie `ingrid.lineage.process_step`.
               basis_data:
                 type: string
                 description: Basisdaten des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`
+
+                    > Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im
+                    > gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie
+                    > `ingrid.lineage.source`.
               explanation:
                 type: string
                 description: Erläuterungen
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`
               service_urls:
                 type: array
                 description: URLs des Informations-Systems
+                x-transform:
+                  iso19139-2007: |
+                    UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+
+                    > Der InGrid Editor schreibt die URLs als
+                    > `gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource`
+                    > mit `gmd:function` `information`; beim Lesen nicht von anderen Verweisen (siehe `references`)
+                    > zu unterscheiden.
                 items:
                   type: object
                   properties:
