@@ -2676,48 +2676,84 @@
             },
             "publication": {
               "type": "object",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
+              },
               "properties": {
                 "author": {
                   "type": "string",
-                  "description": "Name des Autors"
+                  "description": "Name des Autors",
+                  "x-transform": {
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n\n> Der InGrid Editor schreibt den Autor als\n> `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName`\n> mit `gmd:role` `originator`; Adressen mit derselben Rolle stehen im selben Element.\n"
+                  }
                 },
                 "publisher": {
                   "type": "string",
-                  "description": "Name des Verlage"
+                  "description": "Name des Verlage",
+                  "x-transform": {
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n\n> Der InGrid Editor schreibt den Herausgeber als\n> `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName`\n> mit `gmd:role` `publisher` (ohne Herausgeber, aber mit `place_of_publication`: Platzhalter\n> `Location of the editor`); Adressen mit derselben Rolle stehen im selben Element.\n"
+                  }
                 },
                 "published_in": {
                   "type": "string",
-                  "description": "Name des Verlags"
+                  "description": "Name des Verlags",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:name/gco:CharacterString`\n"
+                  }
                 },
                 "place_of_publication": {
                   "type": "string",
-                  "description": "Ort des Verlags"
+                  "description": "Ort des Verlags",
+                  "x-transform": {
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n\n> Der InGrid Editor schreibt den Ort als `gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city`\n> des Herausgebers (siehe `publisher`).\n"
+                  }
                 },
                 "volume": {
                   "type": "string",
-                  "description": "Name des Volumens"
+                  "description": "Name des Volumens",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:issueIdentification/gco:CharacterString`\n"
+                  }
                 },
                 "pages": {
                   "type": "string",
-                  "description": "Seitennummern"
+                  "description": "Seitennummern",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:series/gmd:CI_Series/gmd:page/gco:CharacterString`\n"
+                  }
                 },
                 "publication_date": {
                   "type": "string",
-                  "description": "Datum der Veröffentlichung"
+                  "description": "Datum der Veröffentlichung",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:editionDate/gco:Date`\n"
+                  }
                 },
                 "location": {
-                  "type": "string"
+                  "type": "string",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:contactInstructions/gco:CharacterString`\n\n> Nur `gmd:CI_ResponsibleParty` mit `gmd:role` `resourceProvider` und `gmd:organisationName` =\n> `Contact instructions for the location of resource`.\n"
+                  }
                 },
                 "isbn": {
                   "type": "string",
-                  "description": "ISBN des Dokumentes"
+                  "description": "ISBN des Dokumentes",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:ISBN/gco:CharacterString`\n"
+                  }
                 },
                 "publishing_house": {
                   "type": "string",
-                  "description": "Name des Verlagsgesellschaften"
+                  "description": "Name des Verlagsgesellschaften",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString`\n\n> Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `distribute`\n> (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`).\n"
+                  }
                 },
                 "document_type": {
                   "type": "object",
+                  "x-transform": {
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n\n> Der InGrid Editor schreibt den englischen Wert der InGrid-Codeliste 3385 als\n> `gmd:identificationInfo/*/gmd:resourceFormat/gmd:MD_Format/gmd:name/gco:CharacterString`, aber nicht\n> bei aktivem DOI.\n"
+                  },
                   "additionalProperties": false,
                   "properties": {
                     "key": {
@@ -2736,60 +2772,99 @@
                 },
                 "base_data_text": {
                   "type": "string",
-                  "description": "Basisdaten des Dokumentes"
+                  "description": "Basisdaten des Dokumentes",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`\n\n> Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im\n> gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie\n> `ingrid.lineage.source`.\n"
+                  }
                 },
                 "bibliographic_data": {
                   "type": "string",
-                  "description": "Bibliographische Daten des Dokumentes"
+                  "description": "Bibliographische Daten des Dokumentes",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails/gco:CharacterString`\n"
+                  }
                 },
                 "explanation": {
                   "type": "string",
-                  "description": "Erläuterungen"
+                  "description": "Erläuterungen",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`\n"
+                  }
                 }
               }
             },
             "project": {
               "type": "object",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
+              },
               "properties": {
                 "participants": {
                   "type": "string",
-                  "description": "Namen der Beteiligten"
+                  "description": "Namen der Beteiligten",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `projectParticipant`\n> (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`). Lesen: alle Vorkommen, durch\n> Zeilenumbruch getrennt. Schreiben: als ein `gmd:citedResponsibleParty`.\n"
+                  }
                 },
                 "manager": {
                   "type": "string",
-                  "description": "Name des Projektleiters"
+                  "description": "Name des Projektleiters",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `projectManager`\n> (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`). Lesen: alle Vorkommen, durch\n> Zeilenumbruch getrennt. Schreiben: als ein `gmd:citedResponsibleParty`.\n"
+                  }
                 },
                 "explanation": {
                   "type": "string",
-                  "description": "Erläuterungen"
+                  "description": "Erläuterungen",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`\n"
+                  }
                 }
               }
             },
             "database_collection": {
               "type": "object",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
+              },
               "properties": {
                 "catalog_categories": {
                   "type": "array",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation`\n\n> Ein Eintrag je `gmd:CI_Citation`. Gleiche Quelle wie `ingrid.codelist_reference`. Lesen: der\n> Platzhalter mit Titel `unknown` wird übersprungen. Schreiben: alle in einem\n> `gmd:MD_FeatureCatalogueDescription`; ohne Eintrag ein Platzhalter (Titel `unknown`, Datum\n> `2006-05-01`, `gmd:dateType` `publication`), da `gmd:featureCatalogueCitation` Pflicht ist.\n"
+                  },
                   "items": {
                     "type": "object",
                     "properties": {
                       "title": {
                         "type": "string",
-                        "description": "Titel der Kategorie"
+                        "description": "Titel der Kategorie",
+                        "x-transform": {
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:title/gco:CharacterString`\n\n> Wert der InGrid-Codeliste 3535.\n"
+                        }
                       },
                       "date": {
                         "type": "string",
-                        "description": "Datum der Kategorie"
+                        "description": "Datum der Kategorie",
+                        "x-transform": {
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:DateTime`\n\n> Lesen: erstes Datum, auch `gco:Date`. Schreiben: mit `gmd:dateType` `creation`; ohne Wert\n> `gmd:date` mit `gco:nilReason=\"missing\"`.\n"
+                        }
                       },
                       "edition": {
                         "type": "string",
-                        "description": "Ausgabe der Kategorie"
+                        "description": "Ausgabe der Kategorie",
+                        "x-transform": {
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation/gmd:edition/gco:CharacterString`\n"
+                        }
                       }
                     }
                   }
                 },
                 "database_content": {
                   "type": "array",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureTypes/gco:LocalName`\n\n## Mapping (logic)\n\n- je Eintrag ein `gmd:featureTypes` mit dem Text `<parameter> (<more_info>)`\n- `parameter` ↔ Text ohne die abschließende Klammer\n- `more_info` ↔ Inhalt der abschließenden Klammer\n\n> Lesen: ohne abschließende Klammer wird der ganze Text `parameter`. UNKLAR: ein `parameter`, der\n> selbst auf eine Klammer endet, ist ohne `more_info` nicht zu unterscheiden.\n"
+                  },
                   "items": {
                     "type": "object",
                     "properties": {
@@ -2806,51 +2881,84 @@
                 },
                 "method": {
                   "type": "string",
-                  "description": "Beschreibung der Methode/Datengrundlage"
+                  "description": "Beschreibung der Methode/Datengrundlage",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`\n\n> Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im\n> gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie\n> `ingrid.lineage.source`.\n"
+                  }
                 },
                 "explanation": {
                   "type": "string",
-                  "description": "Erläuterungen"
+                  "description": "Erläuterungen",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`\n"
+                  }
                 }
               }
             },
             "information_system": {
               "type": "object",
+              "x-transform": {
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
+              },
               "properties": {
                 "service_type": {
                   "type": "string",
-                  "description": "Typ des Informations-Systems"
+                  "description": "Typ des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n\n> `srv:serviceType` gibt es nur in `srv:SV_ServiceIdentification` (siehe `ingrid.service.type`).\n"
+                  }
                 },
                 "version": {
                   "type": "array",
                   "description": "Versionen des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n\n> `srv:serviceTypeVersion` gibt es nur in `srv:SV_ServiceIdentification` (siehe\n> `ingrid.service.versions`).\n"
+                  },
                   "items": {
                     "type": "string"
                   }
                 },
                 "information_system": {
                   "type": "string",
-                  "description": "Informations-System"
+                  "description": "Informations-System",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
+                  }
                 },
                 "system_environment": {
                   "type": "string",
-                  "description": "Umgebung des Informations-Systems"
+                  "description": "Umgebung des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:environmentDescription/gco:CharacterString`\n"
+                  }
                 },
                 "history": {
                   "type": "string",
-                  "description": "Historie des Informations-Systems"
+                  "description": "Historie des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`\n\n> Lesen: alle Bearbeitungsschritte, durch Zeilenumbruch getrennt. Schreiben: als ein\n> `gmd:LI_ProcessStep` im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche\n> Quelle wie `ingrid.lineage.process_step`.\n"
+                  }
                 },
                 "basis_data": {
                   "type": "string",
-                  "description": "Basisdaten des Informations-Systems"
+                  "description": "Basisdaten des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`\n\n> Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source` im\n> gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`). Gleiche Quelle wie\n> `ingrid.lineage.source`.\n"
+                  }
                 },
                 "explanation": {
                   "type": "string",
-                  "description": "Erläuterungen"
+                  "description": "Erläuterungen",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:supplementalInformation/gco:CharacterString`\n"
+                  }
                 },
                 "service_urls": {
                   "type": "array",
                   "description": "URLs des Informations-Systems",
+                  "x-transform": {
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n\n> Der InGrid Editor schreibt die URLs als\n> `gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource`\n> mit `gmd:function` `information`; beim Lesen nicht von anderen Verweisen (siehe `references`)\n> zu unterscheiden.\n"
+                  },
                   "items": {
                     "type": "object",
                     "properties": {
