@@ -1394,7 +1394,7 @@
             "dcat-ap": "# Lesen & schreiben\n\n`foaf:page`\n\n## Mapping (logic)\n\n- `url` ↔ `foaf:page`, `title` ↔ dessen `dct:title`; `type.value` `information`, `type.key` ← ID des\n  Eintrags der InGrid-Codeliste 2000 dazu\n- `type.value` `previewGraphic` → `foaf:depiction`\n\n> In `index-opendata` stehen Landingpage und Distributionen in `dcat.landing_page` bzw.\n> `distributions`.\n"
           }
         },
-        "dcat": {
+        "opendata": {
           "type": "object",
           "properties": {
             "landing_page": {
@@ -1402,101 +1402,101 @@
               "x-transform": {
                 "dcat-ap": "# Lesen & schreiben\n\n`dcat:landingPage`\n"
               }
-            }
-          }
-        },
-        "legal_basis": {
-          "type": "string",
-          "x-transform": {
-            "dcat-ap": "# Lesen & schreiben\n\n`dcatde:legalBasis`\n\n> DCAT-AP.de-Erweiterung.\n"
-          }
-        },
-        "distributions": {
-          "type": "array",
-          "x-transform": {
-            "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution`\n\n> Eine `dcat:Distribution` je Eintrag.\n"
-          },
-          "items": {
-            "type": "object",
-            "properties": {
-              "format": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:format`\n\n## Mapping (logic)\n\n- `format` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/file-type/` (z. B. `CSV`)\n\n> Lesen: auch `dcat:mediaType` (IANA-Medientyp, z. B. `text/csv`), ein Literal oder das Label eines\n> Knotens; `dct:format` vor `dcat:mediaType`.\n"
-                }
+            },
+            "legal_basis": {
+              "type": "string",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`dcatde:legalBasis`\n\n> DCAT-AP.de-Erweiterung.\n"
+              }
+            },
+            "distributions": {
+              "type": "array",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution`\n\n> Eine `dcat:Distribution` je Eintrag.\n"
               },
-              "access_url": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcat:accessURL`\n"
-                }
-              },
-              "modified": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:modified`\n"
-                }
-              },
-              "title": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:title`\n"
-                }
-              },
-              "description": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:description`\n"
-                }
-              },
-              "license": {
+              "items": {
                 "type": "object",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> Eine Lizenz je Distribution.\n"
-                },
                 "properties": {
-                  "url": {
+                  "format": {
                     "type": "string",
                     "x-transform": {
-                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> IRI der Lizenz (z. B. `http://dcat-ap.de/def/licenses/cc-by/4.0`).\n"
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:format`\n\n## Mapping (logic)\n\n- `format` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/file-type/` (z. B. `CSV`)\n\n> Lesen: auch `dcat:mediaType` (IANA-Medientyp, z. B. `text/csv`), ein Literal oder das Label eines\n> Knotens; `dct:format` vor `dcat:mediaType`.\n"
                     }
                   },
-                  "name": {
+                  "access_url": {
                     "type": "string",
                     "x-transform": {
-                      "dcat-ap": "# Lesen\n\n`dcat:distribution/dct:license/dct:title`\n\n> Auch `rdfs:label` oder `skos:prefLabel`; ohne Angabe der Titel aus der Lizenzliste von DCAT-AP.de.\n\n# Schreiben\n\nWird nicht geschrieben; die Lizenz ist über `url` bestimmt.\n"
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcat:accessURL`\n"
                     }
                   },
-                  "attribution_by_text": {
+                  "modified": {
                     "type": "string",
                     "x-transform": {
-                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatde:licenseAttributionByText`\n\n> DCAT-AP.de-Erweiterung.\n"
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:modified`\n"
                     }
                   },
-                  "languages": {
-                    "type": "array",
+                  "title": {
+                    "type": "string",
                     "x-transform": {
-                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:language`\n\n## Mapping (logic)\n\n- je Wert ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)\n"
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:title`\n"
+                    }
+                  },
+                  "description": {
+                    "type": "string",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:description`\n"
+                    }
+                  },
+                  "license": {
+                    "type": "object",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> Eine Lizenz je Distribution.\n"
                     },
-                    "items": {
-                      "type": "string"
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "x-transform": {
+                          "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> IRI der Lizenz (z. B. `http://dcat-ap.de/def/licenses/cc-by/4.0`).\n"
+                        }
+                      },
+                      "name": {
+                        "type": "string",
+                        "x-transform": {
+                          "dcat-ap": "# Lesen\n\n`dcat:distribution/dct:license/dct:title`\n\n> Auch `rdfs:label` oder `skos:prefLabel`; ohne Angabe der Titel aus der Lizenzliste von DCAT-AP.de.\n\n# Schreiben\n\nWird nicht geschrieben; die Lizenz ist über `url` bestimmt.\n"
+                        }
+                      },
+                      "attribution_by_text": {
+                        "type": "string",
+                        "x-transform": {
+                          "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatde:licenseAttributionByText`\n\n> DCAT-AP.de-Erweiterung.\n"
+                        }
+                      },
+                      "languages": {
+                        "type": "array",
+                        "x-transform": {
+                          "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:language`\n\n## Mapping (logic)\n\n- je Wert ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)\n"
+                        },
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "availability": {
+                    "type": "string",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatap:availability`\n\n## Mapping (logic)\n\n- `availability` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/planned-availability/` (z. B. `STABLE`)\n"
                     }
                   }
                 }
-              },
-              "availability": {
-                "type": "string",
-                "x-transform": {
-                  "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatap:availability`\n\n## Mapping (logic)\n\n- `availability` ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/planned-availability/` (z. B. `STABLE`)\n"
-                }
+              }
+            },
+            "political_geocoding_level_uri": {
+              "type": "string",
+              "x-transform": {
+                "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingLevelURI`\n\n> DCAT-AP.de-Erweiterung.\n"
               }
             }
-          }
-        },
-        "political_geocoding_level_uri": {
-          "type": "string",
-          "x-transform": {
-            "dcat-ap": "# Lesen & schreiben\n\n`dcatde:politicalGeocodingLevelURI`\n\n> DCAT-AP.de-Erweiterung.\n"
           }
         }
       }
