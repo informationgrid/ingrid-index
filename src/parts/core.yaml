@@ -71,7 +71,10 @@ properties:
     type: string
   language:
     type: string
-    description: Welches Format hat die Sprache, wo wird es verwendet.
+    description: Angabe der Sprache des Datensatzes im ISO 639-1 Format
+    examples:
+      - de
+      - en
     x-transform:
       iso19139-2007: |
         # Lesen & schreiben
@@ -745,7 +748,11 @@ $defs:
           - bw_mj
       language:
         title: language
-        description: Enthält die Sprache des Metadatensatzes.
+        type: string
+        description: Angabe der Sprache des Metadatensatzes im ISO 639-1 Format
+        examples:
+          - de
+          - en
         x-transform:
           iso19139-2007: |
             # Lesen & schreiben
@@ -769,7 +776,6 @@ $defs:
               639-2)
 
             > Sprache des Metadatensatzes.
-        $ref: ./shared-types.yaml#/$defs/KeyValue
       datasource:
         x-transform:
           iso19139-2007: |

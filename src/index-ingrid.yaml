@@ -57,9 +57,6 @@ $defs:
 
                     > Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.
                     > Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.
-              language:
-                type: string
-                description: Enthält die Sprache des Metadatensatzes. Hier wird die Codeliste 99999999 verwendet.
               partner:
                 type: string
                 description: Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.

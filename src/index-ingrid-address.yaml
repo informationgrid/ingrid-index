@@ -25,28 +25,6 @@ $defs:
     type: object
     title: Address
     required: [ contacts ]
-    if:
-      properties:
-        metadata:
-          properties:
-            document_type:
-              const: InGridPersonDoc
-          required: [ document_type ]
-      required: [ metadata ]
-    then:
-      required: [ address ]
-      properties:
-        address:
-          required: [ last_name ]
-    else:
-      properties:
-        address:
-          properties:
-            salutation: false
-            academic_title: false
-            first_name: false
-            last_name: false
-            hide_address: false
     properties:
       id:
         x-transform:
@@ -57,37 +35,37 @@ $defs:
       metadata:
         description: Angaben zur Adresse statt zum Metadatensatz.
         required: [ document_type ]
-        properties:
-          data_type:
-            description: "UNKLAR: Der Wert für Adressen ist noch festzulegen."
-          document_type:
-            type: string
-            description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
-            enum:
-              - InGridPersonDoc
-              - InGridOrganisationDoc
-            x-transform:
-              iso19139-2007: |
-                # Lesen
-
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`
-
-                ## Mapping (logic)
-
-                - `InGridPersonDoc` ← mit `gmd:individualName`
-                - `InGridOrganisationDoc` ← ohne `gmd:individualName`
-
-                # Schreiben
-
-                Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
-                `gmd:organisationName` geschrieben wird.
-          created:
-            description: Erstellungsdatum der Adresse. ISO 8601 Format.
-          modified:
-            description: Änderungsdatum der Adresse. ISO 8601 Format.
-            x-transform:
-              iso19139-2007: |
-                Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.
+        unevaluatedProperties: false
+        allOf:
+          - $ref: ./parts/core.yaml#/$defs/Metadata
+          - type: object
+            title: Address Metadata
+            properties:
+              data_type:
+                type: string
+                const: ADDRESS
+                description: "Definiert das Index-Dokument als Adresse."
+              document_type:
+                type: string
+                description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
+                enum:
+                  - InGridPersonDoc
+                  - InGridOrganisationDoc
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen
+    
+                    `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`
+    
+                    ## Mapping (logic)
+    
+                    - `InGridPersonDoc` ← mit `gmd:individualName`
+                    - `InGridOrganisationDoc` ← ohne `gmd:individualName`
+    
+                    # Schreiben
+    
+                    Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
+                    `gmd:organisationName` geschrieben wird.
       title:
         x-transform:
           iso19139-2007: |
@@ -200,128 +178,144 @@ $defs:
                 - Niedersachsen
       address:
         type: object
+        description: Der Inhalt hängt von dem verwendeten `document_type` ab.
+    if:
+      properties:
+        metadata:
+          properties:
+            document_type:
+              const: InGridPersonDoc
+          required: [ document_type ]
+      required: [ metadata ]
+    then:
+      properties:
+        address:
+          unevaluatedProperties: false
+          allOf:
+            - $ref: "#/$defs/GeneralAddress"
+            - $ref: "#/$defs/Person"
+    else:
+      properties:
+        address:
+          unevaluatedProperties: false
+          $ref: "#/$defs/GeneralAddress"
+  GeneralAddress:
+    type: object
+    description: |
+      Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`, `academic_title`,
+      `first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
+    properties:
+      position_name:
+        type: string
+        title: Aufgaben
         description: |
-          Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`, `academic_title`,
-          `first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
-        properties:
-          position_name:
-            type: string
-            title: Aufgaben
-            description: |
-              Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form
-              sollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.
-            $comment: 'InGrid-Domain 377'
-            x-transform:
-              iso19139-2007: |
-                # Lesen & schreiben
+          Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form
+          sollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.
+        $comment: 'InGrid-Domain 377'
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
 
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`
 
-                > Position oder Funktion der zuständigen Person.
-            examples:
-              - Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG
-          hours_of_service:
-            type: string
-            title: Servicezeiten
-            description: |
-              Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden
-              kann.
-            x-transform:
-              iso19139-2007: |
-                # Lesen & schreiben
+            > Position oder Funktion der zuständigen Person.
+        examples:
+          - Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG
+      hours_of_service:
+        type: string
+        title: Servicezeiten
+        description: |
+          Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden
+          kann.
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
 
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`
-          salutation:
-            title: Anrede
-            description: |
-              Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300
-              verwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.
-            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-            x-transform:
-              iso19139-2007: |
-                Kein Gegenstück in ISO 19139:2007.
-            examples:
-              - 1 - Frau
-          academic_title:
-            title: Titel
-            description: |
-              Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet
-              (`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen
-              nicht angegeben.
-            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
-            x-transform:
-              iso19139-2007: |
-                # Lesen & schreiben
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`
+      cross_references:
+        type: array
+        title: Verknüpfungen
+        description: |
+          Interne InGrid-Verknüpfungen der Adresse:
 
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
+          * Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.
+          * Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit
+            `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet
+            (z. B. `pointOfContact`).
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.
+        items:
+          $ref: ./parts/shared-types.yaml#/$defs/CrossReference
+  Person:
+    type: object
+    properties:
+      salutation:
+        title: Anrede
+        description: |
+          Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300
+          verwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.
+        $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+        x-transform:
+          iso19139-2007: |
+            Kein Gegenstück in ISO 19139:2007.
+        examples:
+          - 1 - Frau
+      academic_title:
+        title: Titel
+        description: |
+          Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet
+          (`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen
+          nicht angegeben.
+        $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
 
-                ## Mapping (logic)
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
 
-                - `value` ↔ dritter Teil des Namens (siehe `address.last_name`)
-                - `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`
-            examples:
-              - 3 - Prof. Dr.
-          first_name:
-            type: string
-            title: Vorname
-            description: |
-              Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf
-              Vollständigkeit der Vornamen wird kein Wert gelegt.
-            $comment: 'InGrid-Domain 374'
-            x-transform:
-              iso19139-2007: |
-                # Lesen & schreiben
+            ## Mapping (logic)
 
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
+            - `value` ↔ dritter Teil des Namens (siehe `address.last_name`)
+            - `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`
+        examples:
+          - 3 - Prof. Dr.
+      first_name:
+        type: string
+        title: Vorname
+        description: |
+          Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf
+          Vollständigkeit der Vornamen wird kein Wert gelegt.
+        $comment: 'InGrid-Domain 374'
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
 
-                > Zweiter Teil des Namens (siehe `address.last_name`).
-            examples:
-              - Rosemarie
-          last_name:
-            type: string
-            title: Name
-            description: |
-              Vollständiger Nachname der Person.
-            $comment: 'InGrid-Domain 374'
-            x-transform:
-              iso19139-2007: |
-                # Lesen & schreiben
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
 
-                `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
+            > Zweiter Teil des Namens (siehe `address.last_name`).
+        examples:
+          - Rosemarie
+      last_name:
+        type: string
+        title: Name
+        description: |
+          Vollständiger Nachname der Person.
+        $comment: 'InGrid-Domain 374'
+        x-transform:
+          iso19139-2007: |
+            # Lesen & schreiben
 
-                ## Mapping (logic)
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`
 
-                - `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`
+            ## Mapping (logic)
 
-                > Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma
-                > gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein
-                > mittlerer Teil, ist die Aufteilung nicht eindeutig.
-            examples:
-              - vom Busche
-          hide_address:
-            type: boolean
-            title: Adresse verbergen
-            description: |
-              Bei `true` werden für die Anzeige die Daten der übergeordneten Organisation verwendet statt die der
-              Person.
-            x-transform:
-              iso19139-2007: |
-                Kein Gegenstück in ISO 19139:2007. 
+            - `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`
 
-                > Wenn `true` dann werden die Daten der übergeordneten Organisation verwendet; das Indexformat
-                > enthält nur den Verweis darauf (`address.cross_references`), nicht ihre Daten.
-          cross_references:
-            type: array
-            title: Verknüpfungen
-            description: |
-              Interne InGrid-Verknüpfungen der Adresse:
-
-              * Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.
-              * Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit
-                `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet
-                (z. B. `pointOfContact`).
-            x-transform:
-              iso19139-2007: |
-                Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.
-            items:
-              $ref: ./parts/shared-types.yaml#/$defs/CrossReference
+            > Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma
+            > gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein
+            > mittlerer Teil, ist die Aufteilung nicht eindeutig.
+        examples:
+          - vom Busche
+    required:
+      - last_name
