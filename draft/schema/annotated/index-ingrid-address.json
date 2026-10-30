@@ -131,25 +131,15 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes.",
+              "type": "string",
+              "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+              "examples": [
+                "de",
+                "en"
+              ],
               "x-transform": {
                 "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
                 "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
               }
             },
             "datasource": {
@@ -217,7 +207,11 @@
         },
         "language": {
           "type": "string",
-          "description": "Welches Format hat die Sprache, wo wird es verwendet.",
+          "description": "Angabe der Sprache des Datensatzes im ISO 639-1 Format",
+          "examples": [
+            "de",
+            "en"
+          ],
           "x-transform": {
             "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `de` ↔ `ger` (lesen auch `deu`, `de`)\n- `en` ↔ `eng` (lesen auch `en`)\n\n> Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als `gco:CharacterString`; ohne\n> Angabe oder ohne Treffer `de`.\n",
             "dcat-ap": "# Lesen & schreiben\n\n`dct:language`\n\n## Mapping (lookup)\n\n- `de` ↔ `http://publications.europa.eu/resource/authority/language/DEU`\n- `en` ↔ `http://publications.europa.eu/resource/authority/language/ENG`\n\n> Sprache der Ressource. Lesen: auch die Literale `de`, `deu`, `ger`, `en`, `eng`; ohne Angabe `de`.\n"
@@ -1271,25 +1265,15 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes.",
+              "type": "string",
+              "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+              "examples": [
+                "de",
+                "en"
+              ],
               "x-transform": {
                 "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
                 "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
               }
             },
             "datasource": {
@@ -1381,48 +1365,6 @@
       "required": [
         "contacts"
       ],
-      "if": {
-        "properties": {
-          "metadata": {
-            "properties": {
-              "document_type": {
-                "const": "InGridPersonDoc"
-              }
-            },
-            "required": [
-              "document_type"
-            ]
-          }
-        },
-        "required": [
-          "metadata"
-        ]
-      },
-      "then": {
-        "required": [
-          "address"
-        ],
-        "properties": {
-          "address": {
-            "required": [
-              "last_name"
-            ]
-          }
-        }
-      },
-      "else": {
-        "properties": {
-          "address": {
-            "properties": {
-              "salutation": false,
-              "academic_title": false,
-              "first_name": false,
-              "last_name": false,
-              "hide_address": false
-            }
-          }
-        }
-      },
       "properties": {
         "id": {
           "x-transform": {
@@ -1434,31 +1376,177 @@
           "required": [
             "document_type"
           ],
-          "properties": {
-            "data_type": {
-              "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
+          "unevaluatedProperties": false,
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "data_type": {
+                  "type": "string",
+                  "x-transform": {
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
+                  },
+                  "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
+                  "examples": [
+                    "UmweltNAVI Datensatz ['UMWELTNAVI']",
+                    "InGrid Datensatz ['INGRID']",
+                    "UVP Datensatz ['UVP']"
+                  ]
+                },
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
+                  "x-transform": {
+                    "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
+                  },
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
+                "created": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
+                  },
+                  "examples": [
+                    "2026-04-22T12:00:00Z",
+                    "2026-04-22T12:00:00+01:00"
+                  ]
+                },
+                "modified": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
+                  },
+                  "examples": [
+                    "2026-04-22T12:00:00Z",
+                    "2026-04-22T12:00:00+01:00"
+                  ]
+                },
+                "issued": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
+                  }
+                },
+                "partner": {
+                  "type": "string",
+                  "description": "Der Partner der Datenquelle als Kürzel.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
+                  },
+                  "examples": [
+                    "bb",
+                    "st"
+                  ]
+                },
+                "provider": {
+                  "type": "string",
+                  "description": "Der Anbieter der Datenquelle.",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
+                  },
+                  "examples": [
+                    "ni_gll",
+                    "bw_mj"
+                  ]
+                },
+                "language": {
+                  "title": "language",
+                  "type": "string",
+                  "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+                  "examples": [
+                    "de",
+                    "en"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
+                  }
+                },
+                "datasource": {
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Die ID der Datenquelle."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Der Name der Datenquelle."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Der Typ der Datenquelle.",
+                      "$comment": "Anforderung kommt aus Harvester.",
+                      "examples": [
+                        "csw",
+                        "wfs",
+                        "ckan",
+                        "json",
+                        "dcat",
+                        "dcatapplu",
+                        "GENESIS",
+                        "sparql",
+                        "oai_iso19139"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "data_type",
+                "created",
+                "modified"
+              ]
             },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
-              "enum": [
-                "InGridPersonDoc",
-                "InGridOrganisationDoc"
-              ],
-              "x-transform": {
-                "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`\n\n## Mapping (logic)\n\n- `InGridPersonDoc` ← mit `gmd:individualName`\n- `InGridOrganisationDoc` ← ohne `gmd:individualName`\n\n# Schreiben\n\nWird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder\n`gmd:organisationName` geschrieben wird.\n"
-              }
-            },
-            "created": {
-              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
-            },
-            "modified": {
-              "description": "Änderungsdatum der Adresse. ISO 8601 Format.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.\n"
+            {
+              "type": "object",
+              "title": "Address Metadata",
+              "properties": {
+                "data_type": {
+                  "type": "string",
+                  "const": "ADDRESS",
+                  "description": "Definiert das Index-Dokument als Adresse."
+                },
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+                  "enum": [
+                    "InGridPersonDoc",
+                    "InGridOrganisationDoc"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`\n\n## Mapping (logic)\n\n- `InGridPersonDoc` ← mit `gmd:individualName`\n- `InGridOrganisationDoc` ← ohne `gmd:individualName`\n\n# Schreiben\n\nWird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder\n`gmd:organisationName` geschrieben wird.\n"
+                  }
+                }
               }
             }
-          }
+          ]
         },
         "title": {
           "x-transform": {
@@ -1587,153 +1675,257 @@
         },
         "address": {
           "type": "object",
-          "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
-          "properties": {
-            "position_name": {
-              "type": "string",
-              "title": "Aufgaben",
-              "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
-              "$comment": "InGrid-Domain 377",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
-              },
-              "examples": [
-                "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
-              ]
-            },
-            "hours_of_service": {
-              "type": "string",
-              "title": "Servicezeiten",
-              "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+          "description": "Der Inhalt hängt von dem verwendeten `document_type` ab."
+        }
+      },
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "document_type": {
+                "const": "InGridPersonDoc"
               }
             },
-            "salutation": {
-              "title": "Anrede",
-              "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
-              },
-              "examples": [
-                "1 - Frau"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            },
-            "academic_title": {
-              "title": "Titel",
-              "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `value` ↔ dritter Teil des Namens (siehe `address.last_name`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`\n"
-              },
-              "examples": [
-                "3 - Prof. Dr."
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            },
-            "first_name": {
-              "type": "string",
-              "title": "Vorname",
-              "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
-              "$comment": "InGrid-Domain 374",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Zweiter Teil des Namens (siehe `address.last_name`).\n"
-              },
-              "examples": [
-                "Rosemarie"
-              ]
-            },
-            "last_name": {
-              "type": "string",
-              "title": "Name",
-              "description": "Vollständiger Nachname der Person.\n",
-              "$comment": "InGrid-Domain 374",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`\n\n> Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma\n> gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein\n> mittlerer Teil, ist die Aufteilung nicht eindeutig.\n"
-              },
-              "examples": [
-                "vom Busche"
-              ]
-            },
-            "hide_address": {
-              "type": "boolean",
-              "title": "Adresse verbergen",
-              "description": "Bei `true` werden für die Anzeige die Daten der übergeordneten Organisation verwendet statt die der\nPerson.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. \n\n> Wenn `true` dann werden die Daten der übergeordneten Organisation verwendet; das Indexformat\n> enthält nur den Verweis darauf (`address.cross_references`), nicht ihre Daten.\n"
-              }
-            },
-            "cross_references": {
-              "type": "array",
-              "title": "Verknüpfungen",
-              "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
-              },
-              "items": {
+            "required": [
+              "document_type"
+            ]
+          }
+        },
+        "required": [
+          "metadata"
+        ]
+      },
+      "then": {
+        "properties": {
+          "address": {
+            "unevaluatedProperties": false,
+            "allOf": [
+              {
                 "type": "object",
-                "title": "Verknüpfung",
-                "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
                 "properties": {
-                  "uuid": {
+                  "position_name": {
                     "type": "string",
-                    "description": "UUID des verknüpften Dokuments."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Titel des verknüpften Dokuments."
-                  },
-                  "document_type": {
-                    "type": "string",
-                    "description": "`metadata.document_type` des verknüpften Dokuments."
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Beschreibung des verknüpften Dokuments."
-                  },
-                  "reference_type": {
-                    "type": "string",
-                    "description": "Art der Verknüpfung."
-                  },
-                  "direction": {
-                    "type": "string",
-                    "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
-                    "enum": [
-                      "IN",
-                      "OUT"
+                    "title": "Aufgaben",
+                    "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                    "$comment": "InGrid-Domain 377",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
+                    },
+                    "examples": [
+                      "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
                     ]
+                  },
+                  "hours_of_service": {
+                    "type": "string",
+                    "title": "Servicezeiten",
+                    "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+                    }
+                  },
+                  "cross_references": {
+                    "type": "array",
+                    "title": "Verknüpfungen",
+                    "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                    "x-transform": {
+                      "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "Verknüpfung",
+                      "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                      "properties": {
+                        "uuid": {
+                          "type": "string",
+                          "description": "UUID des verknüpften Dokuments."
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Titel des verknüpften Dokuments."
+                        },
+                        "document_type": {
+                          "type": "string",
+                          "description": "`metadata.document_type` des verknüpften Dokuments."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Beschreibung des verknüpften Dokuments."
+                        },
+                        "reference_type": {
+                          "type": "string",
+                          "description": "Art der Verknüpfung."
+                        },
+                        "direction": {
+                          "type": "string",
+                          "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                          "enum": [
+                            "IN",
+                            "OUT"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "salutation": {
+                    "title": "Anrede",
+                    "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+                    "x-transform": {
+                      "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
+                    },
+                    "examples": [
+                      "1 - Frau"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "academic_title": {
+                    "title": "Titel",
+                    "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `value` ↔ dritter Teil des Namens (siehe `address.last_name`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`\n"
+                    },
+                    "examples": [
+                      "3 - Prof. Dr."
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "title": "Vorname",
+                    "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Zweiter Teil des Namens (siehe `address.last_name`).\n"
+                    },
+                    "examples": [
+                      "Rosemarie"
+                    ]
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "Vollständiger Nachname der Person.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`\n\n> Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma\n> gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein\n> mittlerer Teil, ist die Aufteilung nicht eindeutig.\n"
+                    },
+                    "examples": [
+                      "vom Busche"
+                    ]
+                  }
+                },
+                "required": [
+                  "last_name"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "address": {
+            "type": "object",
+            "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+            "properties": {
+              "position_name": {
+                "type": "string",
+                "title": "Aufgaben",
+                "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                "$comment": "InGrid-Domain 377",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
+                },
+                "examples": [
+                  "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+                ]
+              },
+              "hours_of_service": {
+                "type": "string",
+                "title": "Servicezeiten",
+                "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+                }
+              },
+              "cross_references": {
+                "type": "array",
+                "title": "Verknüpfungen",
+                "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
+                },
+                "items": {
+                  "type": "object",
+                  "title": "Verknüpfung",
+                  "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "description": "UUID des verknüpften Dokuments."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Titel des verknüpften Dokuments."
+                    },
+                    "document_type": {
+                      "type": "string",
+                      "description": "`metadata.document_type` des verknüpften Dokuments."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Beschreibung des verknüpften Dokuments."
+                    },
+                    "reference_type": {
+                      "type": "string",
+                      "description": "Art der Verknüpfung."
+                    },
+                    "direction": {
+                      "type": "string",
+                      "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                      "enum": [
+                        "IN",
+                        "OUT"
+                      ]
+                    }
                   }
                 }
               }
-            }
+            },
+            "unevaluatedProperties": false
           }
         }
       }
@@ -1746,48 +1938,6 @@
       "required": [
         "contacts"
       ],
-      "if": {
-        "properties": {
-          "metadata": {
-            "properties": {
-              "document_type": {
-                "const": "InGridPersonDoc"
-              }
-            },
-            "required": [
-              "document_type"
-            ]
-          }
-        },
-        "required": [
-          "metadata"
-        ]
-      },
-      "then": {
-        "required": [
-          "address"
-        ],
-        "properties": {
-          "address": {
-            "required": [
-              "last_name"
-            ]
-          }
-        }
-      },
-      "else": {
-        "properties": {
-          "address": {
-            "properties": {
-              "salutation": false,
-              "academic_title": false,
-              "first_name": false,
-              "last_name": false,
-              "hide_address": false
-            }
-          }
-        }
-      },
       "properties": {
         "id": {
           "x-transform": {
@@ -1799,31 +1949,177 @@
           "required": [
             "document_type"
           ],
-          "properties": {
-            "data_type": {
-              "description": "UNKLAR: Der Wert für Adressen ist noch festzulegen."
+          "unevaluatedProperties": false,
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "data_type": {
+                  "type": "string",
+                  "x-transform": {
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (`index-ingrid`: `INGRID`).\n"
+                  },
+                  "description": "Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.\n",
+                  "examples": [
+                    "UmweltNAVI Datensatz ['UMWELTNAVI']",
+                    "InGrid Datensatz ['INGRID']",
+                    "UVP Datensatz ['UVP']"
+                  ]
+                },
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
+                  "x-transform": {
+                    "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
+                  },
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
+                "created": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der Erstellung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes;\nWert `null`.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert `null`.\n"
+                  },
+                  "examples": [
+                    "2026-04-22T12:00:00Z",
+                    "2026-04-22T12:00:00+01:00"
+                  ]
+                },
+                "modified": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dateStamp/gco:DateTime`\n\n> Lesen: auch `gco:Date`; ein reines Datum gilt als 00:00 UTC.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:modified`\n\n> Lesen: ohne `dcat:CatalogRecord` das `dct:modified` der Ressource.\n"
+                  },
+                  "examples": [
+                    "2026-04-22T12:00:00Z",
+                    "2026-04-22T12:00:00+01:00"
+                  ]
+                },
+                "issued": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "Das Datum der ersten Veröffentlichung des Metadatensatzes. ISO 8601 Format.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des\nMetadatensatzes; das der Ressource steht in `temporal.data_temporal` (`first_published`).\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:issued`\n\n> Aufnahme in den Katalog laut `dcat:CatalogRecord`.\n"
+                  }
+                },
+                "partner": {
+                  "type": "string",
+                  "description": "Der Partner der Datenquelle als Kürzel.\n",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.\n"
+                  },
+                  "examples": [
+                    "bb",
+                    "st"
+                  ]
+                },
+                "provider": {
+                  "type": "string",
+                  "description": "Der Anbieter der Datenquelle.",
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.\n"
+                  },
+                  "examples": [
+                    "ni_gll",
+                    "bw_mj"
+                  ]
+                },
+                "language": {
+                  "title": "language",
+                  "type": "string",
+                  "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+                  "examples": [
+                    "de",
+                    "en"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
+                  }
+                },
+                "datasource": {
+                  "x-transform": {
+                    "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
+                  },
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Die ID der Datenquelle."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Der Name der Datenquelle."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Der Typ der Datenquelle.",
+                      "$comment": "Anforderung kommt aus Harvester.",
+                      "examples": [
+                        "csw",
+                        "wfs",
+                        "ckan",
+                        "json",
+                        "dcat",
+                        "dcatapplu",
+                        "GENESIS",
+                        "sparql",
+                        "oai_iso19139"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "data_type",
+                "created",
+                "modified"
+              ]
             },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
-              "enum": [
-                "InGridPersonDoc",
-                "InGridOrganisationDoc"
-              ],
-              "x-transform": {
-                "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`\n\n## Mapping (logic)\n\n- `InGridPersonDoc` ← mit `gmd:individualName`\n- `InGridOrganisationDoc` ← ohne `gmd:individualName`\n\n# Schreiben\n\nWird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder\n`gmd:organisationName` geschrieben wird.\n"
-              }
-            },
-            "created": {
-              "description": "Erstellungsdatum der Adresse. ISO 8601 Format."
-            },
-            "modified": {
-              "description": "Änderungsdatum der Adresse. ISO 8601 Format.",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. `gmd:CI_ResponsibleParty` enthält kein Änderungsdatum.\n"
+            {
+              "type": "object",
+              "title": "Address Metadata",
+              "properties": {
+                "data_type": {
+                  "type": "string",
+                  "const": "ADDRESS",
+                  "description": "Definiert das Index-Dokument als Adresse."
+                },
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+                  "enum": [
+                    "InGridPersonDoc",
+                    "InGridOrganisationDoc"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`\n\n## Mapping (logic)\n\n- `InGridPersonDoc` ← mit `gmd:individualName`\n- `InGridOrganisationDoc` ← ohne `gmd:individualName`\n\n# Schreiben\n\nWird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder\n`gmd:organisationName` geschrieben wird.\n"
+                  }
+                }
               }
             }
-          }
+          ]
         },
         "title": {
           "x-transform": {
@@ -1952,156 +2248,411 @@
         },
         "address": {
           "type": "object",
-          "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
-          "properties": {
-            "position_name": {
-              "type": "string",
-              "title": "Aufgaben",
-              "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
-              "$comment": "InGrid-Domain 377",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
-              },
-              "examples": [
-                "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
-              ]
-            },
-            "hours_of_service": {
-              "type": "string",
-              "title": "Servicezeiten",
-              "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+          "description": "Der Inhalt hängt von dem verwendeten `document_type` ab."
+        }
+      },
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "document_type": {
+                "const": "InGridPersonDoc"
               }
             },
-            "salutation": {
-              "title": "Anrede",
-              "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
-              },
-              "examples": [
-                "1 - Frau"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            },
-            "academic_title": {
-              "title": "Titel",
-              "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `value` ↔ dritter Teil des Namens (siehe `address.last_name`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`\n"
-              },
-              "examples": [
-                "3 - Prof. Dr."
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            },
-            "first_name": {
-              "type": "string",
-              "title": "Vorname",
-              "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
-              "$comment": "InGrid-Domain 374",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Zweiter Teil des Namens (siehe `address.last_name`).\n"
-              },
-              "examples": [
-                "Rosemarie"
-              ]
-            },
-            "last_name": {
-              "type": "string",
-              "title": "Name",
-              "description": "Vollständiger Nachname der Person.\n",
-              "$comment": "InGrid-Domain 374",
-              "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`\n\n> Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma\n> gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein\n> mittlerer Teil, ist die Aufteilung nicht eindeutig.\n"
-              },
-              "examples": [
-                "vom Busche"
-              ]
-            },
-            "hide_address": {
-              "type": "boolean",
-              "title": "Adresse verbergen",
-              "description": "Bei `true` werden für die Anzeige die Daten der übergeordneten Organisation verwendet statt die der\nPerson.\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. \n\n> Wenn `true` dann werden die Daten der übergeordneten Organisation verwendet; das Indexformat\n> enthält nur den Verweis darauf (`address.cross_references`), nicht ihre Daten.\n"
-              }
-            },
-            "cross_references": {
-              "type": "array",
-              "title": "Verknüpfungen",
-              "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
-              "x-transform": {
-                "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
-              },
-              "items": {
+            "required": [
+              "document_type"
+            ]
+          }
+        },
+        "required": [
+          "metadata"
+        ]
+      },
+      "then": {
+        "properties": {
+          "address": {
+            "unevaluatedProperties": false,
+            "allOf": [
+              {
                 "type": "object",
-                "title": "Verknüpfung",
-                "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
                 "properties": {
-                  "uuid": {
+                  "position_name": {
                     "type": "string",
-                    "description": "UUID des verknüpften Dokuments."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Titel des verknüpften Dokuments."
-                  },
-                  "document_type": {
-                    "type": "string",
-                    "description": "`metadata.document_type` des verknüpften Dokuments."
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Beschreibung des verknüpften Dokuments."
-                  },
-                  "reference_type": {
-                    "type": "string",
-                    "description": "Art der Verknüpfung."
-                  },
-                  "direction": {
-                    "type": "string",
-                    "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
-                    "enum": [
-                      "IN",
-                      "OUT"
+                    "title": "Aufgaben",
+                    "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                    "$comment": "InGrid-Domain 377",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
+                    },
+                    "examples": [
+                      "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
                     ]
+                  },
+                  "hours_of_service": {
+                    "type": "string",
+                    "title": "Servicezeiten",
+                    "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+                    }
+                  },
+                  "cross_references": {
+                    "type": "array",
+                    "title": "Verknüpfungen",
+                    "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                    "x-transform": {
+                      "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
+                    },
+                    "items": {
+                      "type": "object",
+                      "title": "Verknüpfung",
+                      "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                      "properties": {
+                        "uuid": {
+                          "type": "string",
+                          "description": "UUID des verknüpften Dokuments."
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Titel des verknüpften Dokuments."
+                        },
+                        "document_type": {
+                          "type": "string",
+                          "description": "`metadata.document_type` des verknüpften Dokuments."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Beschreibung des verknüpften Dokuments."
+                        },
+                        "reference_type": {
+                          "type": "string",
+                          "description": "Art der Verknüpfung."
+                        },
+                        "direction": {
+                          "type": "string",
+                          "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                          "enum": [
+                            "IN",
+                            "OUT"
+                          ]
+                        }
+                      }
+                    }
                   }
                 }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "salutation": {
+                    "title": "Anrede",
+                    "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+                    "x-transform": {
+                      "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
+                    },
+                    "examples": [
+                      "1 - Frau"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "academic_title": {
+                    "title": "Titel",
+                    "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `value` ↔ dritter Teil des Namens (siehe `address.last_name`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`\n"
+                    },
+                    "examples": [
+                      "3 - Prof. Dr."
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "title": "Vorname",
+                    "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Zweiter Teil des Namens (siehe `address.last_name`).\n"
+                    },
+                    "examples": [
+                      "Rosemarie"
+                    ]
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "Vollständiger Nachname der Person.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "x-transform": {
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`\n\n> Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma\n> gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein\n> mittlerer Teil, ist die Aufteilung nicht eindeutig.\n"
+                    },
+                    "examples": [
+                      "vom Busche"
+                    ]
+                  }
+                },
+                "required": [
+                  "last_name"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "address": {
+            "type": "object",
+            "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+            "properties": {
+              "position_name": {
+                "type": "string",
+                "title": "Aufgaben",
+                "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                "$comment": "InGrid-Domain 377",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
+                },
+                "examples": [
+                  "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+                ]
+              },
+              "hours_of_service": {
+                "type": "string",
+                "title": "Servicezeiten",
+                "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
+                "x-transform": {
+                  "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+                }
+              },
+              "cross_references": {
+                "type": "array",
+                "title": "Verknüpfungen",
+                "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                "x-transform": {
+                  "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
+                },
+                "items": {
+                  "type": "object",
+                  "title": "Verknüpfung",
+                  "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "description": "UUID des verknüpften Dokuments."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Titel des verknüpften Dokuments."
+                    },
+                    "document_type": {
+                      "type": "string",
+                      "description": "`metadata.document_type` des verknüpften Dokuments."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Beschreibung des verknüpften Dokuments."
+                    },
+                    "reference_type": {
+                      "type": "string",
+                      "description": "Art der Verknüpfung."
+                    },
+                    "direction": {
+                      "type": "string",
+                      "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                      "enum": [
+                        "IN",
+                        "OUT"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "unevaluatedProperties": false
+          }
+        }
+      }
+    },
+    "GeneralAddress": {
+      "type": "object",
+      "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+      "properties": {
+        "position_name": {
+          "type": "string",
+          "title": "Aufgaben",
+          "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+          "$comment": "InGrid-Domain 377",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:positionName/gco:CharacterString`\n\n> Position oder Funktion der zuständigen Person.\n"
+          },
+          "examples": [
+            "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+          ]
+        },
+        "hours_of_service": {
+          "type": "string",
+          "title": "Servicezeiten",
+          "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:hoursOfService/gco:CharacterString`\n"
+          }
+        },
+        "cross_references": {
+          "type": "array",
+          "title": "Verknüpfungen",
+          "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+          "x-transform": {
+            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.\n"
+          },
+          "items": {
+            "type": "object",
+            "title": "Verknüpfung",
+            "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+            "properties": {
+              "uuid": {
+                "type": "string",
+                "description": "UUID des verknüpften Dokuments."
+              },
+              "name": {
+                "type": "string",
+                "description": "Titel des verknüpften Dokuments."
+              },
+              "document_type": {
+                "type": "string",
+                "description": "`metadata.document_type` des verknüpften Dokuments."
+              },
+              "description": {
+                "type": "string",
+                "description": "Beschreibung des verknüpften Dokuments."
+              },
+              "reference_type": {
+                "type": "string",
+                "description": "Art der Verknüpfung."
+              },
+              "direction": {
+                "type": "string",
+                "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                "enum": [
+                  "IN",
+                  "OUT"
+                ]
               }
             }
           }
         }
       }
+    },
+    "Person": {
+      "type": "object",
+      "properties": {
+        "salutation": {
+          "title": "Anrede",
+          "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+          "x-transform": {
+            "iso19139-2007": "Kein Gegenstück in ISO 19139:2007.\n"
+          },
+          "examples": [
+            "1 - Frau"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "academic_title": {
+          "title": "Titel",
+          "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `value` ↔ dritter Teil des Namens (siehe `address.last_name`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`\n"
+          },
+          "examples": [
+            "3 - Prof. Dr."
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "first_name": {
+          "type": "string",
+          "title": "Vorname",
+          "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+          "$comment": "InGrid-Domain 374",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n> Zweiter Teil des Namens (siehe `address.last_name`).\n"
+          },
+          "examples": [
+            "Rosemarie"
+          ]
+        },
+        "last_name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Vollständiger Nachname der Person.\n",
+          "$comment": "InGrid-Domain 374",
+          "x-transform": {
+            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName/gco:CharacterString`\n\n## Mapping (logic)\n\n- `<last_name>, <first_name>, <academic_title.value>` ↔ Text von `gmd:individualName`\n\n> Schreiben: fehlende Teile entfallen samt Trennzeichen. Lesen: Aufteilung am Komma; ohne Komma\n> gilt der ganze Text als `last_name`. UNKLAR: Das Trennzeichen ist abzustimmen; fehlt ein\n> mittlerer Teil, ist die Aufteilung nicht eindeutig.\n"
+          },
+          "examples": [
+            "vom Busche"
+          ]
+        }
+      },
+      "required": [
+        "last_name"
+      ]
     }
   }
 }

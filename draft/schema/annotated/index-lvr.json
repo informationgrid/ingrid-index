@@ -129,25 +129,15 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes.",
+              "type": "string",
+              "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+              "examples": [
+                "de",
+                "en"
+              ],
               "x-transform": {
                 "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
                 "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
               }
             },
             "datasource": {
@@ -215,7 +205,11 @@
         },
         "language": {
           "type": "string",
-          "description": "Welches Format hat die Sprache, wo wird es verwendet.",
+          "description": "Angabe der Sprache des Datensatzes im ISO 639-1 Format",
+          "examples": [
+            "de",
+            "en"
+          ],
           "x-transform": {
             "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `de` ↔ `ger` (lesen auch `deu`, `de`)\n- `en` ↔ `eng` (lesen auch `en`)\n\n> Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als `gco:CharacterString`; ohne\n> Angabe oder ohne Treffer `de`.\n",
             "dcat-ap": "# Lesen & schreiben\n\n`dct:language`\n\n## Mapping (lookup)\n\n- `de` ↔ `http://publications.europa.eu/resource/authority/language/DEU`\n- `en` ↔ `http://publications.europa.eu/resource/authority/language/ENG`\n\n> Sprache der Ressource. Lesen: auch die Literale `de`, `deu`, `ger`, `en`, `eng`; ohne Angabe `de`.\n"
@@ -1269,25 +1263,15 @@
             },
             "language": {
               "title": "language",
-              "description": "Enthält die Sprache des Metadatensatzes.",
+              "type": "string",
+              "description": "Angabe der Sprache des Metadatensatzes im ISO 639-1 Format",
+              "examples": [
+                "de",
+                "en"
+              ],
               "x-transform": {
                 "iso19139-2007": "# Lesen & schreiben\n\n`gmd:language/gmd:LanguageCode/@codeListValue`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. `ger`)\n\n> Sprache des Metadatensatzes. Lesen: auch als `gco:CharacterString`. Schreiben: `@codeList`\n> `http://www.loc.gov/standards/iso639-2/`.\n",
                 "dcat-ap": "# Lesen & schreiben\n\n`^foaf:primaryTopic/dct:language`\n\n## Mapping (logic)\n\n- ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO\n  639-2)\n\n> Sprache des Metadatensatzes.\n"
-              },
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
               }
             },
             "datasource": {
