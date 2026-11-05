@@ -1,6 +1,16 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://example.com/schemas/1.0.0/dcat.yaml
 title: InGrid Index - OpenData
+description: |
+  Schema for InGrid Index - OpenData
+  Hinweise:
+  * Webseite als Reference
+  * Qualitätssicherungsprozess URI als Reference
+  * Schlagworte, HVD-Kategorien und Open Data Kategorien als keywords
+  * ist HVD, sobald mindestens eine Open Data Kategorie vorhanden ist
+  * 
+  
+
 type: object
 allOf:
   - $ref: ./parts/core.yaml
@@ -181,8 +191,9 @@ allOf:
     
                       - `availability` ↔ letzter Pfadabschnitt der IRI aus
                         `http://publications.europa.eu/resource/authority/planned-availability/` (z. B. `STABLE`)
-          political_geocoding_level_uri:
+          political_geocoding_level:
             type: string
+            description: Werte kommen aus der Katalog-Codeliste 20006. TODO enum verwenden oder flexibel bleiben?
             x-transform:
               dcat-ap: |
                 # Lesen & schreiben
