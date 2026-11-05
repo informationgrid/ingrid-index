@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schema.ingrid-oss.eu/index/draft/schema/index-opendata.json",
   "title": "InGrid Index - OpenData",
+  "description": "Schema for InGrid Index - OpenData\nHinweise:\n* Webseite als Reference\n* Qualitätssicherungsprozess URI als Reference\n* Schlagworte, HVD-Kategorien und Open Data Kategorien als keywords\n* ist HVD, sobald mindestens eine Open Data Kategorie vorhanden ist\n* \n",
   "type": "object",
   "allOf": [
     {
@@ -1217,8 +1218,9 @@
                 }
               }
             },
-            "political_geocoding_level_uri": {
-              "type": "string"
+            "political_geocoding_level": {
+              "type": "string",
+              "description": "Werte kommen aus der Katalog-Codeliste 20006. TODO enum verwenden oder flexibel bleiben?"
             }
           }
         }
