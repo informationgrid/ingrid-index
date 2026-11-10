@@ -786,29 +786,21 @@
                 "description": "Die URL zur externen Ressource oder Download."
               },
               "type": {
-                "type": "object",
+                "type": "string",
                 "title": "type",
                 "description": "Gibt den Typ der externen Ressource oder Download an.",
                 "examples": [
                   "3600 - Gekoppelte Daten",
                   "5304 - Bestellung",
                   "3535 - Schlüsselkatalog"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "key": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                }
+                ]
+              },
+              "type_ref_uri": {
+                "type": "string",
+                "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                "examples": [
+                  "/codelist/1234/3"
+                ]
               },
               "title": {
                 "type": "string",
@@ -1321,29 +1313,21 @@
               "description": "Die URL zur externen Ressource oder Download."
             },
             "type": {
-              "type": "object",
+              "type": "string",
               "title": "type",
               "description": "Gibt den Typ der externen Ressource oder Download an.",
               "examples": [
                 "3600 - Gekoppelte Daten",
                 "5304 - Bestellung",
                 "3535 - Schlüsselkatalog"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
+              ]
+            },
+            "type_ref_uri": {
+              "type": "string",
+              "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+              "examples": [
+                "/codelist/1234/3"
+              ]
             },
             "title": {
               "type": "string",

@@ -642,29 +642,21 @@
                 "description": "Die URL zur externen Ressource oder Download."
               },
               "type": {
-                "type": "object",
+                "type": "string",
                 "title": "type",
                 "description": "Gibt den Typ der externen Ressource oder Download an.",
                 "examples": [
                   "3600 - Gekoppelte Daten",
                   "5304 - Bestellung",
                   "3535 - Schlüsselkatalog"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "key": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                }
+                ]
+              },
+              "type_ref_uri": {
+                "type": "string",
+                "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                "examples": [
+                  "/codelist/1234/3"
+                ]
               },
               "title": {
                 "type": "string",
@@ -1115,29 +1107,21 @@
               "description": "Die URL zur externen Ressource oder Download."
             },
             "type": {
-              "type": "object",
+              "type": "string",
               "title": "type",
               "description": "Gibt den Typ der externen Ressource oder Download an.",
               "examples": [
                 "3600 - Gekoppelte Daten",
                 "5304 - Bestellung",
                 "3535 - Schlüsselkatalog"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
+              ]
+            },
+            "type_ref_uri": {
+              "type": "string",
+              "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+              "examples": [
+                "/codelist/1234/3"
+              ]
             },
             "title": {
               "type": "string",
@@ -1324,20 +1308,7 @@
             },
             "required": [
               "role",
-              "administrative_area",
               "communications"
-            ],
-            "anyOf": [
-              {
-                "required": [
-                  "street"
-                ]
-              },
-              {
-                "required": [
-                  "pobox"
-                ]
-              }
             ]
           },
           "items": {
@@ -1503,48 +1474,34 @@
                 "type": "object",
                 "properties": {
                   "salutation": {
+                    "type": "string",
                     "title": "Anrede",
                     "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
                     "examples": [
                       "1 - Frau"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "value": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
+                    ]
+                  },
+                  "salutation_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
                   },
                   "academic_title": {
+                    "type": "string",
                     "title": "Titel",
                     "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
                     "examples": [
                       "3 - Prof. Dr."
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "value": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
+                    ]
+                  },
+                  "academic_title_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
                   },
                   "first_name": {
                     "type": "string",
@@ -1814,20 +1771,7 @@
             },
             "required": [
               "role",
-              "administrative_area",
               "communications"
-            ],
-            "anyOf": [
-              {
-                "required": [
-                  "street"
-                ]
-              },
-              {
-                "required": [
-                  "pobox"
-                ]
-              }
             ]
           },
           "items": {
@@ -1993,48 +1937,34 @@
                 "type": "object",
                 "properties": {
                   "salutation": {
+                    "type": "string",
                     "title": "Anrede",
                     "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
                     "examples": [
                       "1 - Frau"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "value": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
+                    ]
+                  },
+                  "salutation_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
                   },
                   "academic_title": {
+                    "type": "string",
                     "title": "Titel",
                     "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
                     "examples": [
                       "3 - Prof. Dr."
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "value": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
+                    ]
+                  },
+                  "academic_title_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
                   },
                   "first_name": {
                     "type": "string",
@@ -2193,48 +2123,34 @@
       "type": "object",
       "properties": {
         "salutation": {
+          "type": "string",
           "title": "Anrede",
           "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
           "examples": [
             "1 - Frau"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "key": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "value": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
-          }
+          ]
+        },
+        "salutation_ref_uri": {
+          "type": "string",
+          "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+          "examples": [
+            "/codelist/1234/3"
+          ]
         },
         "academic_title": {
+          "type": "string",
           "title": "Titel",
           "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
           "examples": [
             "3 - Prof. Dr."
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "key": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "value": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
-          }
+          ]
+        },
+        "academic_title_ref_uri": {
+          "type": "string",
+          "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+          "examples": [
+            "/codelist/1234/3"
+          ]
         },
         "first_name": {
           "type": "string",

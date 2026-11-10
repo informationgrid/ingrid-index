@@ -787,29 +787,21 @@
                 "description": "Die URL zur externen Ressource oder Download."
               },
               "type": {
-                "type": "object",
+                "type": "string",
                 "title": "type",
                 "description": "Gibt den Typ der externen Ressource oder Download an.",
                 "examples": [
                   "3600 - Gekoppelte Daten",
                   "5304 - Bestellung",
                   "3535 - Schlüsselkatalog"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "key": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                }
+                ]
+              },
+              "type_ref_uri": {
+                "type": "string",
+                "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                "examples": [
+                  "/codelist/1234/3"
+                ]
               },
               "title": {
                 "type": "string",
@@ -1322,29 +1314,21 @@
               "description": "Die URL zur externen Ressource oder Download."
             },
             "type": {
-              "type": "object",
+              "type": "string",
               "title": "type",
               "description": "Gibt den Typ der externen Ressource oder Download an.",
               "examples": [
                 "3600 - Gekoppelte Daten",
                 "5304 - Bestellung",
                 "3535 - Schlüsselkatalog"
-              ],
-              "additionalProperties": false,
-              "properties": {
-                "key": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "value": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
+              ]
+            },
+            "type_ref_uri": {
+              "type": "string",
+              "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+              "examples": [
+                "/codelist/1234/3"
+              ]
             },
             "title": {
               "type": "string",
@@ -1455,16 +1439,16 @@
                         "x-transform": {
                           "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dcatde:licenseAttributionByText`\n\n> DCAT-AP.de-Erweiterung.\n"
                         }
-                      },
-                      "languages": {
-                        "type": "array",
-                        "x-transform": {
-                          "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:language`\n\n## Mapping (logic)\n\n- je Wert ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)\n"
-                        },
-                        "items": {
-                          "type": "string"
-                        }
                       }
+                    }
+                  },
+                  "languages": {
+                    "type": "array",
+                    "x-transform": {
+                      "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:language`\n\n## Mapping (logic)\n\n- je Wert ↔ letzter Pfadabschnitt der IRI aus\n  `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)\n"
+                    },
+                    "items": {
+                      "type": "string"
                     }
                   },
                   "availability": {
