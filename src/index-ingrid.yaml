@@ -81,6 +81,7 @@ $defs:
                     - InGridPublication
                     - InGridProject
                     - InGridSpecialisedTask
+                    - InGridAlgorithm
             required:
               - data_type
 
@@ -98,7 +99,7 @@ $defs:
             title: InGrid Temporal
             properties:
               status:
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                type: string
                 description: "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet."
                 x-transform:
                   iso19139-2007: |
@@ -115,8 +116,10 @@ $defs:
                 examples:
                   - 1 - abgeschlossen
                   - 2 - historisches Archiv
+              status_ref_uri:
+                $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
               maintenance_frequency:
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                type: string
                 description: "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet."
                 x-transform:
                   iso19139-2007: |
@@ -155,6 +158,8 @@ $defs:
                   - 2 - täglich
                   - 3 - wöchentlich
                   - 5 - monatlich
+              maintenance_frequency_ref_uri:
+                $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
               user_defined_maintenance_frequency_in_sec:
                 type: string
                 description: "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes in Sekunden."
@@ -192,6 +197,7 @@ $defs:
                 Kein Gegenstück in DCAT-AP. Nur bei Datensätzen im Format ISO 19139:2007.
 
       ingrid:
+        unevaluatedProperties: false
         properties:
 
           # portal specific
@@ -299,10 +305,11 @@ $defs:
                   items:
                     title: item
                     properties:
-                      key:
+                      name:
                         type: [ "string", "null" ]
-                      value:
-                        type: [ "string", "null" ]
+                        description: "Name der Einschränkung oder Nutzungsbedingung."
+                      name_ref_uri:
+                        $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                       source:
                         type: string
                         description: "Quelle der Einschränkung"
@@ -511,7 +518,7 @@ $defs:
                       dcat-ap: |
                         Kein Gegenstück in DCAT-AP.
                   cell_geometry:
-                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                    type: string
                     description: "Angabe, ob die Rasterdatenzelle einen Punkt oder eine Fläche beschreibt. Hier wird die Codeliste 509 verwendet."
                     x-transform:
                       iso19139-2007: |
@@ -525,6 +532,8 @@ $defs:
                         - `key` ← ID des Eintrags der InGrid-Codeliste 509 zum Code
                       dcat-ap: |
                         Kein Gegenstück in DCAT-AP.
+                  cell_geometry_ref_uri:
+                    $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                   rectified:
                     title: "Georektifiziertes Raster"
                     properties:
@@ -568,7 +577,7 @@ $defs:
                           dcat-ap: |
                             Kein Gegenstück in DCAT-AP.
                       point_in_pixel:
-                        $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                        type: string
                         description: "Enthält den Punkt im Pixel, an welchem der Bezug zur Erde besteht. Hier wird die Codeliste 2100 verwendet."
                         x-transform:
                           iso19139-2007: |
@@ -584,6 +593,8 @@ $defs:
                             > Nur bei `gmd:MD_Georectified`.
                           dcat-ap: |
                             Kein Gegenstück in DCAT-AP.
+                      point_in_pixel_ref_uri:
+                        $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                   referenced:
                     title: "Georeferenzierbares Raster"
                     properties:
@@ -927,7 +938,7 @@ $defs:
                       dcat-ap: |
                         Kein Gegenstück in DCAT-AP.
                   unit:
-                    type: object
+                    type: string
                     description: Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.
                     x-transform:
                       iso19139-2007: |
@@ -943,9 +954,10 @@ $defs:
                         > Schreiben: `gml:VerticalCRS` mit `gml:id` und den übrigen Pflichtangaben der GML-Elemente.
                       dcat-ap: |
                         Kein Gegenstück in DCAT-AP.
-                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                  unit_ref_uri:
+                    $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                   vdatum:
-                    type: object
+                    type: string
                     description: Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.
                     x-transform:
                       iso19139-2007: |
@@ -959,7 +971,8 @@ $defs:
                         - `key` ← ID des Eintrags der InGrid-Codeliste 101 zum Wert
                       dcat-ap: |
                         Kein Gegenstück in DCAT-AP.
-                    $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                  vdatum_ref_uri:
+                    $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
           # - Zusatzinformationen
           #   - Eignung
           specific_usage:
@@ -1031,8 +1044,7 @@ $defs:
                     - not-conformant
                     - not-evaluated
                 specification:
-                  type: object
-                  $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                  type: string
                   x-transform:
                     iso19139-2007: |
                       # Lesen & schreiben
@@ -1054,6 +1066,8 @@ $defs:
                       - `value` ↔ `dct:title` (lesen auch `rdfs:label`, sonst die IRI)
 
                       > Schreiben: ohne `key` ein Blank Node `dct:Standard` mit `dct:title`.
+                specification_ref_uri:
+                  $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                 publication_date:
                   type: string
                   x-transform:
@@ -1173,7 +1187,7 @@ $defs:
                       - quantitativeAttributeAccuracy
                       - relativeInternalPositionalAccuracy
                     measure_type:
-                      type: object
+                      type: string
                       x-transform:
                         iso19139-2007: |
                           # Lesen & schreiben
@@ -1181,7 +1195,8 @@ $defs:
                           `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*/gmd:nameOfMeasure/gco:CharacterString`
 
                           > `value` = Name des Maßes, `key` leer.
-                      $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                    measure_type_ref_uri:
+                      $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                     value:
                       type: number
                       x-transform:
@@ -1198,7 +1213,7 @@ $defs:
                           `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/*/gmd:measureDescription/gco:CharacterString`
 
           character_set:
-            type: object
+            type: string
             description: "Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz."
             x-transform:
               iso19139-2007: |
@@ -1214,7 +1229,8 @@ $defs:
                 > Nur Datensätze.
               dcat-ap: |
                 Kein Gegenstück in DCAT-AP.
-            $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+          character_set_ref_uri:
+            $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
 
           service:
             type: object
@@ -1500,7 +1516,7 @@ $defs:
                     `gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:ISBN/gco:CharacterString`
               publishing_house:
                 type: string
-                description: Name des Verlagsgesellschaften
+                description: Name des Verlags
                 x-transform:
                   iso19139-2007: |
                     # Lesen & schreiben
@@ -1510,8 +1526,7 @@ $defs:
                     > Nur `gmd:CI_ResponsibleParty` mit `gmd:role/gmd:CI_RoleCode/@codeListValue` = `distribute`
                     > (InGrid-Erweiterung, kein Wert der ISO-Codeliste `CI_RoleCode`).
               document_type:
-                type: object
-                $ref: ./parts/shared-types.yaml#/$defs/KeyValue
+                type: string
                 x-transform:
                   iso19139-2007: |
                     UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
@@ -1519,6 +1534,8 @@ $defs:
                     > Der InGrid Editor schreibt den englischen Wert der InGrid-Codeliste 3385 als
                     > `gmd:identificationInfo/*/gmd:resourceFormat/gmd:MD_Format/gmd:name/gco:CharacterString`, aber nicht
                     > bei aktivem DOI.
+              document_type_ref_uri:
+                $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
               base_data_text:
                 type: string
                 description: Basisdaten des Dokumentes
@@ -1789,6 +1806,3 @@ $defs:
                     explanation:
                       type: string
                       description: Erläuterungen der URL
-          # TODO: merge references and fileReferences
-          # TODO: properties to tags (core?)
-          # TODO: parentIdentifier (core?)

@@ -107,10 +107,7 @@ $defs:
                   value:
                     minLength: 1
                 required: [ type, value ]
-          required: [ role, administrative_area, communications ]
-          anyOf:
-            - required: [ street ]
-            - required: [ pobox ]
+          required: [ role, communications ]
         items:
           properties:
             role:
@@ -251,23 +248,25 @@ $defs:
     type: object
     properties:
       salutation:
+        type: string
         title: Anrede
         description: |
           Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300
           verwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.
-        $ref: ./parts/shared-types.yaml#/$defs/KeyValue
         x-transform:
           iso19139-2007: |
             Kein Gegenstück in ISO 19139:2007.
         examples:
           - 1 - Frau
+      salutation_ref_uri:
+        $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
       academic_title:
+        type: string
         title: Titel
         description: |
           Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet
           (`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen
           nicht angegeben.
-        $ref: ./parts/shared-types.yaml#/$defs/KeyValue
         x-transform:
           iso19139-2007: |
             # Lesen & schreiben
@@ -280,6 +279,8 @@ $defs:
             - `key` ← ID des Eintrags der InGrid-Codeliste 4305 zum Wert, sonst `null`
         examples:
           - 3 - Prof. Dr.
+      academic_title_ref_uri:
+        $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
       first_name:
         type: string
         title: Vorname

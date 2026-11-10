@@ -165,20 +165,20 @@ allOf:
                           `dcat:distribution/dcatde:licenseAttributionByText`
     
                           > DCAT-AP.de-Erweiterung.
-                    languages:
-                      type: array
-                      x-transform:
-                        dcat-ap: |
-                          # Lesen & schreiben
-    
-                          `dcat:distribution/dct:language`
-    
-                          ## Mapping (logic)
-    
-                          - je Wert ↔ letzter Pfadabschnitt der IRI aus
-                            `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)
-                      items:
-                        type: string
+                languages:
+                  type: array
+                  x-transform:
+                    dcat-ap: |
+                      # Lesen & schreiben
+
+                      `dcat:distribution/dct:language`
+
+                      ## Mapping (logic)
+
+                      - je Wert ↔ letzter Pfadabschnitt der IRI aus
+                        `http://publications.europa.eu/resource/authority/language/` (z. B. `DEU`)
+                  items:
+                    type: string
                 availability:
                   type: string
                   x-transform:

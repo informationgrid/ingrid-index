@@ -1,13 +1,11 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 type: object
 $defs:
-  KeyValue:
-    additionalProperties: false
-    properties:
-      key:
-        type: [ "string", "null" ]
-      value:
-        type: [ "string", "null" ]
+  CodelistRefUri:
+    type: string
+    description: Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.
+    examples:
+      - /codelist/1234/3
   CrossReference:
     type: object
     title: Verknüpfung

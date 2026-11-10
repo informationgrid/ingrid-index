@@ -816,14 +816,15 @@ $defs:
         type: string
         description: "Die URL zur externen Ressource oder Download."
       type:
-        type: object
+        type: string
         title: type
         description: "Gibt den Typ der externen Ressource oder Download an."
         examples:
           - 3600 - Gekoppelte Daten
           - 5304 - Bestellung
           - 3535 - Schlüsselkatalog
-        $ref: ./shared-types.yaml#/$defs/KeyValue
+      type_ref_uri:
+        $ref: ./shared-types.yaml#/$defs/CodelistRefUri
       title:
         type: string
         description: "Ein Titel der externen Ressource oder Download."
