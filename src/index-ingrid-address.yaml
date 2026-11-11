@@ -24,7 +24,7 @@ $defs:
   Address:
     type: object
     title: Address
-    required: [ contacts ]
+    required: [ contacts, address ]
     properties:
       id:
         x-transform:
@@ -34,7 +34,6 @@ $defs:
             `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/@uuid`
       metadata:
         description: Angaben zur Adresse statt zum Metadatensatz.
-        required: [ document_type ]
         unevaluatedProperties: false
         allOf:
           - $ref: ./parts/core.yaml#/$defs/Metadata
@@ -45,27 +44,6 @@ $defs:
                 type: string
                 const: ADDRESS
                 description: "Definiert das Index-Dokument als Adresse."
-              document_type:
-                type: string
-                description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
-                enum:
-                  - InGridPersonDoc
-                  - InGridOrganisationDoc
-                x-transform:
-                  iso19139-2007: |
-                    # Lesen
-    
-                    `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`
-    
-                    ## Mapping (logic)
-    
-                    - `InGridPersonDoc` ← mit `gmd:individualName`
-                    - `InGridOrganisationDoc` ← ohne `gmd:individualName`
-    
-                    # Schreiben
-    
-                    Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
-                    `gmd:organisationName` geschrieben wird.
       title:
         x-transform:
           iso19139-2007: |
@@ -176,32 +154,50 @@ $defs:
       address:
         type: object
         description: Der Inhalt hängt von dem verwendeten `document_type` ab.
-    if:
-      properties:
-        metadata:
+        if:
           properties:
             document_type:
               const: InGridPersonDoc
-          required: [ document_type ]
-      required: [ metadata ]
-    then:
-      properties:
-        address:
-          unevaluatedProperties: false
-          allOf:
-            - $ref: "#/$defs/GeneralAddress"
-            - $ref: "#/$defs/Person"
-    else:
-      properties:
-        address:
-          unevaluatedProperties: false
-          $ref: "#/$defs/GeneralAddress"
+        then:
+          properties:
+            address:
+              unevaluatedProperties: false
+              allOf:
+                - $ref: "#/$defs/GeneralAddress"
+                - $ref: "#/$defs/Person"
+        else:
+          properties:
+            address:
+              unevaluatedProperties: false
+              $ref: "#/$defs/GeneralAddress"
   GeneralAddress:
     type: object
     description: |
       Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`, `academic_title`,
-      `first_name`, `last_name` und `hide_address` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
+      `first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
     properties:
+      document_type:
+        type: string
+        description: "Beschreibt, ob die Adresse eine Person oder eine Organisation ist."
+        enum:
+          - InGridPersonDoc
+          - InGridOrganisationDoc
+        x-transform:
+          iso19139-2007: |
+            # Lesen
+
+            `gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName`
+
+            ## Mapping (logic)
+
+            - `InGridPersonDoc` ← mit `gmd:individualName`
+            - `InGridOrganisationDoc` ← ohne `gmd:individualName`
+
+            # Schreiben
+
+            Wird nicht als eigenes Element geschrieben; bestimmt, ob `title` als `gmd:individualName` oder
+            `gmd:organisationName` geschrieben wird.
+
       position_name:
         type: string
         title: Aufgaben
@@ -244,6 +240,8 @@ $defs:
             Kein Gegenstück in ISO 19139:2007. Interne InGrid-Verknüpfungen.
         items:
           $ref: ./parts/shared-types.yaml#/$defs/CrossReference
+    required:
+      - document_type
   Person:
     type: object
     properties:

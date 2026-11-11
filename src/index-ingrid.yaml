@@ -18,6 +18,8 @@ $defs:
   InGrid:
     type: object
     title: InGrid
+    required:
+      - ingrid
     properties:
       metadata:
         type: object
@@ -36,27 +38,6 @@ $defs:
                 x-transform:
                   iso19139-2007: |
                     Kein Gegenstück in ISO 19139:2007. Konstant `INGRID`.
-              document_type:
-                type: string
-                description: "Beschreibt den Typ des Metadatensatzes."
-                x-transform:
-                  iso19139-2007: |
-                    # Lesen & schreiben
-
-                    `gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`
-
-                    ## Mapping (lookup)
-
-                    - `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)
-                    - `InGridGeoService` ↔ `service`
-                    - `InGridInformationSystem` ↔ `application`
-                    - `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`
-                    - `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`
-                    - `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`
-                    - `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`
-
-                    > Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.
-                    > Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.
               partner:
                 type: string
                 description: Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110.
@@ -65,25 +46,6 @@ $defs:
                 description: Der Anbieter der Datenquelle als Kürzel. Dieser wird aus der Codeliste 111 genommen.
                 examples:
                   - ni_gll
-            if:
-              properties:
-                data_type:
-                  const: "INGRID"
-              required: [ data_type ]
-            then:
-              properties:
-                document_type:
-                  enum:
-                    - InGridGeoDataset
-                    - InGridDataCollection
-                    - InGridGeoService
-                    - InGridInformationSystem
-                    - InGridPublication
-                    - InGridProject
-                    - InGridSpecialisedTask
-                    - InGridAlgorithm
-            required:
-              - data_type
 
       # - Aktualität des Datensatzes
       #   - Status (temporal.status)
@@ -198,7 +160,43 @@ $defs:
 
       ingrid:
         unevaluatedProperties: false
+        required:
+          - document_type
         properties:
+
+          document_type:
+            type: string
+            description: "Beschreibt den Typ des Metadatensatzes."
+            enum:
+              - InGridGeoDataset
+              - InGridDataCollection
+              - InGridGeoService
+              - InGridInformationSystem
+              - InGridPublication
+              - InGridProject
+              - InGridSpecialisedTask
+              - InGridAlgorithm
+            x-transform:
+              iso19139-2007: |
+                # Lesen & schreiben
+
+                `gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`
+
+                ## Mapping (lookup)
+
+                - `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)
+                - `InGridGeoService` ↔ `service`
+                - `InGridInformationSystem` ↔ `application`
+                - `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`
+                - `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`
+                - `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`
+                - `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`
+
+                > Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.
+                > Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.
+            examples:
+              - InGridGeoDataset
+              - InGridGeoService
 
           # portal specific
 

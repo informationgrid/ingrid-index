@@ -13,13 +13,6 @@ allOf:
           data_type:
             type: string
             const: 'UMWELTNAVI'
-          document_type:
-            description: Definiert den Statuslayer des Dokuments
-            type: string
-            enum:
-              - object
-              - map
-              - statistic
           datasource:
             $ref: "./parts/core.yaml#/$defs/Metadata/properties/datasource"
             description: Beschreibt Datenkatalog (Herkunft)
@@ -27,7 +20,6 @@ allOf:
               - NLWKN_DSK
         required:
           - data_type
-          - document_type
           - datasource
       spatials:
         type: array
@@ -67,6 +59,13 @@ allOf:
         type: object
         description: All field for umweltnavi
         properties:
+          document_type:
+            description: Definiert den Statuslayer des Dokuments
+            type: string
+            enum:
+              - object
+              - map
+              - statistic
           oid:
             type: string
             description: 'Objekt ID (eindeutig über alle Datenkataloge). Setzt sich aus 
@@ -551,34 +550,28 @@ allOf:
         allOf:
           - if:
               properties:
-                metadata:
-                  properties:
-                    document_type:
-                      const: object
-              required:
-                - type
+                document_type:
+                  const: object
             then:
               required:
                 - source_id
           - if:
               properties:
-                metadata:
-                  properties:
-                    document_type:
-                      const: map
-              required:
-                - type
+                document_type:
+                  const: map
             then:
               required:
                 - origin
                 - classification
         required:
-        - oid
-        - part
-        - category
-        - import_ref
+          - document_type
+          - oid
+          - part
+          - category
+          - import_ref
     required:
       - metadata
+      - umweltnavi
 $defs:
   UmweltNaviSourceAttributes:
     type: object

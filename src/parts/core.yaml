@@ -656,23 +656,6 @@ $defs:
           - UmweltNAVI Datensatz ['UMWELTNAVI']
           - InGrid Datensatz ['INGRID']
           - UVP Datensatz ['UVP']
-      document_type:
-        type: string
-        description: Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.
-        x-transform:
-          dcat-ap: |
-            # Lesen & schreiben
-
-            `rdf:type`
-
-            ## Mapping (lookup)
-
-            - `InGridGeoService` ↔ `dcat:DataService`
-            - `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)
-            - alle anderen → `dcat:Dataset`
-        examples:
-          - InGridGeoDataset
-          - InGridGeoService
       created:
         type: [ "string", "null" ]
         format: date-time
