@@ -45,14 +45,6 @@
                     "UVP Datensatz ['UVP']"
                   ]
                 },
-                "document_type": {
-                  "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                  "examples": [
-                    "InGridGeoDataset",
-                    "InGridGeoService"
-                  ]
-                },
                 "created": {
                   "type": [
                     "string",
@@ -1005,14 +997,6 @@
                     "UVP Datensatz ['UVP']"
                   ]
                 },
-                "document_type": {
-                  "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                  "examples": [
-                    "InGridGeoDataset",
-                    "InGridGeoService"
-                  ]
-                },
                 "created": {
                   "type": [
                     "string",
@@ -1144,6 +1128,9 @@
         {
           "type": "object",
           "title": "InGrid",
+          "required": [
+            "ingrid"
+          ],
           "properties": {
             "metadata": {
               "type": "object",
@@ -1160,14 +1147,6 @@
                         "UmweltNAVI Datensatz ['UMWELTNAVI']",
                         "InGrid Datensatz ['INGRID']",
                         "UVP Datensatz ['UVP']"
-                      ]
-                    },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                      "examples": [
-                        "InGridGeoDataset",
-                        "InGridGeoService"
                       ]
                     },
                     "created": {
@@ -1273,10 +1252,6 @@
                         "UMWELTNAVI"
                       ]
                     },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den Typ des Metadatensatzes."
-                    },
                     "partner": {
                       "type": "string",
                       "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110."
@@ -1288,36 +1263,7 @@
                         "ni_gll"
                       ]
                     }
-                  },
-                  "if": {
-                    "properties": {
-                      "data_type": {
-                        "const": "INGRID"
-                      }
-                    },
-                    "required": [
-                      "data_type"
-                    ]
-                  },
-                  "then": {
-                    "properties": {
-                      "document_type": {
-                        "enum": [
-                          "InGridGeoDataset",
-                          "InGridDataCollection",
-                          "InGridGeoService",
-                          "InGridInformationSystem",
-                          "InGridPublication",
-                          "InGridProject",
-                          "InGridSpecialisedTask",
-                          "InGridAlgorithm"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "data_type"
-                  ]
+                  }
                 }
               ]
             },
@@ -1451,7 +1397,28 @@
             },
             "ingrid": {
               "unevaluatedProperties": false,
+              "required": [
+                "document_type"
+              ],
               "properties": {
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den Typ des Metadatensatzes.",
+                  "enum": [
+                    "InGridGeoDataset",
+                    "InGridDataCollection",
+                    "InGridGeoService",
+                    "InGridInformationSystem",
+                    "InGridPublication",
+                    "InGridProject",
+                    "InGridSpecialisedTask",
+                    "InGridAlgorithm"
+                  ],
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
                 "alternate_title": {
                   "type": "string",
                   "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes."
@@ -2206,6 +2173,9 @@
         "InGrid": {
           "type": "object",
           "title": "InGrid",
+          "required": [
+            "ingrid"
+          ],
           "properties": {
             "metadata": {
               "type": "object",
@@ -2222,14 +2192,6 @@
                         "UmweltNAVI Datensatz ['UMWELTNAVI']",
                         "InGrid Datensatz ['INGRID']",
                         "UVP Datensatz ['UVP']"
-                      ]
-                    },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                      "examples": [
-                        "InGridGeoDataset",
-                        "InGridGeoService"
                       ]
                     },
                     "created": {
@@ -2335,10 +2297,6 @@
                         "UMWELTNAVI"
                       ]
                     },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den Typ des Metadatensatzes."
-                    },
                     "partner": {
                       "type": "string",
                       "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110."
@@ -2350,36 +2308,7 @@
                         "ni_gll"
                       ]
                     }
-                  },
-                  "if": {
-                    "properties": {
-                      "data_type": {
-                        "const": "INGRID"
-                      }
-                    },
-                    "required": [
-                      "data_type"
-                    ]
-                  },
-                  "then": {
-                    "properties": {
-                      "document_type": {
-                        "enum": [
-                          "InGridGeoDataset",
-                          "InGridDataCollection",
-                          "InGridGeoService",
-                          "InGridInformationSystem",
-                          "InGridPublication",
-                          "InGridProject",
-                          "InGridSpecialisedTask",
-                          "InGridAlgorithm"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "data_type"
-                  ]
+                  }
                 }
               ]
             },
@@ -2513,7 +2442,28 @@
             },
             "ingrid": {
               "unevaluatedProperties": false,
+              "required": [
+                "document_type"
+              ],
               "properties": {
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den Typ des Metadatensatzes.",
+                  "enum": [
+                    "InGridGeoDataset",
+                    "InGridDataCollection",
+                    "InGridGeoService",
+                    "InGridInformationSystem",
+                    "InGridPublication",
+                    "InGridProject",
+                    "InGridSpecialisedTask",
+                    "InGridAlgorithm"
+                  ],
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
                 "alternate_title": {
                   "type": "string",
                   "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes."

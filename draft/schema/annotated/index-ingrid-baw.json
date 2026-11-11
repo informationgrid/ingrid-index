@@ -56,17 +56,6 @@
                     "UVP Datensatz ['UVP']"
                   ]
                 },
-                "document_type": {
-                  "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                  "x-transform": {
-                    "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-                  },
-                  "examples": [
-                    "InGridGeoDataset",
-                    "InGridGeoService"
-                  ]
-                },
                 "created": {
                   "type": [
                     "string",
@@ -1182,17 +1171,6 @@
                     "UVP Datensatz ['UVP']"
                   ]
                 },
-                "document_type": {
-                  "type": "string",
-                  "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                  "x-transform": {
-                    "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-                  },
-                  "examples": [
-                    "InGridGeoDataset",
-                    "InGridGeoService"
-                  ]
-                },
                 "created": {
                   "type": [
                     "string",
@@ -1352,6 +1330,9 @@
         {
           "type": "object",
           "title": "InGrid",
+          "required": [
+            "ingrid"
+          ],
           "properties": {
             "metadata": {
               "type": "object",
@@ -1371,17 +1352,6 @@
                         "UmweltNAVI Datensatz ['UMWELTNAVI']",
                         "InGrid Datensatz ['INGRID']",
                         "UVP Datensatz ['UVP']"
-                      ]
-                    },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                      "x-transform": {
-                        "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-                      },
-                      "examples": [
-                        "InGridGeoDataset",
-                        "InGridGeoService"
                       ]
                     },
                     "created": {
@@ -1518,13 +1488,6 @@
                         "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Konstant `INGRID`.\n"
                       }
                     },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den Typ des Metadatensatzes.",
-                      "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)\n- `InGridGeoService` ↔ `service`\n- `InGridInformationSystem` ↔ `application`\n- `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`\n- `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`\n- `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`\n- `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`\n\n> Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.\n> Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.\n"
-                      }
-                    },
                     "partner": {
                       "type": "string",
                       "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110."
@@ -1536,36 +1499,7 @@
                         "ni_gll"
                       ]
                     }
-                  },
-                  "if": {
-                    "properties": {
-                      "data_type": {
-                        "const": "INGRID"
-                      }
-                    },
-                    "required": [
-                      "data_type"
-                    ]
-                  },
-                  "then": {
-                    "properties": {
-                      "document_type": {
-                        "enum": [
-                          "InGridGeoDataset",
-                          "InGridDataCollection",
-                          "InGridGeoService",
-                          "InGridInformationSystem",
-                          "InGridPublication",
-                          "InGridProject",
-                          "InGridSpecialisedTask",
-                          "InGridAlgorithm"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "data_type"
-                  ]
+                  }
                 }
               ]
             },
@@ -1719,7 +1653,31 @@
             },
             "ingrid": {
               "unevaluatedProperties": false,
+              "required": [
+                "document_type"
+              ],
               "properties": {
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den Typ des Metadatensatzes.",
+                  "enum": [
+                    "InGridGeoDataset",
+                    "InGridDataCollection",
+                    "InGridGeoService",
+                    "InGridInformationSystem",
+                    "InGridPublication",
+                    "InGridProject",
+                    "InGridSpecialisedTask",
+                    "InGridAlgorithm"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)\n- `InGridGeoService` ↔ `service`\n- `InGridInformationSystem` ↔ `application`\n- `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`\n- `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`\n- `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`\n- `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`\n\n> Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.\n> Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.\n"
+                  },
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
                 "alternate_title": {
                   "type": "string",
                   "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes.",
@@ -2878,6 +2836,9 @@
         "InGrid": {
           "type": "object",
           "title": "InGrid",
+          "required": [
+            "ingrid"
+          ],
           "properties": {
             "metadata": {
               "type": "object",
@@ -2897,17 +2858,6 @@
                         "UmweltNAVI Datensatz ['UMWELTNAVI']",
                         "InGrid Datensatz ['INGRID']",
                         "UVP Datensatz ['UVP']"
-                      ]
-                    },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-                      "x-transform": {
-                        "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-                      },
-                      "examples": [
-                        "InGridGeoDataset",
-                        "InGridGeoService"
                       ]
                     },
                     "created": {
@@ -3044,13 +2994,6 @@
                         "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Konstant `INGRID`.\n"
                       }
                     },
-                    "document_type": {
-                      "type": "string",
-                      "description": "Beschreibt den Typ des Metadatensatzes.",
-                      "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)\n- `InGridGeoService` ↔ `service`\n- `InGridInformationSystem` ↔ `application`\n- `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`\n- `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`\n- `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`\n- `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`\n\n> Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.\n> Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.\n"
-                      }
-                    },
                     "partner": {
                       "type": "string",
                       "description": "Der Partner der Datenquelle als Kürzel. Siehe auch Codeliste 110."
@@ -3062,36 +3005,7 @@
                         "ni_gll"
                       ]
                     }
-                  },
-                  "if": {
-                    "properties": {
-                      "data_type": {
-                        "const": "INGRID"
-                      }
-                    },
-                    "required": [
-                      "data_type"
-                    ]
-                  },
-                  "then": {
-                    "properties": {
-                      "document_type": {
-                        "enum": [
-                          "InGridGeoDataset",
-                          "InGridDataCollection",
-                          "InGridGeoService",
-                          "InGridInformationSystem",
-                          "InGridPublication",
-                          "InGridProject",
-                          "InGridSpecialisedTask",
-                          "InGridAlgorithm"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "data_type"
-                  ]
+                  }
                 }
               ]
             },
@@ -3245,7 +3159,31 @@
             },
             "ingrid": {
               "unevaluatedProperties": false,
+              "required": [
+                "document_type"
+              ],
               "properties": {
+                "document_type": {
+                  "type": "string",
+                  "description": "Beschreibt den Typ des Metadatensatzes.",
+                  "enum": [
+                    "InGridGeoDataset",
+                    "InGridDataCollection",
+                    "InGridGeoService",
+                    "InGridInformationSystem",
+                    "InGridPublication",
+                    "InGridProject",
+                    "InGridSpecialisedTask",
+                    "InGridAlgorithm"
+                  ],
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:hierarchyLevel/gmd:MD_ScopeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `InGridGeoDataset` ↔ `dataset` (lesen auch `series` und ohne Angabe)\n- `InGridGeoService` ↔ `service`\n- `InGridInformationSystem` ↔ `application`\n- `InGridSpecialisedTask` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `job`\n- `InGridPublication` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `document`\n- `InGridProject` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `project`\n- `InGridDataCollection` ↔ `nonGeographicDataset` mit `gmd:hierarchyLevelName` `database`\n\n> Lesen: `nonGeographicDataset` mit anderem `gmd:hierarchyLevelName` → `InGridGeoDataset`.\n> Schreiben: `series` lässt sich nicht unterscheiden und wird `dataset`.\n"
+                  },
+                  "examples": [
+                    "InGridGeoDataset",
+                    "InGridGeoService"
+                  ]
+                },
                 "alternate_title": {
                   "type": "string",
                   "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes.",

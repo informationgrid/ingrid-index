@@ -48,17 +48,6 @@
                 "UVP Datensatz ['UVP']"
               ]
             },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "x-transform": {
-                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-              },
-              "examples": [
-                "InGridGeoDataset",
-                "InGridGeoService"
-              ]
-            },
             "created": {
               "type": [
                 "string",
@@ -1172,17 +1161,6 @@
                 "UmweltNAVI Datensatz ['UMWELTNAVI']",
                 "InGrid Datensatz ['INGRID']",
                 "UVP Datensatz ['UVP']"
-              ]
-            },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "x-transform": {
-                "dcat-ap": "# Lesen & schreiben\n\n`rdf:type`\n\n## Mapping (lookup)\n\n- `InGridGeoService` ↔ `dcat:DataService`\n- `InGridGeoDataset` ↔ `dcat:Dataset` (lesen auch `dcat:DatasetSeries`)\n- alle anderen → `dcat:Dataset`\n"
-              },
-              "examples": [
-                "InGridGeoDataset",
-                "InGridGeoService"
               ]
             },
             "created": {

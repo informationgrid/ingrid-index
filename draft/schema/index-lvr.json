@@ -37,14 +37,6 @@
                 "UVP Datensatz ['UVP']"
               ]
             },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "examples": [
-                "InGridGeoDataset",
-                "InGridGeoService"
-              ]
-            },
             "created": {
               "type": [
                 "string",
@@ -995,14 +987,6 @@
                 "UmweltNAVI Datensatz ['UMWELTNAVI']",
                 "InGrid Datensatz ['INGRID']",
                 "UVP Datensatz ['UVP']"
-              ]
-            },
-            "document_type": {
-              "type": "string",
-              "description": "Beschreibt den genauen Typ des Metadatensatzes. Dies kann als Unterkategorie im Profil definiert werden.",
-              "examples": [
-                "InGridGeoDataset",
-                "InGridGeoService"
               ]
             },
             "created": {
