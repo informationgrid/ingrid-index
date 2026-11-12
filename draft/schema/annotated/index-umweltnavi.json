@@ -1322,9 +1322,22 @@
     {
       "title": "InGrid",
       "type": "object",
-      "required": [
-        "ingrid"
-      ],
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "data_type": {
+                "const": "INGRID"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "ingrid"
+        ]
+      },
       "properties": {
         "metadata": {
           "type": "object",
@@ -3724,7 +3737,7 @@
           "description": "All field for umweltnavi",
           "properties": {
             "document_type": {
-              "description": "Definiert den Statuslayer des Dokuments",
+              "description": "Definiert den Type des Dokuments",
               "type": "string",
               "enum": [
                 "object",

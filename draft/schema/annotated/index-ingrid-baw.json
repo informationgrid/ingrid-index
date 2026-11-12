@@ -1330,9 +1330,22 @@
         {
           "type": "object",
           "title": "InGrid",
-          "required": [
-            "ingrid"
-          ],
+          "if": {
+            "properties": {
+              "metadata": {
+                "properties": {
+                  "data_type": {
+                    "const": "INGRID"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "ingrid"
+            ]
+          },
           "properties": {
             "metadata": {
               "type": "object",
@@ -2836,9 +2849,22 @@
         "InGrid": {
           "type": "object",
           "title": "InGrid",
-          "required": [
-            "ingrid"
-          ],
+          "if": {
+            "properties": {
+              "metadata": {
+                "properties": {
+                  "data_type": {
+                    "const": "INGRID"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "ingrid"
+            ]
+          },
           "properties": {
             "metadata": {
               "type": "object",
