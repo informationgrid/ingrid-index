@@ -60,7 +60,7 @@ allOf:
         description: All field for umweltnavi
         properties:
           document_type:
-            description: Definiert den Statuslayer des Dokuments
+            description: Definiert den Type des Dokuments
             type: string
             enum:
               - object
