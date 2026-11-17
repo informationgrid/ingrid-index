@@ -1593,8 +1593,7 @@
                   "type": "string",
                   "description": "In welchem Zustand ist der Datensatz? Hier wird die Codeliste 523 verwendet.",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:status/gmd:MD_ProgressCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 523 zum Code\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:status/gmd:MD_ProgressCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 523 zum Code\n"
                   },
                   "examples": [
                     "1 - abgeschlossen",
@@ -1612,8 +1611,7 @@
                   "type": "string",
                   "description": "Enthält das Pflegeintervall des Datensatzes. Es wird die Codeliste 518 verwendet.",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:maintenanceAndUpdateFrequency/gmd:MD_MaintenanceFrequencyCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 518 zum Code\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dct:accrualPeriodicity`\n\n## Mapping (lookup)\n\n`value` ↔ letzter Pfadabschnitt der IRI aus\n`http://publications.europa.eu/resource/authority/frequency/`:\n\n- `continual` ↔ `UPDATE_CONT` (lesen auch `CONT`)\n- `daily` ↔ `DAILY`\n- `weekly` ↔ `WEEKLY`\n- `fortnightly` ↔ `BIWEEKLY`\n- `monthly` ↔ `MONTHLY`\n- `quarterly` ↔ `QUARTERLY`\n- `biannually` ↔ `ANNUAL_2`\n- `annually` ↔ `ANNUAL`\n- `irregular` ↔ `IRREG`\n- `notPlanned` ↔ `NEVER`\n- `unknown` ↔ `UNKNOWN`\n\n> Lesen: `key` = ID des Eintrags der InGrid-Codeliste 518 zum Wert.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:maintenanceAndUpdateFrequency/gmd:MD_MaintenanceFrequencyCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 518 zum Code\n"
                   },
                   "examples": [
                     "2 - täglich",
@@ -1632,8 +1630,7 @@
                   "type": "string",
                   "description": "Enthält das benutzerdefinierte Pflegeintervall des Datensatzes in Sekunden.",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:userDefinedMaintenanceFrequency/gts:TM_PeriodDuration`\n\n## Mapping (logic)\n\n- Sekunden ↔ ISO-8601-Dauer (z. B. `P1D` = 86400; geschrieben als `PT<n>S`)\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceMaintenance/gmd:MD_MaintenanceInformation/gmd:userDefinedMaintenanceFrequency/gts:TM_PeriodDuration`\n\n## Mapping (logic)\n\n- Sekunden ↔ ISO-8601-Dauer (z. B. `P1D` = 86400; geschrieben als `PT<n>S`)\n"
                   },
                   "examples": [
                     60
@@ -1650,8 +1647,7 @@
               "type": "string",
               "description": "Enthält das vollständige ISO-19139-Dokument im XML-Format.",
               "x-transform": {
-                "iso19139-2007": "# Lesen\n\n`.`\n\n> Der vollständige Quelldatensatz (`gmd:MD_Metadata`) als XML-String.\n\n# Schreiben\n\nWird nicht geschrieben; das ISO-Dokument entsteht aus den übrigen Feldern.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP. Nur bei Datensätzen im Format ISO 19139:2007.\n"
+                "iso19139-2007": "# Lesen\n\n`.`\n\n> Der vollständige Quelldatensatz (`gmd:MD_Metadata`) als XML-String.\n\n# Schreiben\n\nWird nicht geschrieben; das ISO-Dokument entsteht aus den übrigen Feldern.\n"
               }
             }
           }
@@ -1687,16 +1683,14 @@
               "type": "string",
               "description": "Ermöglicht das Setzen eines alternativen Titels oder eine Kurzbeschreibung des Datensatzes.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:alternateTitle/gco:CharacterString`\n\n> Lesen: alle Vorkommen, mit Leerzeichen verbunden. Schreiben: als ein `gmd:alternateTitle`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:alternative`\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:alternateTitle/gco:CharacterString`\n\n> Lesen: alle Vorkommen, mit Leerzeichen verbunden. Schreiben: als ein `gmd:alternateTitle`.\n"
               }
             },
             "licenses": {
               "type": "array",
               "description": "Liste der Nutzungsbedingungen oder Einschränkungen für die Verwendung der externen Ressource oder Download.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceConstraints`\n\n## Mapping (logic)\n\n- `useLimitations` ↔ `gmd:MD_Constraints/gmd:useLimitation`\n- `useConstraints` ↔ `gmd:MD_LegalConstraints` mit `gmd:useConstraints` = `otherRestrictions`, je\n  Wert ein `gmd:otherConstraints`\n- `accessConstraints` ↔ `gmd:MD_LegalConstraints` mit `gmd:accessConstraints` = `otherRestrictions`,\n  je Wert ein `gmd:otherConstraints`; `key` ← ID des Eintrags der InGrid-Codeliste 6010 zum Wert\n- `source` ↔ Zeile `Quellenvermerk: <source>` bei `useConstraints`\n\n> Lesen: höchstens ein Eintrag je `type`; `source` auch aus dem Feld `quelle` eines JSON-Texts\n> (GDI-DE-Konvention), der selbst kein `item` wird; Codes außer `otherRestrictions` werden als\n> `item` übernommen.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:license | dct:accessRights | dcat:distribution/dct:rights`\n\n## Mapping (logic)\n\n- `useConstraints` ↔ `dct:license` (`key` = IRI, `value` = Titel der Lizenz); `source` ↔\n  `dcat:distribution/dcatde:licenseAttributionByText`\n- `accessConstraints` ↔ `dct:accessRights` (`key` = IRI, `value` = Label)\n- `useLimitations` ↔ `dcat:distribution/dct:rights` (`dct:RightsStatement`, `value` = `rdfs:label`)\n\n> Lesen: höchstens ein Eintrag je `type`; Lizenzen der Ressource und aller Distributionen ohne\n> Duplikate. Schreiben: Lizenzen und `dct:rights` an jeder Distribution. UNKLAR: Werte ohne IRI\n> (`key`) bei `useConstraints` und `accessConstraints`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceConstraints`\n\n## Mapping (logic)\n\n- `useLimitations` ↔ `gmd:MD_Constraints/gmd:useLimitation`\n- `useConstraints` ↔ `gmd:MD_LegalConstraints` mit `gmd:useConstraints` = `otherRestrictions`, je\n  Wert ein `gmd:otherConstraints`\n- `accessConstraints` ↔ `gmd:MD_LegalConstraints` mit `gmd:accessConstraints` = `otherRestrictions`,\n  je Wert ein `gmd:otherConstraints`; `key` ← ID des Eintrags der InGrid-Codeliste 6010 zum Wert\n- `source` ↔ Zeile `Quellenvermerk: <source>` bei `useConstraints`\n\n> Lesen: höchstens ein Eintrag je `type`; `source` auch aus dem Feld `quelle` eines JSON-Texts\n> (GDI-DE-Konvention), der selbst kein `item` wird; Codes außer `otherRestrictions` werden als\n> `item` übernommen.\n"
               },
               "items": {
                 "type": "object",
@@ -1745,16 +1739,14 @@
               "type": "string",
               "description": "UUID des übergeordneten Datensatzes. Kann für die Strukturierung von Datensätzen verwendet werden.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:parentIdentifier/gco:CharacterString`\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:inSeries`\n\n> Lesen: auch `dct:isPartOf`; `dct:identifier` der übergeordneten Ressource, sonst ihre IRI. UNKLAR:\n> Schreiben braucht die IRI der Serie, das Indexformat enthält nur die UUID.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:parentIdentifier/gco:CharacterString`\n"
               }
             },
             "datasource_identifier": {
               "type": "string",
               "description": "Enthält den Identifikator der Datenquelle. Dieser muss eine auflösbare URL sein, die den Direktzugriff auf das XML des Daten-Metadatensatzes ermöglicht.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`adms:identifier/skos:notation`\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gco:CharacterString`\n\n> Lesen: auch `gmd:RS_Identifier`.\n"
               },
               "examples": [
                 "https://registry.gdi-de.org/id/ingrid_cat/d848fd14-7a22-40ba-980a-3ea7e3fcbcae"
@@ -1764,8 +1756,7 @@
               "type": "object",
               "title": "Digitale Repräsentation",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` für `vector` und eines für `grid` (jeweils wenn gesetzt); das\n> Element darunter ergibt sich aus `vector` bzw. `grid` (siehe dort).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n> Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle\n> Typen an jeder Distribution.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` für `vector` und eines für `grid` (jeweils wenn gesetzt); das\n> Element darunter ergibt sich aus `vector` bzw. `grid` (siehe dort).\n"
               },
               "properties": {
                 "types": {
@@ -1773,8 +1764,7 @@
                   "title": "Typen",
                   "description": "Beschreibt die Typen der Repräsentation",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich\n> `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,\n> `gmd:MD_Georectified` oder `gmd:MD_Georeferenceable` unter `gmd:spatialRepresentationInfo`, ohne\n> Dubletten.\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n## Mapping (lookup)\n\nLetzter Pfadabschnitt der IRI aus\n`http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/`:\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein Wert je IRI, ohne Dubletten.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich\n> `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,\n> `gmd:MD_Georectified` oder `gmd:MD_Georeferenceable` unter `gmd:spatialRepresentationInfo`, ohne\n> Dubletten.\n"
                   },
                   "items": {
                     "type": "string",
@@ -1793,8 +1783,7 @@
                   "title": "Vector",
                   "description": "Beschreibt die digitale Repräsentation als eine Liste von Vektor-Daten.",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects`\n\n> Nur bei `gmd:MD_VectorSpatialRepresentation`; ein `gmd:MD_GeometricObjects` je Eintrag.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects`\n\n> Nur bei `gmd:MD_VectorSpatialRepresentation`; ein `gmd:MD_GeometricObjects` je Eintrag.\n"
                   },
                   "items": {
                     "properties": {
@@ -1826,15 +1815,13 @@
                   "title": "Raster/Gitter",
                   "description": "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n"
                   },
                   "properties": {
                     "axes": {
                       "type": "array",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension`\n\n> Bei allen Raster-Elementen.\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension`\n\n> Bei allen Raster-Elementen.\n"
                       },
                       "items": {
                         "properties": {
@@ -1866,24 +1853,21 @@
                       "type": "boolean",
                       "description": "Beschreibt, ob Parameter für das Raster verfügbar sind",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:transformationParameterAvailability/gco:Boolean`\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:transformationParameterAvailability/gco:Boolean`\n"
                       }
                     },
                     "number_dimensions": {
                       "type": "integer",
                       "description": "Beschreibt die Anzahl der unabhängigen räumlich-zeitlichen Achsen",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:numberOfDimensions/gco:Integer`\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:numberOfDimensions/gco:Integer`\n"
                       }
                     },
                     "cell_geometry": {
                       "type": "string",
                       "description": "Angabe, ob die Rasterdatenzelle einen Punkt oder eine Fläche beschreibt. Hier wird die Codeliste 509 verwendet.",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:cellGeometry/gmd:MD_CellGeometryCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 509 zum Code\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:cellGeometry/gmd:MD_CellGeometryCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 509 zum Code\n"
                       }
                     },
                     "cell_geometry_ref_uri": {
@@ -1900,31 +1884,27 @@
                           "type": "boolean",
                           "description": "Beschreibt, ob die Punkte für die Rasterdatenzelle geprüft werden.",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:checkPointAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georectified`.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:checkPointAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georectified`.\n"
                           }
                         },
                         "checkpoint_description": {
                           "type": "string",
                           "description": "Beschreibt die Beschreibung der Punkte, die für die Rasterdatenzelle verwendet werden. Hier wird die Codeliste 510 verwendet.",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:checkPointDescription/gco:CharacterString`\n\n> Nur bei `gmd:MD_Georectified`. Freitext.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:checkPointDescription/gco:CharacterString`\n\n> Nur bei `gmd:MD_Georectified`. Freitext.\n"
                           }
                         },
                         "corner_points": {
                           "type": "string",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:cornerPoints`\n\n## Mapping (logic)\n\n- je Eckpunkt (durch Komma getrennt) ↔ `gml:Point/gml:pos` (mit `gml:id`)\n\n> Nur bei `gmd:MD_Georectified`. Lesen: auch GML 3.2 (`gml32:`).\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:cornerPoints`\n\n## Mapping (logic)\n\n- je Eckpunkt (durch Komma getrennt) ↔ `gml:Point/gml:pos` (mit `gml:id`)\n\n> Nur bei `gmd:MD_Georectified`. Lesen: auch GML 3.2 (`gml32:`).\n"
                           }
                         },
                         "point_in_pixel": {
                           "type": "string",
                           "description": "Enthält den Punkt im Pixel, an welchem der Bezug zur Erde besteht. Hier wird die Codeliste 2100 verwendet.",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:pointInPixel/gmd:MD_PixelOrientationCode`\n\n## Mapping (logic)\n\n- `value` ↔ Wert (z. B. `center`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 2100 zum Wert\n\n> Nur bei `gmd:MD_Georectified`.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:pointInPixel/gmd:MD_PixelOrientationCode`\n\n## Mapping (logic)\n\n- `value` ↔ Wert (z. B. `center`)\n- `key` ← ID des Eintrags der InGrid-Codeliste 2100 zum Wert\n\n> Nur bei `gmd:MD_Georectified`.\n"
                           }
                         },
                         "point_in_pixel_ref_uri": {
@@ -1943,24 +1923,21 @@
                           "type": "boolean",
                           "description": "Angabe, ob Orientierungsparameter verfügbar sind.",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:orientationParameterAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georeferenceable`.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:orientationParameterAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georeferenceable`.\n"
                           }
                         },
                         "control_point_availability": {
                           "type": "boolean",
                           "description": "Angabe, ob Passpunkte existieren.",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:controlPointAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georeferenceable`. Der Feldname im Indexformat weicht in der Schreibweise vom\n> ISO-Element ab.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:controlPointAvailability/gco:Boolean`\n\n> Nur bei `gmd:MD_Georeferenceable`. Der Feldname im Indexformat weicht in der Schreibweise vom\n> ISO-Element ab.\n"
                           }
                         },
                         "parameters": {
                           "type": "string",
                           "description": "Parameter, die die Georeferenzierung der Rasterdaten ermöglichen",
                           "x-transform": {
-                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:georeferencedParameters/gco:Record`\n\n> Nur bei `gmd:MD_Georeferenceable`. Lesen: ohne `gmd:georeferencedParameters` der Titel der ersten\n> `gmd:parameterCitation`.\n",
-                            "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                            "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:georeferencedParameters/gco:Record`\n\n> Nur bei `gmd:MD_Georeferenceable`. Lesen: ohne `gmd:georeferencedParameters` der Titel der ersten\n> `gmd:parameterCitation`.\n"
                           }
                         }
                       }
@@ -1972,16 +1949,14 @@
             "spatial_resolution_scale": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution`\n\n> Nur Datensätze. Ein `gmd:MD_Resolution` enthält entweder `gmd:equivalentScale` oder\n> `gmd:distance`. Schreiben: ein `gmd:MD_Resolution` je gesetztem Unterfeld.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:spatialResolutionInMeters`\n\n> Nur `resolution_ground`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution`\n\n> Nur Datensätze. Ein `gmd:MD_Resolution` enthält entweder `gmd:equivalentScale` oder\n> `gmd:distance`. Schreiben: ein `gmd:MD_Resolution` je gesetztem Unterfeld.\n"
               },
               "properties": {
                 "scale": {
                   "type": "integer",
                   "description": "Angabe des Erstellungsmaßstabs",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer`\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer`\n"
                   },
                   "examples": [
                     "25000 für 1:25.000"
@@ -1991,16 +1966,14 @@
                   "type": "number",
                   "description": "Bodenauflösung in Metern",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance`\n\n> In Meter, geschrieben mit `@uom=\"m\"`. Lesen: `gco:Distance` mit anderer Einheit als `dpi`,\n> umgerechnet nach `@uom`.\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:spatialResolutionInMeters`\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance`\n\n> In Meter, geschrieben mit `@uom=\"m\"`. Lesen: `gco:Distance` mit anderer Einheit als `dpi`,\n> umgerechnet nach `@uom`.\n"
                   }
                 },
                 "resolution_scan": {
                   "type": "number",
                   "description": "Scan-Auflösung in DPI",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance`\n\n> In dpi: `gco:Distance` mit `@uom=\"dpi\"`.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance`\n\n> In dpi: `gco:Distance` mit `@uom=\"dpi\"`.\n"
                   }
                 }
               }
@@ -2008,8 +1981,7 @@
             "cross_references": {
               "type": "array",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:operatesOn`\n\n## Mapping (logic)\n\n- je gekoppeltem Datensatz ein Eintrag mit `direction` `OUT` und `reference_type` `Basisdaten`\n- `uuid` ↔ `@uuidref`\n\n> Nur bei Diensten. Lesen: `uuid` auch aus `@xlink:href` (Parameter `id` oder letzter Pfadabschnitt)\n> und aus `srv:coupledResource/srv:SV_CoupledResource/srv:identifier`; die eigene UUID wird\n> ignoriert. `name`, `document_type` und `description` stammen aus dem gekoppelten Datensatz, dort\n> entsteht auch der Eintrag mit `direction` `IN`. Schreiben: nur Einträge mit `direction` `OUT`.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:servesDataset`\n\n## Mapping (logic)\n\n- je Datensatz ein Eintrag mit `direction` `OUT` und `reference_type` `Basisdaten`\n- `uuid` ↔ `dct:identifier` des Datensatzes, sonst seine IRI\n\n> Nur bei `dcat:DataService`. `name`, `document_type` und `description` stammen aus dem gekoppelten\n> Datensatz. Schreiben: nur Einträge mit `direction` `OUT`. UNKLAR: Bildung der IRI aus der UUID.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:operatesOn`\n\n## Mapping (logic)\n\n- je gekoppeltem Datensatz ein Eintrag mit `direction` `OUT` und `reference_type` `Basisdaten`\n- `uuid` ↔ `@uuidref`\n\n> Nur bei Diensten. Lesen: `uuid` auch aus `@xlink:href` (Parameter `id` oder letzter Pfadabschnitt)\n> und aus `srv:coupledResource/srv:SV_CoupledResource/srv:identifier`; die eigene UUID wird\n> ignoriert. `name`, `document_type` und `description` stammen aus dem gekoppelten Datensatz, dort\n> entsteht auch der Eintrag mit `direction` `IN`. Schreiben: nur Einträge mit `direction` `OUT`.\n"
               },
               "items": {
                 "type": "object",
@@ -2052,32 +2024,28 @@
               "title": "Datenherkunft",
               "description": "Angaben zur Herkunft und Entstehung der Daten (Lineage)",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage`\n\n> Schreiben: im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:provenance`\n\n> Ein `dct:ProvenanceStatement`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage`\n\n> Schreiben: im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`).\n"
               },
               "properties": {
                 "statement": {
                   "type": "string",
                   "description": "Allgemeine Beschreibung der Datenherkunft/Prozesskette",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString`\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dct:provenance/rdfs:label`\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString`\n"
                   }
                 },
                 "source": {
                   "type": "string",
                   "description": "Beschreibung der Ausgangsdaten",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`\n\n> Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source`.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:source/gmd:LI_Source/gmd:description/gco:CharacterString`\n\n> Lesen: alle `gmd:LI_Source`, durch Zeilenumbruch getrennt. Schreiben: als ein `gmd:LI_Source`.\n"
                   }
                 },
                 "process_step": {
                   "type": "string",
                   "description": "Beschreibung der Bearbeitungsschritte",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`\n\n> Alle Bearbeitungsschritte, durch Zeilenumbruch getrennt.\n\n# Schreiben\n\nWird nicht geschrieben; die Bearbeitungsschritte stehen in `ingrid.process_step_description`.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`\n\n> Alle Bearbeitungsschritte, durch Zeilenumbruch getrennt.\n\n# Schreiben\n\nWird nicht geschrieben; die Bearbeitungsschritte stehen in `ingrid.process_step_description`.\n"
                   }
                 }
               }
@@ -2086,8 +2054,7 @@
               "type": "array",
               "description": "Angabe der Methode, die zur Erstellung des Datenobjektes geführt hat.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`\n\n> Ein `gmd:LI_ProcessStep` je Wert.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:processStep/gmd:LI_ProcessStep/gmd:description/gco:CharacterString`\n\n> Ein `gmd:LI_ProcessStep` je Wert.\n"
               },
               "items": {
                 "type": "string"
@@ -2097,8 +2064,7 @@
               "type": "array",
               "description": "Für die Präsentation genormter Objekte und Sachverhalte können für die Nutzer der Daten zur Herstellung von Karten abgestimmte Symbole vorgegeben werden",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation`\n\n> Ein Eintrag je `gmd:CI_Citation`. Schreiben: ein `gmd:portrayalCatalogueInfo` je Eintrag.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:portrayalCatalogueInfo/gmd:MD_PortrayalCatalogueReference/gmd:portrayalCatalogueCitation/gmd:CI_Citation`\n\n> Ein Eintrag je `gmd:CI_Citation`. Schreiben: ein `gmd:portrayalCatalogueInfo` je Eintrag.\n"
               },
               "items": {
                 "type": "object",
@@ -2131,8 +2097,7 @@
               "type": "array",
               "description": "An dieser Stelle besteht die Möglichkeit, den Daten zugrunde liegende Klassifizierungsschlüssel zu benennen.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation`\n\n> Ein Eintrag je `gmd:CI_Citation`. Schreiben: alle in einem `gmd:MD_FeatureCatalogueDescription`.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:contentInfo/gmd:MD_FeatureCatalogueDescription/gmd:featureCatalogueCitation/gmd:CI_Citation`\n\n> Ein Eintrag je `gmd:CI_Citation`. Schreiben: alle in einem `gmd:MD_FeatureCatalogueDescription`.\n"
               },
               "items": {
                 "type": "object",
@@ -2165,8 +2130,7 @@
               "type": "array",
               "description": "Angabe der mit der Geo-Information/Karte verbundenen Sachdaten.",
               "x-transform": {
-                "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
               },
               "items": {
                 "type": "string"
@@ -2179,8 +2143,7 @@
                   "type": "string",
                   "description": "Erläuterung zu den Raumbezügen",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:description/gco:CharacterString`\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:description/gco:CharacterString`\n"
                   }
                 },
                 "vertical_extent": {
@@ -2192,24 +2155,21 @@
                       "type": "number",
                       "description": "Minimaler Wert der vertikalen Ausdehnung",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue/gco:Real`\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue/gco:Real`\n"
                       }
                     },
                     "maximum": {
                       "type": "number",
                       "description": "Maximaler Wert der vertikalen Ausdehnung",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue/gco:Real`\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue/gco:Real`\n"
                       }
                     },
                     "unit": {
                       "type": "string",
                       "description": "Maßeinheit der vertikalen Ausdehnung. Hier wird die Codeliste 102 verwendet.",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalCS/gml:VerticalCS/gml:axis/gml:CoordinateSystemAxis/@uom`\n\n## Mapping (logic)\n\n- `value` ↔ `@uom`\n- `key` ← ID des Eintrags der InGrid-Codeliste 102 zum Wert\n\n> Schreiben: `gml:VerticalCRS` mit `gml:id` und den übrigen Pflichtangaben der GML-Elemente.\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalCS/gml:VerticalCS/gml:axis/gml:CoordinateSystemAxis/@uom`\n\n## Mapping (logic)\n\n- `value` ↔ `@uom`\n- `key` ← ID des Eintrags der InGrid-Codeliste 102 zum Wert\n\n> Schreiben: `gml:VerticalCRS` mit `gml:id` und den übrigen Pflichtangaben der GML-Elemente.\n"
                       }
                     },
                     "unit_ref_uri": {
@@ -2223,8 +2183,7 @@
                       "type": "string",
                       "description": "Bezugssystem (vertikales Datum) der Höhenangabe. Hier wird die Codeliste 101 verwendet.",
                       "x-transform": {
-                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalDatum/gml:VerticalDatum/gml:identifier`\n\n## Mapping (logic)\n\n- `value` ↔ Text von `gml:identifier`\n- `key` ← ID des Eintrags der InGrid-Codeliste 101 zum Wert\n",
-                        "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                        "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:verticalCRS/gml:VerticalCRS/gml:verticalDatum/gml:VerticalDatum/gml:identifier`\n\n## Mapping (logic)\n\n- `value` ↔ Text von `gml:identifier`\n- `key` ← ID des Eintrags der InGrid-Codeliste 101 zum Wert\n"
                       }
                     },
                     "vdatum_ref_uri": {
@@ -2241,22 +2200,19 @@
             "specific_usage": {
               "type": "string",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceSpecificUsage/gmd:MD_Usage/gmd:specificUsage/gco:CharacterString`\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:resourceSpecificUsage/gmd:MD_Usage/gmd:specificUsage/gco:CharacterString`\n"
               }
             },
             "purpose": {
               "type": "string",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:purpose/gco:CharacterString`\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:purpose/gco:CharacterString`\n"
               }
             },
             "conformance_result": {
               "type": "array",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult`\n\n> Lesen: aus allen Prüfberichten (`gmd:report/*`). Schreiben: ein `gmd:report`\n> (`gmd:DQ_DomainConsistency`) je Eintrag.\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo`\n\n> Ein Eintrag je Spezifikation, außer Koordinatenreferenzsystemen (siehe `crs`) und, bei\n> `dcat:DataService`, Dienst-Standards (siehe `ingrid.service.versions`). Schreiben: nur Einträge\n> mit `pass` `conformant`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult`\n\n> Lesen: aus allen Prüfberichten (`gmd:report/*`). Schreiben: ein `gmd:report`\n> (`gmd:DQ_DomainConsistency`) je Eintrag.\n"
               },
               "items": {
                 "title": "item",
@@ -2264,8 +2220,7 @@
                   "pass": {
                     "type": "string",
                     "x-transform": {
-                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:pass/gco:Boolean`\n\n## Mapping (lookup)\n\n- `conformant` ↔ `true`\n- `not-conformant` ↔ `false`\n- `not-evaluated` ↔ ohne Wert (`gco:nilReason=\"unknown\"`)\n",
-                      "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo`\n\n> Lesen: immer `conformant`, DCAT-AP nennt nur erfüllte Spezifikationen. Schreiben: Einträge mit\n> `not-conformant` oder `not-evaluated` werden nicht geschrieben.\n"
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:pass/gco:Boolean`\n\n## Mapping (lookup)\n\n- `conformant` ↔ `true`\n- `not-conformant` ↔ `false`\n- `not-evaluated` ↔ ohne Wert (`gco:nilReason=\"unknown\"`)\n"
                     },
                     "enum": [
                       "conformant",
@@ -2276,8 +2231,7 @@
                   "specification": {
                     "type": "string",
                     "x-transform": {
-                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title`\n\n## Mapping (logic)\n\n- `value` ↔ Titel\n- `key` ↔ `@xlink:href` eines `gmx:Anchor`; ohne `key` als `gco:CharacterString`\n",
-                      "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo`\n\n## Mapping (logic)\n\n- `key` ↔ IRI der Spezifikation\n- `value` ↔ `dct:title` (lesen auch `rdfs:label`, sonst die IRI)\n\n> Schreiben: ohne `key` ein Blank Node `dct:Standard` mit `dct:title`.\n"
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title`\n\n## Mapping (logic)\n\n- `value` ↔ Titel\n- `key` ↔ `@xlink:href` eines `gmx:Anchor`; ohne `key` als `gco:CharacterString`\n"
                     }
                   },
                   "specification_ref_uri": {
@@ -2290,15 +2244,13 @@
                   "publication_date": {
                     "type": "string",
                     "x-transform": {
-                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date`\n\n> Datum mit `gmd:dateType` `publication`. Lesen: auch `gco:DateTime`.\n",
-                      "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo/dct:issued`\n"
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:date/gco:Date`\n\n> Datum mit `gmd:dateType` `publication`. Lesen: auch `gco:DateTime`.\n"
                     }
                   },
                   "explanation": {
                     "type": "string",
                     "x-transform": {
-                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:explanation/gco:CharacterString`\n",
-                      "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                      "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:explanation/gco:CharacterString`\n"
                     }
                   }
                 }
@@ -2307,14 +2259,12 @@
             "order_info": {
               "type": "string",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor/gmd:MD_Distributor/gmd:distributionOrderProcess/gmd:MD_StandardOrderProcess/gmd:orderingInstructions/gco:CharacterString`\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor/gmd:MD_Distributor/gmd:distributionOrderProcess/gmd:MD_StandardOrderProcess/gmd:orderingInstructions/gco:CharacterString`\n"
               }
             },
             "data_quality": {
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `metadata.document_type`).\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `metadata.document_type`).\n"
               },
               "properties": {
                 "completeness_omission": {
@@ -2399,8 +2349,7 @@
               "type": "string",
               "description": "Angaben zu dem im beschriebenen Datensatz benutzten Zeichensatz.",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:characterSet/gmd:MD_CharacterSetCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 510 zum Code\n\n> Nur Datensätze.\n",
-                "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:characterSet/gmd:MD_CharacterSetCode/@codeListValue`\n\n## Mapping (logic)\n\n- `value` ↔ Code\n- `key` ← ID des Eintrags der InGrid-Codeliste 510 zum Code\n\n> Nur Datensätze.\n"
               }
             },
             "character_set_ref_uri": {
@@ -2414,23 +2363,20 @@
               "type": "object",
               "description": "Angaben zu einem Geodaten-Dienst",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `metadata.document_type` `InGridGeoService`).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `dcat:DataService` (`metadata.document_type` `InGridGeoService`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `metadata.document_type` `InGridGeoService`).\n"
               },
               "properties": {
                 "type": {
                   "type": "string",
                   "description": "Art des Dienstes",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:serviceType/gco:LocalName`\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dct:type`\n\n## Mapping (logic)\n\n- `type` ↔ letzter Pfadabschnitt der IRI aus\n  `http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/` (z. B. `view`, `download`)\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:serviceType/gco:LocalName`\n"
                   }
                 },
                 "classifications": {
                   "type": "array",
                   "x-transform": {
-                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                   },
                   "items": {
                     "type": "string",
@@ -2442,8 +2388,7 @@
                 "versions": {
                   "type": "array",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:serviceTypeVersion/gco:CharacterString`\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dct:conformsTo/dct:title`\n\n> Je Wert ein `dct:Standard` mit `dct:title` (z. B. `OGC WMS 1.3.0`). Lesen: auch `rdfs:label`,\n> sonst die IRI.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:serviceTypeVersion/gco:CharacterString`\n"
                   },
                   "items": {
                     "type": "string",
@@ -2455,8 +2400,7 @@
                 "operations": {
                   "type": "array",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata`\n\n> Ein Eintrag je `srv:SV_OperationMetadata`.\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:endpointURL`\n\n> Ein Eintrag je `dcat:endpointURL`.\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata`\n\n> Ein Eintrag je `srv:SV_OperationMetadata`.\n"
                   },
                   "items": {
                     "properties": {
@@ -2464,24 +2408,21 @@
                         "type": "string",
                         "description": "Name der Operation",
                         "x-transform": {
-                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationName/gco:CharacterString`\n",
-                          "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationName/gco:CharacterString`\n"
                         }
                       },
                       "description": {
                         "type": "string",
                         "description": "Beschreibung der Operation",
                         "x-transform": {
-                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationDescription/gco:CharacterString`\n",
-                          "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationDescription/gco:CharacterString`\n"
                         }
                       },
                       "access_url": {
                         "type": "string",
                         "description": "URL zur Operation",
                         "x-transform": {
-                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL`\n",
-                          "dcat-ap": "# Lesen & schreiben\n\n`dcat:endpointURL`\n"
+                          "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL`\n"
                         }
                       }
                     }
@@ -2491,39 +2432,34 @@
                   "type": "string",
                   "description": "Angaben zum Betriebssystem und der Software, ggf. auch Hardware, die zur Implementierung des Dienstes eingesetzt wird.",
                   "x-transform": {
-                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                   }
                 },
                 "service_history": {
                   "type": "string",
                   "description": "Angaben zur Implementierungsgeschichte des Dienstes.",
                   "x-transform": {
-                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                   }
                 },
                 "additional_information": {
                   "type": "string",
                   "description": "Zusätzliche Informationen zum Dienst",
                   "x-transform": {
-                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                   }
                 },
                 "has_access_constraints": {
                   "type": "boolean",
                   "description": "Ist der Zugriff auf den Dienst eingeschränkt?",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints`\n\n## Mapping (logic)\n\n- `true`, wenn eine Zugriffsbeschränkung angegeben ist, sonst `false`\n\n> UNKLAR: ob `otherRestrictions` mit dem Hinweis „keine Beschränkungen“ (INSPIRE `noLimitations`)\n> als Beschränkung zählt.\n\n# Schreiben\n\nWird nicht geschrieben; ergibt sich aus `ingrid.licenses` (`accessConstraints`).\n",
-                    "dcat-ap": "# Lesen\n\n`dct:accessRights`\n\n## Mapping (logic)\n\n- `true`, wenn `dct:accessRights` angegeben und nicht `PUBLIC` (EU-Normdatei access-right) ist,\n  sonst `false`\n\n# Schreiben\n\nWird nicht geschrieben; ergibt sich aus `ingrid.licenses` (`accessConstraints`).\n"
+                    "iso19139-2007": "# Lesen\n\n`gmd:identificationInfo/*/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:accessConstraints`\n\n## Mapping (logic)\n\n- `true`, wenn eine Zugriffsbeschränkung angegeben ist, sonst `false`\n\n> UNKLAR: ob `otherRestrictions` mit dem Hinweis „keine Beschränkungen“ (INSPIRE `noLimitations`)\n> als Beschränkung zählt.\n\n# Schreiben\n\nWird nicht geschrieben; ergibt sich aus `ingrid.licenses` (`accessConstraints`).\n"
                   }
                 },
                 "doi": {
                   "type": "object",
                   "x-transform": {
-                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n",
-                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                    "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                   },
                   "properties": {
                     "identifier": {

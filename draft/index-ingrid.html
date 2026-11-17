@@ -65,28 +65,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li>Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert erhalten <code>gco:nilReason="missing"</code>.</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0. Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.</p>
-
-<h5>Lesen</h5>
-
-<ul>
-<li>Bei mehreren Sprachfassungen eines Literals gilt das mit Sprach-Tag <code>de</code>, sonst das ohne Sprach-Tag, sonst das erste.</li>
-<li>Ist der Wert ein Knoten statt eines Literals, gilt sein Label (<code>rdfs:label</code>, <code>skos:prefLabel</code> bzw. <code>dct:title</code>), bei einer IRI ohne Label die IRI selbst.</li>
-<li>E-Mail-Adressen und Telefonnummern ohne <code>mailto:</code> bzw. <code>tel:</code>; bei Einzelwerten das erste Vorkommen; Werte, die kein gültiges Datum sind, werden bei Datumsfeldern nicht übernommen.</li>
-<li><code>^foaf:primaryTopic</code> führt zum <code>dcat:CatalogRecord</code> der Ressource (Angaben zum Metadatensatz).</li>
-</ul>
-
-<h5>Schreiben</h5>
-
-<ul>
-<li>Eine Ressource vom Typ <code>dcat:Dataset</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> vom Typ <code>dcat:DataService</code>.</li>
-<li>Textliterale mit dem Sprach-Tag der Ressourcensprache (<code>language</code>), Datumswerte als <code>xsd:date</code> bzw. <code>xsd:dateTime</code>.</li>
-<li>Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate, Frequenzen und Zugriffsrechte, DCAT-AP.de-Lizenzen).</li>
-<li>Zwischenknoten (<code>dct:Location</code>, <code>dct:PeriodOfTime</code>, <code>vcard:Kind</code>, <code>foaf:Agent</code>, <code>dct:Standard</code> …) als Blank Nodes mit passendem <code>rdf:type</code>; <code>^foaf:primaryTopic</code> als <code>dcat:CatalogRecord</code>, dessen <code>foaf:primaryTopic</code> die Ressource ist.</li>
-</ul>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_root"
@@ -180,16 +158,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p><code>gmd:fileIdentifier/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:identifier</code></p>
-
-<blockquote>
-  <p>Lesen: ohne <code>dct:identifier</code> die IRI der Ressource.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_id"
@@ -256,10 +224,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
 
         </div>
         <div>
@@ -370,21 +334,8 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_data_type" onclick="anchorLink('allOf_i0_metadata_data_type')">data_type</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i0_metadata_data_type">
-            <p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
-
-<h3>Transformation</h3>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Wird vom Profil festgelegt (<code>index-ingrid</code>: <code>INGRID</code>).</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_data_type"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_data_type"
-            ></a>
-        </div>
+<span class="description"><p>Beschreibt den Typ des Metadatensatzes im Index. Jeder Eintrag beschreibt eine bestimmte Eigenschaft des Datensatzes. Die Eigenschaften z.B. im Portal verwendet, um eine bestimmte Darstellung des Metadatensatzes zu steuern. Der Wert muss vom Profil bestimmt werden.</p>
+</span>
         
 
         
@@ -454,10 +405,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
 
         </div>
         <div>
@@ -539,16 +486,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: auch <code>gco:Date</code>; ein reines Datum gilt als 00:00 UTC.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>^foaf:primaryTopic/dct:modified</code></p>
-
-<blockquote>
-  <p>Lesen: ohne <code>dcat:CatalogRecord</code> das <code>dct:modified</code> der Ressource.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_modified"
@@ -623,16 +560,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des Metadatensatzes; das der Ressource steht in <code>temporal.data_temporal</code> (<code>first_published</code>).</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>^foaf:primaryTopic/dct:issued</code></p>
-
-<blockquote>
-  <p>Aufnahme in den Katalog laut <code>dcat:CatalogRecord</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_issued"
@@ -700,10 +627,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Partner, aus dessen Bestand der Datensatz stammt.</p>
 
         </div>
         <div>
@@ -778,10 +701,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
 
         </div>
         <div>
@@ -869,22 +788,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Sprache des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>. Schreiben: <code>@codeList</code> <code>http://www.loc.gov/standards/iso639-2/</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>^foaf:primaryTopic/dct:language</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ IRI der EU-Normdatei für Sprachen (Code nach ISO 639-2)</li>
-</ul>
-
-<blockquote>
-  <p>Sprache des Metadatensatzes.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_language"
@@ -950,23 +853,12 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i0_metadata_datasource" onclick="anchorLink('allOf_i0_metadata_datasource')">datasource</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i0_metadata_datasource">
-            <h3>Transformation</h3>
+<span class="description"><h3>Transformation</h3>
 
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_datasource"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_datasource"
-            ></a>
-        </div>
+</span>
         
 
         
@@ -1232,10 +1124,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p>Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_sort_uuid"
@@ -1299,12 +1187,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:title</code></p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_title"
@@ -1367,12 +1249,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:abstract/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:description</code></p>
 
         </div>
         <div>
@@ -1446,23 +1322,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>; ohne Angabe oder ohne Treffer <code>de</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:language</code></p>
-
-<h6>Mapping (lookup)</h6>
-
-<ul>
-<li><code>de</code> ↔ <code>http://publications.europa.eu/resource/authority/language/DEU</code></li>
-<li><code>en</code> ↔ <code>http://publications.europa.eu/resource/authority/language/ENG</code></li>
-</ul>
-
-<blockquote>
-  <p>Sprache der Ressource. Lesen: auch die Literale <code>de</code>, <code>deu</code>, <code>ger</code>, <code>en</code>, <code>eng</code>; ohne Angabe <code>de</code>.</p>
 </blockquote>
 
         </div>
@@ -1542,23 +1401,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: zusätzlich die Kontakte zum Metadatensatz (<code>gmd:contact/gmd:CI_ResponsibleParty</code>), nach denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.</p>
   
   <p>Schreiben: <code>gmd:contact</code> (Pflicht) erhält die Kontakte mit <code>role</code> <code>pointOfContact</code>, sonst den ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und zum Metadatensatz.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt <code>role</code> (siehe dort)</li>
-<li><code>dcat:contactPoint</code> als <code>vcard:Kind</code>, alle anderen als <code>foaf:Agent</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: auch <code>prov:qualifiedAttribution/prov:agent</code>; gleiche Kontakte werden nicht zusammengeführt.</p>
 </blockquote>
 
         </div>
@@ -1676,27 +1518,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Wert unverändert (<code>CI_RoleCode</code>, z. B. <code>pointOfContact</code>, <code>custodian</code>).</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p>Die Property, über die der Kontakt an der Ressource angegeben ist.</p>
-
-<h6>Mapping (lookup)</h6>
-
-<ul>
-<li><code>pointOfContact</code> ↔ <code>dcat:contactPoint</code></li>
-<li><code>publisher</code> ↔ <code>dct:publisher</code></li>
-<li><code>author</code> ↔ <code>dct:creator</code></li>
-<li><code>owner</code> ↔ <code>dct:rightsHolder</code></li>
-<li><code>originator</code> ↔ <code>dcatde:originator</code></li>
-<li><code>custodian</code> ↔ <code>dcatde:maintainer</code></li>
-</ul>
-
-<blockquote>
-  <p>Andere Rollen über <code>prov:qualifiedAttribution</code> mit <code>dcat:hadRole</code> (IRI der INSPIRE-Codeliste <code>ResponsiblePartyRole</code>, letzter Pfadabschnitt = Rolle).</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_role"
@@ -1774,16 +1595,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: ohne Organisation der Personenname (<code>gmd:individualName</code>). Geschrieben wird immer <code>gmd:organisationName</code>, da das Indexformat nicht zwischen Person und Organisation unterscheidet.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:fn</code></p>
-
-<blockquote>
-  <p>Bei <code>foaf:Agent</code> <code>foaf:name</code>. Lesen: bei <code>dcat:contactPoint</code> zuerst <code>vcard:organization-name</code>.</p>
 </blockquote>
 
         </div>
@@ -1872,24 +1683,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p><code>social</code> und <code>other</code> haben kein Gegenstück. Schreiben: nur die erste <code>website</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>email</code> ↔ <code>vcard:hasEmail</code> (<code>foaf:mbox</code>)</li>
-<li><code>phone</code> ↔ <code>vcard:hasTelephone</code> (<code>foaf:phone</code>)</li>
-<li><code>website</code> ↔ <code>vcard:hasURL</code> (<code>foaf:homepage</code>)</li>
-</ul>
-
-<blockquote>
-  <p>In Klammern die Form bei <code>foaf:Agent</code>. E-Mail als <code>mailto:</code>-IRI, Telefon als <code>tel:</code>-IRI. Lesen: Telefon auch als <code>vcard:hasTelephone/vcard:hasValue</code>. <code>fax</code>, <code>social</code> und <code>other</code> haben kein Gegenstück.</p>
 </blockquote>
 
         </div>
@@ -2180,16 +1973,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden, außer dem Postfach (siehe <code>pobox</code>).</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:street-address</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_street"
@@ -2267,16 +2050,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: nicht, wenn <code>gmd:deliveryPoint</code> nur das Postfach enthält (dann <code>pocode</code>).</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:postal-code</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
 </blockquote>
 
         </div>
@@ -2357,10 +2130,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p><code>gmd:CI_Address</code> hat nur eine Postleitzahl; sie gehört zur Hausadresse (<code>code</code>). Lesen: nur, wenn <code>gmd:deliveryPoint</code> ausschließlich das Postfach enthält. Schreiben: nur ohne <code>code</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -2447,16 +2216,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Postfach gemäß ISO 11180, Anhang A. Lesen: ein <code>gmd:deliveryPoint</code>, der mit <code>Postfach</code> beginnt. Schreiben: als eigenes <code>gmd:deliveryPoint</code> nach der Hausadresse (<code>street</code>). UNKLAR: Das Präfix <code>Postfach</code> ist abzustimmen.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:post-office-box</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pobox"
@@ -2531,16 +2290,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:locality</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
-</blockquote>
 
         </div>
         <div>
@@ -2621,16 +2370,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Wert unverändert, ohne Normalisierung auf einen Ländercode.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:country-name</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_country"
@@ -2705,16 +2444,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:contactPoint/vcard:hasAddress/vcard:region</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:contactPoint</code>. Lesen: auch direkt am Kontaktpunkt ohne <code>vcard:hasAddress</code>.</p>
-</blockquote>
 
         </div>
         <div>
@@ -2797,19 +2526,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd &gt; Nord) werden verworfen. Schreiben: alle in einem <code>gmd:EX_Extent</code>, je Wert in <code>toponym</code> ein eigenes <code>gmd:geographicElement</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:spatial | dcatde:politicalGeocodingURI</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>geometry</code>, <code>bbox</code>, <code>toponym</code> ↔ je ein <code>dct:spatial</code> (<code>dct:Location</code> oder IRI eines Gazetteers)</li>
-<li><code>administrative</code> ↔ je ein <code>dcatde:politicalGeocodingURI</code></li>
-</ul>
 
         </div>
         <div>
@@ -3175,10 +2891,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p>Kein Gegenstück in ISO 19139:2007.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_name"
@@ -3266,16 +2978,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString). Schreiben: nur, wenn <code>geometry</code> nicht das Rechteck aus <code>bbox</code> ist.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:spatial/locn:geometry</code></p>
-
-<blockquote>
-  <p>Als GeoJSON-Literal (<code>gsp:geoJSONLiteral</code>). Lesen: auch WKT (<code>gsp:wktLiteral</code>); ohne <code>locn:geometry</code> aus <code>dcat:bbox</code>, sonst aus <code>dcat:centroid</code>.</p>
 </blockquote>
 
         </div>
@@ -6971,16 +6673,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li><code>[west, south, east, north]</code> ↔ <code>gmd:westBoundLongitude</code>, <code>gmd:southBoundLatitude</code>, <code>gmd:eastBoundLongitude</code>, <code>gmd:northBoundLatitude</code> (je <code>gco:Decimal</code>)</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:spatial/dcat:bbox</code></p>
-
-<blockquote>
-  <p>Als WKT-Polygon (<code>gsp:wktLiteral</code>). Lesen: ohne <code>dcat:bbox</code> das umschließende Rechteck von <code>locn:geometry</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_bbox"
@@ -7112,20 +6804,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p>Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen</h5>
-
-<p><code>dct:spatial/(locn:geometry | dcat:bbox)</code></p>
-
-<blockquote>
-  <p>Nur ein WKT-Literal, unverändert.</p>
-</blockquote>
-
-<h5>Schreiben</h5>
-
-<p>Wird nicht geschrieben; die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_spatials_items_wkt"
@@ -7203,16 +6881,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:spatial/skos:prefLabel</code></p>
-
-<blockquote>
-  <p>Lesen: auch <code>rdfs:label</code> und <code>locn:geographicName</code>; bei der IRI eines Gazetteers deren Label.</p>
 </blockquote>
 
         </div>
@@ -7352,23 +7020,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcatde:politicalGeocodingURI</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>regional_key</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/regionalKey/&lt;schlüssel&gt;</code></li>
-<li><code>state</code> ↔ <code>http://dcat-ap.de/def/politicalGeocoding/stateKey/&lt;schlüssel&gt;</code></li>
-</ul>
-
-<blockquote>
-  <p>DCAT-AP.de-Erweiterung.</p>
-</blockquote>
 
         </div>
         <div>
@@ -7647,22 +7298,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li>URI ↔ nur <code>gmd:code</code></li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>EPSG:&lt;code&gt;</code> ↔ <code>http://www.opengis.net/def/crs/EPSG/0/&lt;code&gt;</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: nur IRIs von Koordinatenreferenzsystemen. Schreiben: andere Werte unverändert als IRI.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_crs"
@@ -7835,25 +7470,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: auch GML 3.2 (<code>gml32:</code>) und <code>gml:begin/gml:TimeInstant/gml:timePosition</code>; <code>indeterminatePosition</code> (<code>now</code>, <code>unknown</code>) lässt die Grenze offen; ungültige Werte → <code>date_text</code>.</p>
   
   <p>Schreiben: offene Grenze als leeres Element mit <code>indeterminatePosition="unknown"</code>; <code>gml:TimePeriod</code> mit <code>gml:id</code>; <code>date_text</code> wird nicht geschrieben.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:temporal | dct:issued | dct:modified | dct:created</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>date_range</code> ↔ <code>dct:temporal</code> (<code>dct:PeriodOfTime</code>; <code>gte</code> ↔ <code>dcat:startDate</code>, <code>lte</code> ↔ <code>dcat:endDate</code>)</li>
-<li><code>date</code> mit <code>date_type</code>: <code>first_published</code> ↔ <code>dct:issued</code>, <code>last_updated</code> ↔ <code>dct:modified</code>, <code>created</code> ↔ <code>dct:created</code></li>
-</ul>
-
-<blockquote>
-  <p>Schreiben: <code>date</code> ohne <code>date_type</code> als <code>dct:temporal</code> mit gleichem Start- und Enddatum; <code>date_text</code> wird nicht geschrieben.</p>
-  
-  <p>DCAT-AP 1.x / DCAT-AP.de 1.x: <code>schema:startDate</code>/<code>schema:endDate</code> statt <code>dcat:startDate</code>/<code>dcat:endDate</code> (nur lesen). DCAT-AP 3.0 erlaubt zusätzlich <code>time:hasBeginning</code>/<code>time:hasEnd</code> (nur lesen).</p>
 </blockquote>
 
         </div>
@@ -8635,31 +8251,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal. Schreiben: ein <code>gmd:MD_Keywords</code> je <code>source</code>; Keyword mit <code>id</code> als <code>gmx:Anchor</code>; Thesaurus <code>inspire</code> mit Datum 2008-06-01 (<code>publication</code>).</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:keyword | dcat:theme | dct:subject | dcatap:hvdCategory</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>term</code> mit <code>source</code> <code>frei</code> ↔ <code>dcat:keyword</code></li>
-<li><code>id</code> und <code>term</code> ↔ <code>dcat:theme</code> (IRI; <code>term</code> aus <code>skos:prefLabel</code>, sonst letzter Pfadabschnitt); <code>source</code> nach dem Anfang der IRI:
-<ul>
-<li><code>inspire</code> ↔ <code>http://inspire.ec.europa.eu/theme/</code></li>
-<li><code>gemet</code> ↔ <code>http://www.eionet.europa.eu/gemet/concept/</code></li>
-<li><code>umthes</code> ↔ <code>https://sns.uba.de/umthes/</code></li>
-<li><code>data-theme</code> ↔ <code>http://publications.europa.eu/resource/authority/data-theme/</code></li>
-</ul></li>
-<li><code>source</code> <code>iso_topic</code> ↔ <code>dct:subject</code> mit IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/</code></li>
-<li><code>source</code> <code>hvd</code> ↔ <code>dcatap:hvdCategory</code> mit IRI aus <code>http://data.europa.eu/bna/</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal; ein Literal statt einer IRI wird <code>term</code> mit <code>source</code> <code>frei</code>. UNKLAR: Die Kennungen <code>data-theme</code> und <code>hvd</code> sind noch abzustimmen.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_keywords"
@@ -8974,25 +8565,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: jede URL nur einmal. Schreiben: <code>3600</code> wird nicht als <code>gmd:onLine</code> geschrieben, die URL gehört zu <code>ingrid.service.operations</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:landingPage | foaf:page | dcat:distribution</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>url</code> ↔ <code>dcat:landingPage</code> bzw. <code>foaf:page</code>, <code>title</code> ↔ dessen <code>dct:title</code>; <code>type.value</code> <code>information</code></li>
-<li><code>url</code> ↔ <code>dcat:distribution/dcat:downloadURL</code> (<code>type.value</code> <code>download</code>), sonst <code>dcat:accessURL</code> (<code>type.value</code> <code>information</code>); <code>title</code> ↔ <code>dct:title</code>, <code>explanation</code> ↔ <code>dct:description</code></li>
-<li><code>type.value</code> <code>previewGraphic</code> → <code>foaf:depiction</code></li>
-<li><code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zu <code>type.value</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: jede URL nur einmal. Schreiben: <code>download</code> mit <code>dcat:downloadURL</code> und <code>dcat:accessURL</code>; andere Typen außer <code>information</code> als <code>dcat:distribution</code> mit <code>dcat:accessURL</code>.</p>
 </blockquote>
 
         </div>
@@ -9423,10 +8995,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h4>ISO 19139:2007</h4>
 
 <p>Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Feld für die Volltextsuche.</p>
 
         </div>
         <div>
@@ -10355,10 +9923,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 523 zum Code</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_temporal_allOf_i1_status"
@@ -10518,34 +10082,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li><code>value</code> ↔ Code</li>
 <li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 518 zum Code</li>
 </ul>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:accrualPeriodicity</code></p>
-
-<h6>Mapping (lookup)</h6>
-
-<p><code>value</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://publications.europa.eu/resource/authority/frequency/</code>:</p>
-
-<ul>
-<li><code>continual</code> ↔ <code>UPDATE_CONT</code> (lesen auch <code>CONT</code>)</li>
-<li><code>daily</code> ↔ <code>DAILY</code></li>
-<li><code>weekly</code> ↔ <code>WEEKLY</code></li>
-<li><code>fortnightly</code> ↔ <code>BIWEEKLY</code></li>
-<li><code>monthly</code> ↔ <code>MONTHLY</code></li>
-<li><code>quarterly</code> ↔ <code>QUARTERLY</code></li>
-<li><code>biannually</code> ↔ <code>ANNUAL_2</code></li>
-<li><code>annually</code> ↔ <code>ANNUAL</code></li>
-<li><code>irregular</code> ↔ <code>IRREG</code></li>
-<li><code>notPlanned</code> ↔ <code>NEVER</code></li>
-<li><code>unknown</code> ↔ <code>UNKNOWN</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: <code>key</code> = ID des Eintrags der InGrid-Codeliste 518 zum Wert.</p>
-</blockquote>
 
         </div>
         <div>
@@ -10708,10 +10244,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li>Sekunden ↔ ISO-8601-Dauer (z. B. <code>P1D</code> = 86400; geschrieben als <code>PT&lt;n&gt;S</code>)</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_temporal_allOf_i1_user_defined_maintenance_frequency_in_sec"
@@ -10847,10 +10379,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Schreiben</h5>
 
 <p>Wird nicht geschrieben; das ISO-Dokument entsteht aus den übrigen Feldern.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP. Nur bei Datensätzen im Format ISO 19139:2007.</p>
 
         </div>
         <div>
@@ -11068,12 +10596,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Lesen: alle Vorkommen, mit Leerzeichen verbunden. Schreiben: als ein <code>gmd:alternateTitle</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:alternative</code></p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_alternate_title"
@@ -11155,24 +10677,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Lesen: höchstens ein Eintrag je <code>type</code>; <code>source</code> auch aus dem Feld <code>quelle</code> eines JSON-Texts (GDI-DE-Konvention), der selbst kein <code>item</code> wird; Codes außer <code>otherRestrictions</code> werden als <code>item</code> übernommen.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:license | dct:accessRights | dcat:distribution/dct:rights</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>useConstraints</code> ↔ <code>dct:license</code> (<code>key</code> = IRI, <code>value</code> = Titel der Lizenz); <code>source</code> ↔ <code>dcat:distribution/dcatde:licenseAttributionByText</code></li>
-<li><code>accessConstraints</code> ↔ <code>dct:accessRights</code> (<code>key</code> = IRI, <code>value</code> = Label)</li>
-<li><code>useLimitations</code> ↔ <code>dcat:distribution/dct:rights</code> (<code>dct:RightsStatement</code>, <code>value</code> = <code>rdfs:label</code>)</li>
-</ul>
-
-<blockquote>
-  <p>Lesen: höchstens ein Eintrag je <code>type</code>; Lizenzen der Ressource und aller Distributionen ohne Duplikate. Schreiben: Lizenzen und <code>dct:rights</code> an jeder Distribution. UNKLAR: Werte ohne IRI (<code>key</code>) bei <code>useConstraints</code> und <code>accessConstraints</code>.</p>
 </blockquote>
 
         </div>
@@ -11741,16 +11245,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p><code>gmd:parentIdentifier/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:inSeries</code></p>
-
-<blockquote>
-  <p>Lesen: auch <code>dct:isPartOf</code>; <code>dct:identifier</code> der übergeordneten Ressource, sonst ihre IRI. UNKLAR: Schreiben braucht die IRI der Serie, das Indexformat enthält nur die UUID.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_parent_identifier"
@@ -11824,12 +11318,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>adms:identifier/skos:notation</code></p>
 
         </div>
         <div>
@@ -11905,16 +11393,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Ein <code>gmd:spatialRepresentationInfo</code> für <code>vector</code> und eines für <code>grid</code> (jeweils wenn gesetzt); das Element darunter ergibt sich aus <code>vector</code> bzw. <code>grid</code> (siehe dort).</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:distribution/adms:representationTechnique</code></p>
-
-<blockquote>
-  <p>Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle Typen an jeder Distribution.</p>
 </blockquote>
 
         </div>
@@ -12003,29 +11481,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Ein <code>gmd:spatialRepresentationType</code> je Wert; nur bei <code>gmd:MD_DataIdentification</code>. Lesen: zusätzlich <code>vector</code> bei <code>gmd:MD_VectorSpatialRepresentation</code> und <code>grid</code> bei <code>gmd:MD_GridSpatialRepresentation</code>, <code>gmd:MD_Georectified</code> oder <code>gmd:MD_Georeferenceable</code> unter <code>gmd:spatialRepresentationInfo</code>, ohne Dubletten.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:distribution/adms:representationTechnique</code></p>
-
-<h6>Mapping (lookup)</h6>
-
-<p>Letzter Pfadabschnitt der IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/</code>:</p>
-
-<ul>
-<li><code>vector</code> ↔ <code>vector</code></li>
-<li><code>grid</code> ↔ <code>grid</code></li>
-<li><code>text</code> ↔ <code>textTable</code></li>
-<li><code>tin</code> ↔ <code>tin</code></li>
-<li><code>stereomodel</code> ↔ <code>stereoModel</code></li>
-<li><code>video</code> ↔ <code>video</code></li>
-</ul>
-
-<blockquote>
-  <p>Ein Wert je IRI, ohne Dubletten.</p>
 </blockquote>
 
         </div>
@@ -12167,10 +11622,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Nur bei <code>gmd:MD_VectorSpatialRepresentation</code>; ein <code>gmd:MD_GeometricObjects</code> je Eintrag.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -12594,10 +12045,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Ein <code>gmd:spatialRepresentationInfo</code>. Lesen: das erste Raster-Element.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid"
@@ -12679,10 +12126,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Bei allen Raster-Elementen.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -13137,10 +12580,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <p><code>gmd:spatialRepresentationInfo/*/gmd:transformationParameterAvailability/gco:Boolean</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_available_parameters"
@@ -13224,10 +12663,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:spatialRepresentationInfo/*/gmd:numberOfDimensions/gco:Integer</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -13319,10 +12754,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li><code>value</code> ↔ Code</li>
 <li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 509 zum Code</li>
 </ul>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -13546,10 +12977,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Nur bei <code>gmd:MD_Georectified</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_rectified_checkpoint_availability"
@@ -13644,10 +13071,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Nur bei <code>gmd:MD_Georectified</code>. Freitext.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -13747,10 +13170,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Nur bei <code>gmd:MD_Georectified</code>. Lesen: auch GML 3.2 (<code>gml32:</code>).</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -13853,10 +13272,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Nur bei <code>gmd:MD_Georectified</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -14091,10 +13506,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Nur bei <code>gmd:MD_Georeferenceable</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_orientation_parameter_availability"
@@ -14189,10 +13600,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>Nur bei <code>gmd:MD_Georeferenceable</code>. Der Feldname im Indexformat weicht in der Schreibweise vom ISO-Element ab.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -14289,10 +13696,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Nur bei <code>gmd:MD_Georeferenceable</code>. Lesen: ohne <code>gmd:georeferencedParameters</code> der Titel der ersten <code>gmd:parameterCitation</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid_referenced_parameters"
@@ -14377,16 +13780,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>Nur Datensätze. Ein <code>gmd:MD_Resolution</code> enthält entweder <code>gmd:equivalentScale</code> oder <code>gmd:distance</code>. Schreiben: ein <code>gmd:MD_Resolution</code> je gesetztem Unterfeld.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:spatialResolutionInMeters</code></p>
-
-<blockquote>
-  <p>Nur <code>resolution_ground</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale"
@@ -14459,10 +13852,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -14549,12 +13938,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
   <p>In Meter, geschrieben mit <code>@uom="m"</code>. Lesen: <code>gco:Distance</code> mit anderer Einheit als <code>dpi</code>, umgerechnet nach <code>@uom</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:spatialResolutionInMeters</code></p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_resolution_scale_resolution_ground"
@@ -14635,10 +14018,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <blockquote>
   <p>In dpi: <code>gco:Distance</code> mit <code>@uom="dpi"</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -14721,23 +14100,6 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <blockquote>
   <p>Nur bei Diensten. Lesen: <code>uuid</code> auch aus <code>@xlink:href</code> (Parameter <code>id</code> oder letzter Pfadabschnitt) und aus <code>srv:coupledResource/srv:SV_CoupledResource/srv:identifier</code>; die eigene UUID wird ignoriert. <code>name</code>, <code>document_type</code> und <code>description</code> stammen aus dem gekoppelten Datensatz, dort entsteht auch der Eintrag mit <code>direction</code> <code>IN</code>. Schreiben: nur Einträge mit <code>direction</code> <code>OUT</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:servesDataset</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>je Datensatz ein Eintrag mit <code>direction</code> <code>OUT</code> und <code>reference_type</code> <code>Basisdaten</code></li>
-<li><code>uuid</code> ↔ <code>dct:identifier</code> des Datensatzes, sonst seine IRI</li>
-</ul>
-
-<blockquote>
-  <p>Nur bei <code>dcat:DataService</code>. <code>name</code>, <code>document_type</code> und <code>description</code> stammen aus dem gekoppelten Datensatz. Schreiben: nur Einträge mit <code>direction</code> <code>OUT</code>. UNKLAR: Bildung der IRI aus der UUID.</p>
 </blockquote>
 
         </div>
@@ -15284,16 +14646,6 @@ dieses.</p>
   <p>Schreiben: im gemeinsamen <code>gmd:DQ_DataQuality</code> (siehe <code>ingrid.data_quality</code>).</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:provenance</code></p>
-
-<blockquote>
-  <p>Ein <code>dct:ProvenanceStatement</code>.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage"
@@ -15366,12 +14718,6 @@ dieses.</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage/gmd:statement/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:provenance/rdfs:label</code></p>
 
         </div>
         <div>
@@ -15453,10 +14799,6 @@ dieses.</p>
 <blockquote>
   <p>Lesen: alle <code>gmd:LI_Source</code>, durch Zeilenumbruch getrennt. Schreiben: als ein <code>gmd:LI_Source</code>.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -15543,10 +14885,6 @@ dieses.</p>
 
 <p>Wird nicht geschrieben; die Bearbeitungsschritte stehen in <code>ingrid.process_step_description</code>.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_lineage_process_step"
@@ -15624,10 +14962,6 @@ dieses.</p>
 <blockquote>
   <p>Ein <code>gmd:LI_ProcessStep</code> je Wert.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -15751,10 +15085,6 @@ dieses.</p>
 <blockquote>
   <p>Ein Eintrag je <code>gmd:CI_Citation</code>. Schreiben: ein <code>gmd:portrayalCatalogueInfo</code> je Eintrag.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -16135,10 +15465,6 @@ dieses.</p>
   <p>Ein Eintrag je <code>gmd:CI_Citation</code>. Schreiben: alle in einem <code>gmd:MD_FeatureCatalogueDescription</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_codelist_reference"
@@ -16512,10 +15838,6 @@ dieses.</p>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_attribute_description"
@@ -16692,10 +16014,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:description/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_description"
@@ -16838,10 +16156,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:minimumValue/gco:Real</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_minimum"
@@ -16925,10 +16239,6 @@ dieses.</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:verticalElement/gmd:EX_VerticalExtent/gmd:maximumValue/gco:Real</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -17024,10 +16334,6 @@ dieses.</p>
 <blockquote>
   <p>Schreiben: <code>gml:VerticalCRS</code> mit <code>gml:id</code> und den übrigen Pflichtangaben der GML-Elemente.</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -17183,10 +16489,6 @@ dieses.</p>
 <li><code>key</code> ← ID des Eintrags der InGrid-Codeliste 101 zum Wert</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_vertical_extent_vdatum"
@@ -17326,10 +16628,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/gmd:resourceSpecificUsage/gmd:MD_Usage/gmd:specificUsage/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_specific_usage"
@@ -17397,10 +16695,6 @@ dieses.</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/gmd:purpose/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -17472,16 +16766,6 @@ dieses.</p>
 
 <blockquote>
   <p>Lesen: aus allen Prüfberichten (<code>gmd:report/*</code>). Schreiben: ein <code>gmd:report</code> (<code>gmd:DQ_DomainConsistency</code>) je Eintrag.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo</code></p>
-
-<blockquote>
-  <p>Ein Eintrag je Spezifikation, außer Koordinatenreferenzsystemen (siehe <code>crs</code>) und, bei <code>dcat:DataService</code>, Dienst-Standards (siehe <code>ingrid.service.versions</code>). Schreiben: nur Einträge mit <code>pass</code> <code>conformant</code>.</p>
 </blockquote>
 
         </div>
@@ -17617,16 +16901,6 @@ dieses.</p>
 <li><code>not-evaluated</code> ↔ ohne Wert (<code>gco:nilReason="unknown"</code>)</li>
 </ul>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo</code></p>
-
-<blockquote>
-  <p>Lesen: immer <code>conformant</code>, DCAT-AP nennt nur erfüllte Spezifikationen. Schreiben: Einträge mit <code>not-conformant</code> oder <code>not-evaluated</code> werden nicht geschrieben.</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_pass"
@@ -17718,23 +16992,6 @@ dieses.</p>
 <li><code>value</code> ↔ Titel</li>
 <li><code>key</code> ↔ <code>@xlink:href</code> eines <code>gmx:Anchor</code>; ohne <code>key</code> als <code>gco:CharacterString</code></li>
 </ul>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>key</code> ↔ IRI der Spezifikation</li>
-<li><code>value</code> ↔ <code>dct:title</code> (lesen auch <code>rdfs:label</code>, sonst die IRI)</li>
-</ul>
-
-<blockquote>
-  <p>Schreiben: ohne <code>key</code> ein Blank Node <code>dct:Standard</code> mit <code>dct:title</code>.</p>
-</blockquote>
 
         </div>
         <div>
@@ -17885,12 +17142,6 @@ dieses.</p>
   <p>Datum mit <code>gmd:dateType</code> <code>publication</code>. Lesen: auch <code>gco:DateTime</code>.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo/dct:issued</code></p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_publication_date"
@@ -17973,10 +17224,6 @@ dieses.</p>
 
 <p><code>gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:explanation/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_conformance_result_items_explanation"
@@ -18051,10 +17298,6 @@ dieses.</p>
 
 <p><code>gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor/gmd:MD_Distributor/gmd:distributionOrderProcess/gmd:MD_StandardOrderProcess/gmd:orderingInstructions/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_order_info"
@@ -18126,10 +17369,6 @@ dieses.</p>
 <blockquote>
   <p>Lesen: Prüfberichte aller <code>gmd:DQ_DataQuality</code>. Schreiben: ein gemeinsames <code>gmd:DQ_DataQuality</code> für <code>data_quality</code>, <code>conformance_result</code> und <code>lineage</code>, mit <code>gmd:scope/gmd:DQ_Scope/gmd:level</code> = <code>gmd:hierarchyLevel</code> (siehe <code>metadata.document_type</code>).</p>
 </blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -19103,10 +18342,6 @@ dieses.</p>
   <p>Nur Datensätze.</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_character_set"
@@ -19230,16 +18465,6 @@ dieses.</p>
   <p>Nur bei Diensten (<code>srv:SV_ServiceIdentification</code>, <code>metadata.document_type</code> <code>InGridGeoService</code>).</p>
 </blockquote>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>.</code></p>
-
-<blockquote>
-  <p>Nur bei <code>dcat:DataService</code> (<code>metadata.document_type</code> <code>InGridGeoService</code>).</p>
-</blockquote>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service"
@@ -19313,18 +18538,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/srv:serviceType/gco:LocalName</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:type</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>type</code> ↔ letzter Pfadabschnitt der IRI aus <code>http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/</code> (z. B. <code>view</code>, <code>download</code>)</li>
-</ul>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_type"
@@ -19391,23 +18604,12 @@ dieses.</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_classifications" onclick="anchorLink('allOf_i1_ingrid_service_classifications')">classifications</a></div><span class="badge badge-dark value-type">Type: array of string</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_classifications">
-            <h3>Transformation</h3>
+<span class="description"><h3>Transformation</h3>
 
 <h4>ISO 19139:2007</h4>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_classifications"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_classifications"
-            ></a>
-        </div>
+</span>
         
 
         
@@ -19536,16 +18738,6 @@ dieses.</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/srv:serviceTypeVersion/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dct:conformsTo/dct:title</code></p>
-
-<blockquote>
-  <p>Je Wert ein <code>dct:Standard</code> mit <code>dct:title</code> (z. B. <code>OGC WMS 1.3.0</code>). Lesen: auch <code>rdfs:label</code>, sonst die IRI.</p>
-</blockquote>
 
         </div>
         <div>
@@ -19684,16 +18876,6 @@ dieses.</p>
 
 <blockquote>
   <p>Ein Eintrag je <code>srv:SV_OperationMetadata</code>.</p>
-</blockquote>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:endpointURL</code></p>
-
-<blockquote>
-  <p>Ein Eintrag je <code>dcat:endpointURL</code>.</p>
 </blockquote>
 
         </div>
@@ -19837,10 +19019,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationName/gco:CharacterString</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations_items_name"
@@ -19931,10 +19109,6 @@ dieses.</p>
 <h5>Lesen &amp; schreiben</h5>
 
 <p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:operationDescription/gco:CharacterString</code></p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -20027,12 +19201,6 @@ dieses.</p>
 
 <p><code>gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL</code></p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>dcat:endpointURL</code></p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_operations_items_access_url"
@@ -20114,10 +19282,6 @@ dieses.</p>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_environment_description"
@@ -20193,10 +19357,6 @@ dieses.</p>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_service_history"
@@ -20271,10 +19431,6 @@ dieses.</p>
 <h4>ISO 19139:2007</h4>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
 
         </div>
         <div>
@@ -20367,22 +19523,6 @@ dieses.</p>
 
 <p>Wird nicht geschrieben; ergibt sich aus <code>ingrid.licenses</code> (<code>accessConstraints</code>).</p>
 
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<h5>Lesen</h5>
-
-<p><code>dct:accessRights</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>true</code>, wenn <code>dct:accessRights</code> angegeben und nicht <code>PUBLIC</code> (EU-Normdatei access-right) ist, sonst <code>false</code></li>
-</ul>
-
-<h5>Schreiben</h5>
-
-<p>Wird nicht geschrieben; ergibt sich aus <code>ingrid.licenses</code> (<code>accessConstraints</code>).</p>
-
         </div>
         <div>
             <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_has_access_constraints"
@@ -20449,23 +19589,12 @@ dieses.</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_service_doi" onclick="anchorLink('allOf_i1_ingrid_service_doi')">doi</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_service_doi">
-            <h3>Transformation</h3>
+<span class="description"><h3>Transformation</h3>
 
 <h4>ISO 19139:2007</h4>
 
 <p>UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.</p>
-
-<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
-
-<p>Kein Gegenstück in DCAT-AP.</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_service_doi"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_service_doi"
-            ></a>
-        </div>
+</span>
         
 
         
@@ -24214,6 +23343,6 @@ dieses.</p>
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-17 at 13:59:23 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-17 at 14:10:34 +0000</p>
     </footer></body>
 </html>

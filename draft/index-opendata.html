@@ -40,28 +40,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen Beschreibung.</p>
-
-<h5>Lesen</h5>
-
-<ul>
-<li>Text auch als <code>gmx:Anchor</code> (dann gilt der Textinhalt) statt <code>gco:CharacterString</code>; Übersetzungen (<code>gmd:PT_FreeText</code>) werden nicht übernommen.</li>
-<li><code>gmd:identificationInfo/*</code> ist die erste Identifikation (<code>gmd:identificationInfo[1]</code>), Datensatz (<code>gmd:MD_DataIdentification</code>) oder Dienst (<code>srv:SV_ServiceIdentification</code>); bei Diensten <code>srv:extent</code> statt <code>gmd:extent</code>.</li>
-<li>Bei Einzelwerten gilt das erste Vorkommen; Codelistenwerte stehen in <code>@codeListValue</code>.</li>
-<li>Wahrheitswerte (<code>gco:Boolean</code>): <code>true</code> und <code>1</code> ergeben <code>true</code>, <code>false</code> und <code>0</code> ergeben <code>false</code>.</li>
-</ul>
-
-<h5>Schreiben</h5>
-
-<ul>
-<li>Genau ein <code>gmd:identificationInfo</code>; <code>gmd:identificationInfo/*</code> ist <code>gmd:MD_DataIdentification</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> <code>srv:SV_ServiceIdentification</code> (dann <code>srv:extent</code> statt <code>gmd:extent</code>).</li>
-<li><code>gmd:spatialRepresentationInfo/*</code> steht für das Element, das sich aus <code>ingrid.spatial_representation.vector</code> bzw. <code>.grid</code> ergibt, <code>gmd:report/*</code> für das Element, das <code>ingrid.data_quality.qualities[].type</code> festlegt.</li>
-<li>Text als <code>gco:CharacterString</code>; Codelistenwerte in <code>@codeListValue</code> und als Elementinhalt, <code>@codeList</code> verweist auf das ISO-Codelisten-Register (<code>http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#&lt;Codeliste&gt;</code>).</li>
-<li>Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert erhalten <code>gco:nilReason="missing"</code>.</li>
-</ul>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0. Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.</p>
@@ -78,7 +56,7 @@ Hinweise:<br />
 <h5>Schreiben</h5>
 
 <ul>
-<li>Eine Ressource vom Typ <code>dcat:Dataset</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> vom Typ <code>dcat:DataService</code>.</li>
+<li>Eine Ressource vom Typ <code>dcat:Dataset</code>.</li>
 <li>Textliterale mit dem Sprach-Tag der Ressourcensprache (<code>language</code>), Datumswerte als <code>xsd:date</code> bzw. <code>xsd:dateTime</code>.</li>
 <li>Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate, Frequenzen und Zugriffsrechte, DCAT-AP.de-Lizenzen).</li>
 <li>Zwischenknoten (<code>dct:Location</code>, <code>dct:PeriodOfTime</code>, <code>vcard:Kind</code>, <code>foaf:Agent</code>, <code>dct:Standard</code> …) als Blank Nodes mit passendem <code>rdf:type</code>; <code>^foaf:primaryTopic</code> als <code>dcat:CatalogRecord</code>, dessen <code>foaf:primaryTopic</code> die Ressource ist.</li>
@@ -171,12 +149,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:fileIdentifier/gco:CharacterString</code></p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -249,10 +221,6 @@ Hinweise:<br />
             <p>Enthält die URL des JSON-Schemas, das für die Validierung verwendet wird.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Enthält die <code>$id</code> des Index-Schemas, gegen das das Dokument validiert wird.</p>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -448,10 +416,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP. DCAT-AP enthält kein Erstellungsdatum des Metadatensatzes; Wert <code>null</code>.</p>
@@ -525,16 +489,6 @@ Hinweise:<br />
             <p>Das Datum der letzten Änderung des Metadatensatzes. ISO 8601 Format.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:dateStamp/gco:DateTime</code></p>
-
-<blockquote>
-  <p>Lesen: auch <code>gco:Date</code>; ein reines Datum gilt als 00:00 UTC.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -616,10 +570,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. ISO 19139:2007 enthält kein Veröffentlichungsdatum des Metadatensatzes; das der Ressource steht in <code>temporal.data_temporal</code> (<code>first_published</code>).</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -693,10 +643,6 @@ Hinweise:<br />
             <p>Der Partner der Datenquelle als Kürzel.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Partner, aus dessen Bestand der Datensatz stammt.</p>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -772,10 +718,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP. Anbieter, aus dessen Bestand der Datensatz stammt.</p>
@@ -849,22 +791,6 @@ Hinweise:<br />
             <p>Angabe der Sprache des Metadatensatzes im ISO 639-1 Format</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:language/gmd:LanguageCode/@codeListValue</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>ID des Eintrags der InGrid-Codeliste 99999999 ↔ dessen ISO-Wert (ISO 639-2/B, z. B. <code>ger</code>)</li>
-</ul>
-
-<blockquote>
-  <p>Sprache des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>. Schreiben: <code>@codeList</code> <code>http://www.loc.gov/standards/iso639-2/</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -947,23 +873,12 @@ Hinweise:<br />
             />
         </svg>
     <a href="#allOf_i0_metadata_datasource" onclick="anchorLink('allOf_i0_metadata_datasource')">datasource</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i0_metadata_datasource">
-            <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
+<span class="description"><h3>Transformation</h3>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde (Kennung, Name, Art).</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_metadata_datasource"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_metadata_datasource"
-            ></a>
-        </div>
+</span>
         
 
         
@@ -1225,10 +1140,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP. Sortierschlüssel, der beim Erzeugen des Index-Dokuments vergeben wird.</p>
@@ -1289,12 +1200,6 @@ Hinweise:<br />
             <p>Der Titel des Datensatzes.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString</code></p>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -1359,12 +1264,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:abstract/gco:CharacterString</code></p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -1427,23 +1326,6 @@ Hinweise:<br />
             <p>Angabe der Sprache des Datensatzes im ISO 639-1 Format</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:language/gmd:LanguageCode/@codeListValue</code></p>
-
-<h6>Mapping (lookup)</h6>
-
-<ul>
-<li><code>de</code> ↔ <code>ger</code> (lesen auch <code>deu</code>, <code>de</code>)</li>
-<li><code>en</code> ↔ <code>eng</code> (lesen auch <code>en</code>)</li>
-</ul>
-
-<blockquote>
-  <p>Sprache der Ressource, nicht des Metadatensatzes. Lesen: auch als <code>gco:CharacterString</code>; ohne Angabe oder ohne Treffer <code>de</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -1522,24 +1404,6 @@ Hinweise:<br />
     <a href="#allOf_i0_contacts" onclick="anchorLink('allOf_i0_contacts')">contacts</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>je Kontakt ein <code>gmd:CI_ResponsibleParty</code>; die Art des Kontakts ergibt sich nur aus <code>role</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: zusätzlich die Kontakte zum Metadatensatz (<code>gmd:contact/gmd:CI_ResponsibleParty</code>), nach denen zur Ressource; gleiche Kontakte werden nicht zusammengeführt.</p>
-  
-  <p>Schreiben: <code>gmd:contact</code> (Pflicht) erhält die Kontakte mit <code>role</code> <code>pointOfContact</code>, sonst den ersten Kontakt. UNKLAR: Das Indexformat unterscheidet nicht zwischen Kontakten zur Ressource und zum Metadatensatz.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -1663,16 +1527,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_role">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode/@codeListValue</code></p>
-
-<blockquote>
-  <p>Wert unverändert (<code>CI_RoleCode</code>, z. B. <code>pointOfContact</code>, <code>custodian</code>).</p>
-</blockquote>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -1763,16 +1617,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_name">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString</code></p>
-
-<blockquote>
-  <p>Lesen: ohne Organisation der Personenname (<code>gmd:individualName</code>). Geschrieben wird immer <code>gmd:organisationName</code>, da das Indexformat nicht zwischen Person und Organisation unterscheidet.</p>
-</blockquote>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -1851,25 +1695,6 @@ Hinweise:<br />
     <a href="#allOf_i0_contacts_items_communications" onclick="anchorLink('allOf_i0_contacts_items_communications')">communications</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_communications">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>email</code> ↔ <code>gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString</code></li>
-<li><code>phone</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:voice/gco:CharacterString</code></li>
-<li><code>fax</code> ↔ <code>gmd:phone/gmd:CI_Telephone/gmd:facsimile/gco:CharacterString</code></li>
-<li><code>website</code> ↔ <code>gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage/gmd:URL</code></li>
-</ul>
-
-<blockquote>
-  <p><code>social</code> und <code>other</code> haben kein Gegenstück. Schreiben: nur die erste <code>website</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -2167,16 +1992,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_street">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
-
-<blockquote>
-  <p>Lesen: mehrere <code>gmd:deliveryPoint</code> mit Komma verbunden, außer dem Postfach (siehe <code>pobox</code>).</p>
-</blockquote>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -2256,16 +2071,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_code">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
-
-<blockquote>
-  <p>Lesen: nicht, wenn <code>gmd:deliveryPoint</code> nur das Postfach enthält (dann <code>pocode</code>).</p>
-</blockquote>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -2342,29 +2147,12 @@ Hinweise:<br />
             />
         </svg>
     <a href="#allOf_i0_contacts_items_pocode" onclick="anchorLink('allOf_i0_contacts_items_pocode')">pocode</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pocode">
-            <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:postalCode/gco:CharacterString</code></p>
-
-<blockquote>
-  <p><code>gmd:CI_Address</code> hat nur eine Postleitzahl; sie gehört zur Hausadresse (<code>code</code>). Lesen: nur, wenn <code>gmd:deliveryPoint</code> ausschließlich das Postfach enthält. Schreiben: nur ohne <code>code</code>.</p>
-</blockquote>
+<span class="description"><h3>Transformation</h3>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP.</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i0_contacts_items_pocode"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i0_contacts_items_pocode"
-            ></a>
-        </div>
+</span>
         
 
         
@@ -2427,22 +2215,6 @@ Hinweise:<br />
     <a href="#allOf_i0_contacts_items_pobox" onclick="anchorLink('allOf_i0_contacts_items_pobox')">pobox</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_pobox">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:deliveryPoint/gco:CharacterString</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>&lt;pobox&gt;</code> ↔ <code>Postfach &lt;pobox&gt;</code></li>
-</ul>
-
-<blockquote>
-  <p>Postfach gemäß ISO 11180, Anhang A. Lesen: ein <code>gmd:deliveryPoint</code>, der mit <code>Postfach</code> beginnt. Schreiben: als eigenes <code>gmd:deliveryPoint</code> nach der Hausadresse (<code>street</code>). UNKLAR: Das Präfix <code>Postfach</code> ist abzustimmen.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -2523,12 +2295,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_locality">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:city/gco:CharacterString</code></p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -2607,16 +2373,6 @@ Hinweise:<br />
     <a href="#allOf_i0_contacts_items_country" onclick="anchorLink('allOf_i0_contacts_items_country')">country</a></div><span class="badge badge-dark value-type">Type: string</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_country">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:country/gco:CharacterString</code></p>
-
-<blockquote>
-  <p>Wert unverändert, ohne Normalisierung auf einen Ländercode.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -2697,12 +2453,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_contacts_items_administrative_area">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:administrativeArea/gco:CharacterString</code></p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -2775,25 +2525,6 @@ Hinweise:<br />
             <p>Dieser Bereich enthält Informationen über den Raumbezug.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>je Eintrag ein <code>gmd:geographicElement</code></li>
-<li><code>bbox</code> und <code>geometry</code> ↔ <code>gmd:EX_GeographicBoundingBox</code></li>
-<li><code>geometry</code> ↔ <code>gmd:EX_BoundingPolygon</code></li>
-<li><code>toponym</code> ↔ <code>gmd:EX_GeographicDescription</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: ungültige Bounding Boxes (Länge außerhalb ±180°, Breite außerhalb ±90° oder Süd &gt; Nord) werden verworfen. Schreiben: alle in einem <code>gmd:EX_Extent</code>, je Wert in <code>toponym</code> ein eigenes <code>gmd:geographicElement</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -3168,10 +2899,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007.</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <p>Kein Gegenstück in DCAT-AP.</p>
@@ -3248,22 +2975,6 @@ Hinweise:<br />
     <a href="#allOf_i0_spatials_items_geometry" onclick="anchorLink('allOf_i0_spatials_items_geometry')">geometry</a></div><span class="badge badge-dark value-type">Type: object</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_geometry">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon/gmd:polygon</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>GeoJSON ↔ GML-Geometrie</li>
-</ul>
-
-<blockquote>
-  <p>Lesen: aus einer Bounding Box ein Polygon (bei gleichen Koordinaten Point bzw. LineString). Schreiben: nur, wenn <code>geometry</code> nicht das Rechteck aus <code>bbox</code> ist.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -6956,18 +6667,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>[west, south, east, north]</code> ↔ <code>gmd:westBoundLongitude</code>, <code>gmd:southBoundLatitude</code>, <code>gmd:eastBoundLongitude</code>, <code>gmd:northBoundLatitude</code> (je <code>gco:Decimal</code>)</li>
-</ul>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -7105,10 +6804,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Die Geometrie steht in <code>geometry</code> bzw. <code>bbox</code>.</p>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen</h5>
@@ -7191,16 +6886,6 @@ Hinweise:<br />
     <a href="#allOf_i0_spatials_items_toponym" onclick="anchorLink('allOf_i0_spatials_items_toponym')">toponym</a></div><h4>Toponym</h4><span class="badge badge-dark value-type">Type: array of string</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_spatials_items_toponym">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicDescription/gmd:geographicIdentifier/gmd:MD_Identifier/gmd:code/gco:CharacterString</code></p>
-
-<blockquote>
-  <p>Lesen: auch <code>gmd:RS_Identifier</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -7345,10 +7030,6 @@ Hinweise:<br />
             <p>Administrative Zuordnung</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007.</p>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -7630,20 +7311,6 @@ Hinweise:<br />
 
 <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:referenceSystemInfo/gmd:MD_ReferenceSystem/gmd:referenceSystemIdentifier/gmd:RS_Identifier</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li>je Wert ein <code>gmd:referenceSystemInfo</code></li>
-<li><code>&lt;codeSpace&gt;:&lt;code&gt;</code> (z. B. <code>EPSG:25832</code>) ↔ <code>gmd:codeSpace/gco:CharacterString</code> und <code>gmd:code/gco:CharacterString</code></li>
-<li>URI ↔ nur <code>gmd:code</code></li>
-</ul>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -7813,26 +7480,6 @@ Hinweise:<br />
     <a href="#allOf_i0_temporal_data_temporal" onclick="anchorLink('allOf_i0_temporal_data_temporal')">data_temporal</a></div><span class="badge badge-dark value-type">Type: array</span><br/>
 <div class="description collapse" id="collapseDescription_allOf_i0_temporal_data_temporal">
             <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:extent/gmd:EX_Extent/gmd:temporalElement/gmd:EX_TemporalExtent/gmd:extent | gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation/gmd:date/gmd:CI_Date</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>date_range</code> ↔ <code>gml:TimePeriod</code> (<code>gte</code> ↔ <code>gml:beginPosition</code>, <code>lte</code> ↔ <code>gml:endPosition</code>)</li>
-<li><code>date</code> ↔ <code>gml:TimeInstant/gml:timePosition</code></li>
-<li><code>date</code> mit <code>date_type</code> ↔ <code>gmd:CI_Date</code>: <code>created</code> ↔ <code>creation</code>, <code>last_updated</code> ↔ <code>revision</code>, <code>first_published</code> ↔ <code>publication</code></li>
-</ul>
-
-<blockquote>
-  <p>Lesen: auch GML 3.2 (<code>gml32:</code>) und <code>gml:begin/gml:TimeInstant/gml:timePosition</code>; <code>indeterminatePosition</code> (<code>now</code>, <code>unknown</code>) lässt die Grenze offen; ungültige Werte → <code>date_text</code>.</p>
-  
-  <p>Schreiben: offene Grenze als leeres Element mit <code>indeterminatePosition="unknown"</code>; <code>gml:TimePeriod</code> mit <code>gml:id</code>; <code>date_text</code> wird nicht geschrieben.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -8608,30 +8255,6 @@ Hinweise:<br />
 <div class="description collapse" id="collapseDescription_allOf_i0_keywords">
             <h3>Transformation</h3>
 
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:identificationInfo/*/gmd:descriptiveKeywords/gmd:MD_Keywords</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>term</code> ↔ Text von <code>gmd:keyword</code>, <code>id</code> ↔ <code>gmx:Anchor/@xlink:href</code></li>
-<li><code>source</code> ↔ Titel des Thesaurus (<code>gmd:thesaurusName/gmd:CI_Citation/gmd:title</code>):
-<ul>
-<li><code>inspire</code> ↔ <code>GEMET - INSPIRE themes, version 1.0</code></li>
-<li><code>gemet</code> ↔ <code>GEMET - Concepts, version 2.1</code></li>
-<li><code>umthes</code> ↔ <code>UMTHES Thesaurus</code></li>
-<li><code>frei</code> ↔ ohne Thesaurus</li>
-</ul></li>
-<li><code>term</code> mit <code>source</code> <code>iso_topic</code> ↔ <code>gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/gmd:MD_TopicCategoryCode</code> (nur Datensätze)</li>
-</ul>
-
-<blockquote>
-  <p>Lesen: gleiche Einträge (<code>term</code>, <code>source</code>) nur einmal. Schreiben: ein <code>gmd:MD_Keywords</code> je <code>source</code>; Keyword mit <code>id</code> als <code>gmx:Anchor</code>; Thesaurus <code>inspire</code> mit Datum 2008-06-01 (<code>publication</code>).</p>
-</blockquote>
-
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
 <h5>Lesen &amp; schreiben</h5>
@@ -8953,25 +8576,6 @@ Hinweise:<br />
             <p>Enthält Verweise zu externen Ressourcen oder Downloads, die mit dem Datensatz verbunden sind. Hier können auch URLs zu getCapabilities-Anfragen angegeben werden.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<h5>Lesen &amp; schreiben</h5>
-
-<p><code>gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource</code></p>
-
-<h6>Mapping (logic)</h6>
-
-<ul>
-<li><code>url</code> ↔ <code>gmd:linkage/gmd:URL</code>, <code>title</code> ↔ <code>gmd:name</code>, <code>explanation</code> ↔ <code>gmd:description</code></li>
-<li><code>type.value</code> ↔ <code>gmd:function/gmd:CI_OnLineFunctionCode/@codeListValue</code>; <code>type.key</code> ← ID des Eintrags der InGrid-Codeliste 2000 zum Code</li>
-<li><code>type.value</code> <code>previewGraphic</code> ↔ <code>gmd:identificationInfo/*/gmd:graphicOverview/gmd:MD_BrowseGraphic</code> (<code>url</code> ↔ <code>gmd:fileName</code>, <code>explanation</code> ↔ <code>gmd:fileDescription</code>)</li>
-<li><code>type.key</code> <code>3600</code> (Gekoppelte Daten) ← GetCapabilities-URL eines Dienstes (<code>srv:containsOperations/srv:SV_OperationMetadata/srv:connectPoint</code>)</li>
-</ul>
-
-<blockquote>
-  <p>Lesen: jede URL nur einmal. Schreiben: <code>3600</code> wird nicht als <code>gmd:onLine</code> geschrieben, die URL gehört zu <code>ingrid.service.operations</code>.</p>
-</blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -9416,10 +9020,6 @@ Hinweise:<br />
             <p>Für Full Text Suche. Signifikanz von genauen Treffern kann hier geboostet werden. Entsprechende Felder sollten mit copy_to-Operation in Elasticsearch kopiert werden.</p>
 
 <h3>Transformation</h3>
-
-<h4>ISO 19139:2007</h4>
-
-<p>Kein Gegenstück in ISO 19139:2007. Feld für die Volltextsuche.</p>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
 
@@ -11173,6 +10773,6 @@ Hinweise:<br />
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-17 at 13:59:25 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-17 at 14:10:35 +0000</p>
     </footer></body>
 </html>
