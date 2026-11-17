@@ -1360,144 +1360,9 @@
             }
           },
           "then": {
-            "properties": {
-              "address": {
-                "unevaluatedProperties": false,
-                "allOf": [
-                  {
-                    "type": "object",
-                    "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
-                    "properties": {
-                      "document_type": {
-                        "type": "string",
-                        "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
-                        "enum": [
-                          "InGridPersonDoc",
-                          "InGridOrganisationDoc"
-                        ]
-                      },
-                      "position_name": {
-                        "type": "string",
-                        "title": "Aufgaben",
-                        "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
-                        "$comment": "InGrid-Domain 377",
-                        "examples": [
-                          "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
-                        ]
-                      },
-                      "hours_of_service": {
-                        "type": "string",
-                        "title": "Servicezeiten",
-                        "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
-                      },
-                      "cross_references": {
-                        "type": "array",
-                        "title": "Verknüpfungen",
-                        "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
-                        "items": {
-                          "type": "object",
-                          "title": "Verknüpfung",
-                          "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
-                          "properties": {
-                            "uuid": {
-                              "type": "string",
-                              "description": "UUID des verknüpften Dokuments."
-                            },
-                            "name": {
-                              "type": "string",
-                              "description": "Titel des verknüpften Dokuments."
-                            },
-                            "document_type": {
-                              "type": "string",
-                              "description": "`metadata.document_type` des verknüpften Dokuments."
-                            },
-                            "description": {
-                              "type": "string",
-                              "description": "Beschreibung des verknüpften Dokuments."
-                            },
-                            "reference_type": {
-                              "type": "string",
-                              "description": "Art der Verknüpfung."
-                            },
-                            "direction": {
-                              "type": "string",
-                              "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
-                              "enum": [
-                                "IN",
-                                "OUT"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": [
-                      "document_type"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "salutation": {
-                        "type": "string",
-                        "title": "Anrede",
-                        "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
-                        "examples": [
-                          "1 - Frau"
-                        ]
-                      },
-                      "salutation_ref_uri": {
-                        "type": "string",
-                        "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
-                        "examples": [
-                          "/codelist/1234/3"
-                        ]
-                      },
-                      "academic_title": {
-                        "type": "string",
-                        "title": "Titel",
-                        "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
-                        "examples": [
-                          "3 - Prof. Dr."
-                        ]
-                      },
-                      "academic_title_ref_uri": {
-                        "type": "string",
-                        "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
-                        "examples": [
-                          "/codelist/1234/3"
-                        ]
-                      },
-                      "first_name": {
-                        "type": "string",
-                        "title": "Vorname",
-                        "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
-                        "$comment": "InGrid-Domain 374",
-                        "examples": [
-                          "Rosemarie"
-                        ]
-                      },
-                      "last_name": {
-                        "type": "string",
-                        "title": "Name",
-                        "description": "Vollständiger Nachname der Person.\n",
-                        "$comment": "InGrid-Domain 374",
-                        "examples": [
-                          "vom Busche"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "last_name"
-                    ]
-                  }
-                ]
-              }
-            }
-          },
-          "else": {
-            "properties": {
-              "address": {
+            "unevaluatedProperties": false,
+            "allOf": [
+              {
                 "type": "object",
                 "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
                 "properties": {
@@ -1542,7 +1407,7 @@
                         },
                         "document_type": {
                           "type": "string",
-                          "description": "`metadata.document_type` des verknüpften Dokuments."
+                          "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                         },
                         "description": {
                           "type": "string",
@@ -1566,10 +1431,137 @@
                 },
                 "required": [
                   "document_type"
-                ],
-                "unevaluatedProperties": false
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "salutation": {
+                    "type": "string",
+                    "title": "Anrede",
+                    "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+                    "examples": [
+                      "1 - Frau"
+                    ]
+                  },
+                  "salutation_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
+                  },
+                  "academic_title": {
+                    "type": "string",
+                    "title": "Titel",
+                    "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+                    "examples": [
+                      "3 - Prof. Dr."
+                    ]
+                  },
+                  "academic_title_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "title": "Vorname",
+                    "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "examples": [
+                      "Rosemarie"
+                    ]
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "Vollständiger Nachname der Person.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "examples": [
+                      "vom Busche"
+                    ]
+                  }
+                },
+                "required": [
+                  "last_name"
+                ]
               }
-            }
+            ]
+          },
+          "else": {
+            "type": "object",
+            "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+            "properties": {
+              "document_type": {
+                "type": "string",
+                "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+                "enum": [
+                  "InGridPersonDoc",
+                  "InGridOrganisationDoc"
+                ]
+              },
+              "position_name": {
+                "type": "string",
+                "title": "Aufgaben",
+                "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                "$comment": "InGrid-Domain 377",
+                "examples": [
+                  "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+                ]
+              },
+              "hours_of_service": {
+                "type": "string",
+                "title": "Servicezeiten",
+                "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
+              },
+              "cross_references": {
+                "type": "array",
+                "title": "Verknüpfungen",
+                "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                "items": {
+                  "type": "object",
+                  "title": "Verknüpfung",
+                  "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "description": "UUID des verknüpften Dokuments."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Titel des verknüpften Dokuments."
+                    },
+                    "document_type": {
+                      "type": "string",
+                      "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Beschreibung des verknüpften Dokuments."
+                    },
+                    "reference_type": {
+                      "type": "string",
+                      "description": "Art der Verknüpfung."
+                    },
+                    "direction": {
+                      "type": "string",
+                      "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                      "enum": [
+                        "IN",
+                        "OUT"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "document_type"
+            ],
+            "unevaluatedProperties": false
           }
         }
       }
@@ -1817,144 +1809,9 @@
             }
           },
           "then": {
-            "properties": {
-              "address": {
-                "unevaluatedProperties": false,
-                "allOf": [
-                  {
-                    "type": "object",
-                    "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
-                    "properties": {
-                      "document_type": {
-                        "type": "string",
-                        "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
-                        "enum": [
-                          "InGridPersonDoc",
-                          "InGridOrganisationDoc"
-                        ]
-                      },
-                      "position_name": {
-                        "type": "string",
-                        "title": "Aufgaben",
-                        "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
-                        "$comment": "InGrid-Domain 377",
-                        "examples": [
-                          "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
-                        ]
-                      },
-                      "hours_of_service": {
-                        "type": "string",
-                        "title": "Servicezeiten",
-                        "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
-                      },
-                      "cross_references": {
-                        "type": "array",
-                        "title": "Verknüpfungen",
-                        "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
-                        "items": {
-                          "type": "object",
-                          "title": "Verknüpfung",
-                          "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
-                          "properties": {
-                            "uuid": {
-                              "type": "string",
-                              "description": "UUID des verknüpften Dokuments."
-                            },
-                            "name": {
-                              "type": "string",
-                              "description": "Titel des verknüpften Dokuments."
-                            },
-                            "document_type": {
-                              "type": "string",
-                              "description": "`metadata.document_type` des verknüpften Dokuments."
-                            },
-                            "description": {
-                              "type": "string",
-                              "description": "Beschreibung des verknüpften Dokuments."
-                            },
-                            "reference_type": {
-                              "type": "string",
-                              "description": "Art der Verknüpfung."
-                            },
-                            "direction": {
-                              "type": "string",
-                              "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
-                              "enum": [
-                                "IN",
-                                "OUT"
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": [
-                      "document_type"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "salutation": {
-                        "type": "string",
-                        "title": "Anrede",
-                        "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
-                        "examples": [
-                          "1 - Frau"
-                        ]
-                      },
-                      "salutation_ref_uri": {
-                        "type": "string",
-                        "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
-                        "examples": [
-                          "/codelist/1234/3"
-                        ]
-                      },
-                      "academic_title": {
-                        "type": "string",
-                        "title": "Titel",
-                        "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
-                        "examples": [
-                          "3 - Prof. Dr."
-                        ]
-                      },
-                      "academic_title_ref_uri": {
-                        "type": "string",
-                        "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
-                        "examples": [
-                          "/codelist/1234/3"
-                        ]
-                      },
-                      "first_name": {
-                        "type": "string",
-                        "title": "Vorname",
-                        "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
-                        "$comment": "InGrid-Domain 374",
-                        "examples": [
-                          "Rosemarie"
-                        ]
-                      },
-                      "last_name": {
-                        "type": "string",
-                        "title": "Name",
-                        "description": "Vollständiger Nachname der Person.\n",
-                        "$comment": "InGrid-Domain 374",
-                        "examples": [
-                          "vom Busche"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "last_name"
-                    ]
-                  }
-                ]
-              }
-            }
-          },
-          "else": {
-            "properties": {
-              "address": {
+            "unevaluatedProperties": false,
+            "allOf": [
+              {
                 "type": "object",
                 "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
                 "properties": {
@@ -1999,7 +1856,7 @@
                         },
                         "document_type": {
                           "type": "string",
-                          "description": "`metadata.document_type` des verknüpften Dokuments."
+                          "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                         },
                         "description": {
                           "type": "string",
@@ -2023,10 +1880,137 @@
                 },
                 "required": [
                   "document_type"
-                ],
-                "unevaluatedProperties": false
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "salutation": {
+                    "type": "string",
+                    "title": "Anrede",
+                    "description": "Anrede der Person, um eine korrekte Korrespondenz zu ermöglichen. Hier wird die Codeliste 4300\nverwendet (`1` Frau, `2` Herr); freie Einträge (z. B. Mrs, Mr) sind möglich, dann ist `key` `null`.\n",
+                    "examples": [
+                      "1 - Frau"
+                    ]
+                  },
+                  "salutation_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
+                  },
+                  "academic_title": {
+                    "type": "string",
+                    "title": "Titel",
+                    "description": "Dem Namen vorangestellter akademischer Titel der Person. Hier wird die Codeliste 4305 verwendet\n(`1` Dr., `2` Prof., `3` Prof. Dr.). Amtstitel (z. B. MinD, OAR) werden aus Datenschutzgründen\nnicht angegeben.\n",
+                    "examples": [
+                      "3 - Prof. Dr."
+                    ]
+                  },
+                  "academic_title_ref_uri": {
+                    "type": "string",
+                    "description": "Beschreibt eine URI, die auf eine Codeliste aus dem InGrid-Codelist-Repository verweist.",
+                    "examples": [
+                      "/codelist/1234/3"
+                    ]
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "title": "Vorname",
+                    "description": "Vorname der Person, um Verwechslungen von Trägern gleicher Nachnamen zu vermeiden. Auf\nVollständigkeit der Vornamen wird kein Wert gelegt.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "examples": [
+                      "Rosemarie"
+                    ]
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "Vollständiger Nachname der Person.\n",
+                    "$comment": "InGrid-Domain 374",
+                    "examples": [
+                      "vom Busche"
+                    ]
+                  }
+                },
+                "required": [
+                  "last_name"
+                ]
               }
-            }
+            ]
+          },
+          "else": {
+            "type": "object",
+            "description": "Angaben zur Adresse ohne Gegenstück in den \"Root fields\". `salutation`, `academic_title`,\n`first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.\n",
+            "properties": {
+              "document_type": {
+                "type": "string",
+                "description": "Beschreibt, ob die Adresse eine Person oder eine Organisation ist.",
+                "enum": [
+                  "InGridPersonDoc",
+                  "InGridOrganisationDoc"
+                ]
+              },
+              "position_name": {
+                "type": "string",
+                "title": "Aufgaben",
+                "description": "Angabe der Zuständigkeiten und Aufgaben einer Institution. In knapper, aussagekräftiger Form\nsollen die Aufgaben und Zuständigkeiten der eingetragenen Institution dargestellt werden.\n",
+                "$comment": "InGrid-Domain 377",
+                "examples": [
+                  "Erarbeitung von fachlichen Grundlagen für Entscheidungen der Bezirksregierungen im Bereich des Naturschutzes sowie Erstellung von Gutachten in besonderen Fällen gemäß NNatG"
+                ]
+              },
+              "hours_of_service": {
+                "type": "string",
+                "title": "Servicezeiten",
+                "description": "Zeitraum inklusive der Zeitzone, wann die verantwortliche Person oder Organisation erreicht werden\nkann.\n"
+              },
+              "cross_references": {
+                "type": "array",
+                "title": "Verknüpfungen",
+                "description": "Interne InGrid-Verknüpfungen der Adresse:\n\n* Übergeordnete Adresse: ein Eintrag mit `direction` `OUT`, ohne `reference_type`.\n* Zugeordnete Datensätze (Datensätze, die die Adresse verwenden): je Datensatz ein Eintrag mit\n  `direction` `IN`; `reference_type` ist die Rolle, in der der Datensatz die Adresse verwendet\n  (z. B. `pointOfContact`).\n",
+                "items": {
+                  "type": "object",
+                  "title": "Verknüpfung",
+                  "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "description": "UUID des verknüpften Dokuments."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Titel des verknüpften Dokuments."
+                    },
+                    "document_type": {
+                      "type": "string",
+                      "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Beschreibung des verknüpften Dokuments."
+                    },
+                    "reference_type": {
+                      "type": "string",
+                      "description": "Art der Verknüpfung."
+                    },
+                    "direction": {
+                      "type": "string",
+                      "description": "`OUT`: dieses Dokument verweist auf das verknüpfte. `IN`: das verknüpfte Dokument verweist auf\ndieses.\n",
+                      "enum": [
+                        "IN",
+                        "OUT"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "document_type"
+            ],
+            "unevaluatedProperties": false
           }
         }
       }
@@ -2076,7 +2060,7 @@
               },
               "document_type": {
                 "type": "string",
-                "description": "`metadata.document_type` des verknüpften Dokuments."
+                "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
               },
               "description": {
                 "type": "string",

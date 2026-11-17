@@ -1661,7 +1661,7 @@
                       },
                       "document_type": {
                         "type": "string",
-                        "description": "`metadata.document_type` des verknüpften Dokuments."
+                        "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                       },
                       "description": {
                         "type": "string",
@@ -2722,7 +2722,7 @@
                       },
                       "document_type": {
                         "type": "string",
-                        "description": "`metadata.document_type` des verknüpften Dokuments."
+                        "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                       },
                       "description": {
                         "type": "string",

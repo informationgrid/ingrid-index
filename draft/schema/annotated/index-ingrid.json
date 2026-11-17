@@ -2000,7 +2000,7 @@
                   },
                   "document_type": {
                     "type": "string",
-                    "description": "`metadata.document_type` des verknüpften Dokuments."
+                    "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                   },
                   "description": {
                     "type": "string",
@@ -2266,7 +2266,7 @@
             },
             "data_quality": {
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `metadata.document_type`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `ingrid.document_type`).\n"
               },
               "properties": {
                 "completeness_omission": {
@@ -2365,7 +2365,7 @@
               "type": "object",
               "description": "Angaben zu einem Geodaten-Dienst",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `metadata.document_type` `InGridGeoService`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).\n"
               },
               "properties": {
                 "type": {
@@ -2483,7 +2483,7 @@
             "publication": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
               },
               "properties": {
                 "author": {
@@ -2594,7 +2594,7 @@
             "project": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
               },
               "properties": {
                 "participants": {
@@ -2623,7 +2623,7 @@
             "database_collection": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
               },
               "properties": {
                 "catalog_categories": {
@@ -2696,7 +2696,7 @@
             "information_system": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
               },
               "properties": {
                 "service_type": {
@@ -3462,7 +3462,7 @@
                   },
                   "document_type": {
                     "type": "string",
-                    "description": "`metadata.document_type` des verknüpften Dokuments."
+                    "description": "Dokumenttyp des verknüpften Dokuments (`ingrid.document_type` bzw. `address.document_type`)."
                   },
                   "description": {
                     "type": "string",
@@ -3728,7 +3728,7 @@
             },
             "data_quality": {
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `metadata.document_type`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `ingrid.document_type`).\n"
               },
               "properties": {
                 "completeness_omission": {
@@ -3827,7 +3827,7 @@
               "type": "object",
               "description": "Angaben zu einem Geodaten-Dienst",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `metadata.document_type` `InGridGeoService`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).\n"
               },
               "properties": {
                 "type": {
@@ -3945,7 +3945,7 @@
             "publication": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
               },
               "properties": {
                 "author": {
@@ -4056,7 +4056,7 @@
             "project": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
               },
               "properties": {
                 "participants": {
@@ -4085,7 +4085,7 @@
             "database_collection": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `metadata.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
               },
               "properties": {
                 "catalog_categories": {
@@ -4158,7 +4158,7 @@
             "information_system": {
               "type": "object",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `metadata.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
               },
               "properties": {
                 "service_type": {
