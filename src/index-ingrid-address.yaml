@@ -159,17 +159,13 @@ $defs:
             document_type:
               const: InGridPersonDoc
         then:
-          properties:
-            address:
-              unevaluatedProperties: false
-              allOf:
-                - $ref: "#/$defs/GeneralAddress"
-                - $ref: "#/$defs/Person"
+          unevaluatedProperties: false
+          allOf:
+            - $ref: "#/$defs/GeneralAddress"
+            - $ref: "#/$defs/Person"
         else:
-          properties:
-            address:
-              unevaluatedProperties: false
-              $ref: "#/$defs/GeneralAddress"
+          unevaluatedProperties: false
+          $ref: "#/$defs/GeneralAddress"
   GeneralAddress:
     type: object
     description: |
