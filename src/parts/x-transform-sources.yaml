@@ -6,7 +6,7 @@
 iso19139-2007:
   title: ISO 19139:2007
   pathLanguage: XPath 2.0 (Pfadausdrücke), vollständig ab gmd:MD_Metadata bzw. gmi:MI_Metadata
-  schemas: [index-ingrid, index-opendata, index-ingrid-address]
+  schemas: [index-ingrid, index-ingrid-address]
   description: |
     Die Pfade an den Feldern nennen die Form, die geschrieben wird. Beim Lesen werden zusätzlich die
     allgemeinen Varianten unten akzeptiert; weitere Abweichungen stehen als Kommentar an der jeweiligen
@@ -49,7 +49,7 @@ iso19139-2007:
 dcat-ap:
   title: DCAT-AP (inkl. DCAT-AP.de)
   pathLanguage: SPARQL 1.1 Property Path, vollständig ab der beschriebenen Ressource (dcat:Dataset, dcat:DataService, dcat:DatasetSeries)
-  schemas: [index-ingrid, index-opendata]
+  schemas: [index-opendata]
   description: |
     Gelesen werden alle Versionen (DCAT-AP 1.x bis 3.0, DCAT-AP.de); geschrieben wird DCAT-AP 3.0.
     Abweichungen einzelner Versionen stehen als Kommentar an der jeweiligen Beschreibung.
@@ -66,8 +66,7 @@ dcat-ap:
 
     # Schreiben
 
-    - Eine Ressource vom Typ `dcat:Dataset`, bei `metadata.document_type` `InGridGeoService` vom Typ
-      `dcat:DataService`.
+    - Eine Ressource vom Typ `dcat:Dataset`.
     - Textliterale mit dem Sprach-Tag der Ressourcensprache (`language`), Datumswerte als `xsd:date`
       bzw. `xsd:dateTime`.
     - Werte aus kontrollierten Vokabularen als IRI (EU-Normdateien für Sprachen, Dateiformate,
