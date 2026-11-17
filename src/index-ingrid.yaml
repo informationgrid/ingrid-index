@@ -364,32 +364,39 @@ $defs:
 
                 `gmd:spatialRepresentationInfo`
 
-                > Ein `gmd:spatialRepresentationInfo` je Eintrag; das Element darunter bestimmt `type` (siehe dort).
+                > Ein `gmd:spatialRepresentationInfo` für `vector` und eines für `grid` (jeweils wenn gesetzt); das
+                > Element darunter ergibt sich aus `vector` bzw. `grid` (siehe dort).
               dcat-ap: |
                 # Lesen & schreiben
 
                 `dcat:distribution/adms:representationTechnique`
 
-                > Lesen: ein Eintrag je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle
+                > Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle
                 > Typen an jeder Distribution.
             properties:
-              type:
-                type: string
-                title: "Typ"
-                description: "Beschreibt den Typ der Repräsentation"
+              types:
+                type: array
+                title: "Typen"
+                description: "Beschreibt die Typen der Repräsentation"
                 x-transform:
                   iso19139-2007: |
                     # Lesen & schreiben
 
-                    `gmd:spatialRepresentationInfo/*`
+                    `gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`
 
                     ## Mapping (lookup)
 
-                    - `vector` ↔ `gmd:MD_VectorSpatialRepresentation`
-                    - `grid` ↔ `gmd:MD_Georectified` (wenn `grid.rectified` gesetzt ist), `gmd:MD_Georeferenceable`
-                      (wenn `grid.referenced` gesetzt ist), sonst `gmd:MD_GridSpatialRepresentation`
+                    - `vector` ↔ `vector`
+                    - `grid` ↔ `grid`
+                    - `text` ↔ `textTable`
+                    - `tin` ↔ `tin`
+                    - `stereomodel` ↔ `stereoModel`
+                    - `video` ↔ `video`
 
-                    > `text`, `tin`, `video` und `stereomodel` haben kein Gegenstück.
+                    > Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich
+                    > `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,
+                    > `gmd:MD_Georectified` oder `gmd:MD_Georeferenceable` unter `gmd:spatialRepresentationInfo`, ohne
+                    > Dubletten.
                   dcat-ap: |
                     # Lesen & schreiben
 
@@ -406,13 +413,17 @@ $defs:
                     - `tin` ↔ `tin`
                     - `stereomodel` ↔ `stereoModel`
                     - `video` ↔ `video`
-                enum:
-                  - text
-                  - vector
-                  - tin
-                  - video
-                  - stereomodel
-                  - grid
+
+                    > Ein Wert je IRI, ohne Dubletten.
+                items:
+                  type: string
+                  enum:
+                    - text
+                    - vector
+                    - tin
+                    - video
+                    - stereomodel
+                    - grid
               vector:
                 type: array
                 title: "Vector"
@@ -457,6 +468,21 @@ $defs:
               grid:
                 title: "Raster/Gitter"
                 description: "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?"
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
+
+                    `gmd:spatialRepresentationInfo/*`
+
+                    ## Mapping (logic)
+
+                    - `rectified` gesetzt ↔ `gmd:MD_Georectified`
+                    - `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`
+                    - sonst ↔ `gmd:MD_GridSpatialRepresentation`
+
+                    > Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.
+                  dcat-ap: |
+                    Kein Gegenstück in DCAT-AP.
                 properties:
                   axes:
                     type: array

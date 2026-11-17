@@ -27,8 +27,9 @@ iso19139-2007:
     - Genau ein `gmd:identificationInfo`; `gmd:identificationInfo/*` ist `gmd:MD_DataIdentification`,
       bei `metadata.document_type` `InGridGeoService` `srv:SV_ServiceIdentification` (dann `srv:extent`
       statt `gmd:extent`).
-    - `gmd:spatialRepresentationInfo/*` und `gmd:report/*` stehen für das Element, das
-      `ingrid.spatial_representation[].type` bzw. `ingrid.data_quality.qualities[].type` festlegt.
+    - `gmd:spatialRepresentationInfo/*` steht für das Element, das sich aus
+      `ingrid.spatial_representation.vector` bzw. `.grid` ergibt, `gmd:report/*` für das Element, das
+      `ingrid.data_quality.qualities[].type` festlegt.
     - Text als `gco:CharacterString`; Codelistenwerte in `@codeListValue` und als Elementinhalt,
       `@codeList` verweist auf das ISO-Codelisten-Register
       (`http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#<Codeliste>`).
