@@ -53,8 +53,8 @@ $defs:
 
             ## Mapping (logic)
 
-            - `metadata.document_type` `InGridOrganisationDoc` ↔ `gmd:organisationName`
-            - `metadata.document_type` `InGridPersonDoc` ↔ `gmd:individualName`
+            - `address.document_type` `InGridOrganisationDoc` ↔ `gmd:organisationName`
+            - `address.document_type` `InGridPersonDoc` ↔ `gmd:individualName`
 
             > Schreiben bei Personen: aus `address.last_name`, `address.first_name` und
             > `address.academic_title` (siehe dort), nur ohne diese Angaben aus `title`.

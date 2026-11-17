@@ -25,7 +25,7 @@ iso19139-2007:
     # Schreiben
 
     - Genau ein `gmd:identificationInfo`; `gmd:identificationInfo/*` ist `gmd:MD_DataIdentification`,
-      bei `metadata.document_type` `InGridGeoService` `srv:SV_ServiceIdentification` (dann `srv:extent`
+      bei `ingrid.document_type` `InGridGeoService` `srv:SV_ServiceIdentification` (dann `srv:extent`
       statt `gmd:extent`).
     - `gmd:spatialRepresentationInfo/*` steht für das Element, das sich aus
       `ingrid.spatial_representation.vector` bzw. `.grid` ergibt, `gmd:report/*` für das Element, das

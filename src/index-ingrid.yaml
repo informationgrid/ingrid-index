@@ -937,7 +937,7 @@ $defs:
 
                 > Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`
                 > für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =
-                > `gmd:hierarchyLevel` (siehe `metadata.document_type`).
+                > `gmd:hierarchyLevel` (siehe `ingrid.document_type`).
             properties:
               completeness_omission:
                 type: number
@@ -1062,7 +1062,7 @@ $defs:
 
                 `gmd:identificationInfo/*`
 
-                > Nur bei Diensten (`srv:SV_ServiceIdentification`, `metadata.document_type` `InGridGeoService`).
+                > Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).
             properties:
               type:
                 type: string
@@ -1192,7 +1192,7 @@ $defs:
 
                 `.`
 
-                > Nur bei `metadata.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
+                > Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
                 > `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource
                 > (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).
             properties:
@@ -1334,7 +1334,7 @@ $defs:
 
                 `gmd:identificationInfo/*`
 
-                > Nur bei `metadata.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
+                > Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
                 > `gmd:hierarchyLevelName` `project`).
             properties:
               participants:
@@ -1377,7 +1377,7 @@ $defs:
 
                 `.`
 
-                > Nur bei `metadata.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`
+                > Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`
                 > mit `gmd:hierarchyLevelName` `database`).
             properties:
               catalog_categories:
@@ -1477,7 +1477,7 @@ $defs:
 
                 `gmd:identificationInfo/*`
 
-                > Nur bei `metadata.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),
+                > Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),
                 > als `gmd:MD_DataIdentification`.
             properties:
               service_type:
