@@ -60,7 +60,7 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <ul>
 <li>Genau ein <code>gmd:identificationInfo</code>; <code>gmd:identificationInfo/*</code> ist <code>gmd:MD_DataIdentification</code>, bei <code>metadata.document_type</code> <code>InGridGeoService</code> <code>srv:SV_ServiceIdentification</code> (dann <code>srv:extent</code> statt <code>gmd:extent</code>).</li>
-<li><code>gmd:spatialRepresentationInfo/*</code> und <code>gmd:report/*</code> stehen für das Element, das <code>ingrid.spatial_representation[].type</code> bzw. <code>ingrid.data_quality.qualities[].type</code> festlegt.</li>
+<li><code>gmd:spatialRepresentationInfo/*</code> steht für das Element, das sich aus <code>ingrid.spatial_representation.vector</code> bzw. <code>.grid</code> ergibt, <code>gmd:report/*</code> für das Element, das <code>ingrid.data_quality.qualities[].type</code> festlegt.</li>
 <li>Text als <code>gco:CharacterString</code>; Codelistenwerte in <code>@codeListValue</code> und als Elementinhalt, <code>@codeList</code> verweist auf das ISO-Codelisten-Register (<code>http://standards.iso.org/iso/19139/resources/gmxCodelists.xml#&lt;Codeliste&gt;</code>).</li>
 <li>Zwischenelemente werden angelegt, wiederholbare Elemente einmal je Wert; Pflichtelemente ohne Wert erhalten <code>gco:nilReason="missing"</code>.</li>
 </ul>
@@ -11904,7 +11904,7 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <p><code>gmd:spatialRepresentationInfo</code></p>
 
 <blockquote>
-  <p>Ein <code>gmd:spatialRepresentationInfo</code> je Eintrag; das Element darunter bestimmt <code>type</code> (siehe dort).</p>
+  <p>Ein <code>gmd:spatialRepresentationInfo</code> für <code>vector</code> und eines für <code>grid</code> (jeweils wenn gesetzt); das Element darunter ergibt sich aus <code>vector</code> bzw. <code>grid</code> (siehe dort).</p>
 </blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
@@ -11914,7 +11914,7 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <p><code>dcat:distribution/adms:representationTechnique</code></p>
 
 <blockquote>
-  <p>Lesen: ein Eintrag je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle Typen an jeder Distribution.</p>
+  <p>Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle Typen an jeder Distribution.</p>
 </blockquote>
 
         </div>
@@ -11929,18 +11929,18 @@ Folgende Anmerkungen zu den "Root fields":</p>
         
 
         
-<div class="accordion" id="accordionallOf_i1_ingrid_spatial_representation_type">
+<div class="accordion" id="accordionallOf_i1_ingrid_spatial_representation_types">
     <div class="card">
-        <div class="card-header" id="headingallOf_i1_ingrid_spatial_representation_type">
+        <div class="card-header" id="headingallOf_i1_ingrid_spatial_representation_types">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i1_ingrid_spatial_representation_type"
-                        aria-expanded="" aria-controls="allOf_i1_ingrid_spatial_representation_type" onclick="setAnchor('#allOf_i1_ingrid_spatial_representation_type')"><span class="property-name">type</span></button>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#allOf_i1_ingrid_spatial_representation_types"
+                        aria-expanded="" aria-controls="allOf_i1_ingrid_spatial_representation_types" onclick="setAnchor('#allOf_i1_ingrid_spatial_representation_types')"><span class="property-name">types</span></button>
             </h2>
         </div>
 
-        <div id="allOf_i1_ingrid_spatial_representation_type"
-             class="collapse property-definition-div" aria-labelledby="headingallOf_i1_ingrid_spatial_representation_type"
-             data-parent="#accordionallOf_i1_ingrid_spatial_representation_type">
+        <div id="allOf_i1_ingrid_spatial_representation_types"
+             class="collapse property-definition-div" aria-labelledby="headingallOf_i1_ingrid_spatial_representation_types"
+             data-parent="#accordionallOf_i1_ingrid_spatial_representation_types">
             <div class="card-body pl-5">
 
     <div class="breadcrumbs">root
@@ -11978,9 +11978,9 @@ Folgende Anmerkungen zu den "Root fields":</p>
                 d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
             />
         </svg>
-    <a href="#allOf_i1_ingrid_spatial_representation_type" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_type')">type</a></div><h4>Typ</h4><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_type">
-            <p>Beschreibt den Typ der Repräsentation</p>
+    <a href="#allOf_i1_ingrid_spatial_representation_types" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_types')">types</a></div><h4>Typen</h4><span class="badge badge-dark value-type">Type: array of enum (of string)</span><br/>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_types">
+            <p>Beschreibt die Typen der Repräsentation</p>
 
 <h3>Transformation</h3>
 
@@ -11988,17 +11988,21 @@ Folgende Anmerkungen zu den "Root fields":</p>
 
 <h5>Lesen &amp; schreiben</h5>
 
-<p><code>gmd:spatialRepresentationInfo/*</code></p>
+<p><code>gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue</code></p>
 
 <h6>Mapping (lookup)</h6>
 
 <ul>
-<li><code>vector</code> ↔ <code>gmd:MD_VectorSpatialRepresentation</code></li>
-<li><code>grid</code> ↔ <code>gmd:MD_Georectified</code> (wenn <code>grid.rectified</code> gesetzt ist), <code>gmd:MD_Georeferenceable</code> (wenn <code>grid.referenced</code> gesetzt ist), sonst <code>gmd:MD_GridSpatialRepresentation</code></li>
+<li><code>vector</code> ↔ <code>vector</code></li>
+<li><code>grid</code> ↔ <code>grid</code></li>
+<li><code>text</code> ↔ <code>textTable</code></li>
+<li><code>tin</code> ↔ <code>tin</code></li>
+<li><code>stereomodel</code> ↔ <code>stereoModel</code></li>
+<li><code>video</code> ↔ <code>video</code></li>
 </ul>
 
 <blockquote>
-  <p><code>text</code>, <code>tin</code>, <code>video</code> und <code>stereomodel</code> haben kein Gegenstück.</p>
+  <p>Ein <code>gmd:spatialRepresentationType</code> je Wert; nur bei <code>gmd:MD_DataIdentification</code>. Lesen: zusätzlich <code>vector</code> bei <code>gmd:MD_VectorSpatialRepresentation</code> und <code>grid</code> bei <code>gmd:MD_GridSpatialRepresentation</code>, <code>gmd:MD_Georectified</code> oder <code>gmd:MD_Georeferenceable</code> unter <code>gmd:spatialRepresentationInfo</code>, ohne Dubletten.</p>
 </blockquote>
 
 <h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
@@ -12020,12 +12024,70 @@ Folgende Anmerkungen zu den "Root fields":</p>
 <li><code>video</code> ↔ <code>video</code></li>
 </ul>
 
+<blockquote>
+  <p>Ein Wert je IRI, ohne Dubletten.</p>
+</blockquote>
+
         </div>
         <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_type"
-               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_type"
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_types"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_types"
             ></a>
-        </div><div class="enum-value" id="allOf_i1_ingrid_spatial_representation_type_enum">
+        </div>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="allOf_i1_ingrid_spatial_representation_types_items">
+            
+
+    <div class="breadcrumbs">root
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf" onclick="anchorLink('allOf')">allOf</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1" onclick="anchorLink('allOf_i1')">InGrid</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1_ingrid" onclick="anchorLink('allOf_i1_ingrid')">ingrid</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1_ingrid_spatial_representation" onclick="anchorLink('allOf_i1_ingrid_spatial_representation')">spatial_representation</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1_ingrid_spatial_representation_types" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_types')">types</a>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+            />
+        </svg>
+    <a href="#allOf_i1_ingrid_spatial_representation_types_items" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_types_items')">types items</a></div><span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<div class="enum-value" id="allOf_i1_ingrid_spatial_representation_types_items_enum">
             <h4>Must be one of:</h4>
             <ul class="list-group"><li class="list-group-item enum-item">"text"</li><li class="list-group-item enum-item">"vector"</li><li class="list-group-item enum-item">"tin"</li><li class="list-group-item enum-item">"video"</li><li class="list-group-item enum-item">"stereomodel"</li><li class="list-group-item enum-item">"grid"</li></ul>
             </div>
@@ -12035,6 +12097,8 @@ Folgende Anmerkungen zu den "Root fields":</p>
         
 
         
+        </div>
+    </div>
             </div>
         </div>
     </div>
@@ -12507,8 +12571,39 @@ Folgende Anmerkungen zu den "Root fields":</p>
             />
         </svg>
     <a href="#allOf_i1_ingrid_spatial_representation_grid" onclick="anchorLink('allOf_i1_ingrid_spatial_representation_grid')">grid</a></div><h4>Raster/Gitter</h4><span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?</p>
-</span>
+<div class="description collapse" id="collapseDescription_allOf_i1_ingrid_spatial_representation_grid">
+            <p>Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?</p>
+
+<h3>Transformation</h3>
+
+<h4>ISO 19139:2007</h4>
+
+<h5>Lesen &amp; schreiben</h5>
+
+<p><code>gmd:spatialRepresentationInfo/*</code></p>
+
+<h6>Mapping (logic)</h6>
+
+<ul>
+<li><code>rectified</code> gesetzt ↔ <code>gmd:MD_Georectified</code></li>
+<li><code>referenced</code> gesetzt ↔ <code>gmd:MD_Georeferenceable</code></li>
+<li>sonst ↔ <code>gmd:MD_GridSpatialRepresentation</code></li>
+</ul>
+
+<blockquote>
+  <p>Ein <code>gmd:spatialRepresentationInfo</code>. Lesen: das erste Raster-Element.</p>
+</blockquote>
+
+<h4>DCAT-AP (inkl. DCAT-AP.de)</h4>
+
+<p>Kein Gegenstück in DCAT-AP.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_allOf_i1_ingrid_spatial_representation_grid"
+               aria-expanded="false" aria-controls="collapseDescriptionallOf_i1_ingrid_spatial_representation_grid"
+            ></a>
+        </div>
         
 
         
@@ -24119,6 +24214,6 @@ dieses.</p>
         
 
     <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-12 at 07:20:06 +0000</p>
+        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2026-11-17 at 13:59:23 +0000</p>
     </footer></body>
 </html>

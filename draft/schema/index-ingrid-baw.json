@@ -1497,18 +1497,21 @@
                   "type": "object",
                   "title": "Digitale Repräsentation",
                   "properties": {
-                    "type": {
-                      "type": "string",
-                      "title": "Typ",
-                      "description": "Beschreibt den Typ der Repräsentation",
-                      "enum": [
-                        "text",
-                        "vector",
-                        "tin",
-                        "video",
-                        "stereomodel",
-                        "grid"
-                      ]
+                    "types": {
+                      "type": "array",
+                      "title": "Typen",
+                      "description": "Beschreibt die Typen der Repräsentation",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "vector",
+                          "tin",
+                          "video",
+                          "stereomodel",
+                          "grid"
+                        ]
+                      }
                     },
                     "vector": {
                       "type": "array",
@@ -2555,18 +2558,21 @@
                   "type": "object",
                   "title": "Digitale Repräsentation",
                   "properties": {
-                    "type": {
-                      "type": "string",
-                      "title": "Typ",
-                      "description": "Beschreibt den Typ der Repräsentation",
-                      "enum": [
-                        "text",
-                        "vector",
-                        "tin",
-                        "video",
-                        "stereomodel",
-                        "grid"
-                      ]
+                    "types": {
+                      "type": "array",
+                      "title": "Typen",
+                      "description": "Beschreibt die Typen der Repräsentation",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "text",
+                          "vector",
+                          "tin",
+                          "video",
+                          "stereomodel",
+                          "grid"
+                        ]
+                      }
                     },
                     "vector": {
                       "type": "array",

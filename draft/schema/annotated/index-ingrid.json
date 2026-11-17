@@ -1766,26 +1766,29 @@
               "type": "object",
               "title": "Digitale Repräsentation",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` je Eintrag; das Element darunter bestimmt `type` (siehe dort).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n> Lesen: ein Eintrag je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle\n> Typen an jeder Distribution.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` für `vector` und eines für `grid` (jeweils wenn gesetzt); das\n> Element darunter ergibt sich aus `vector` bzw. `grid` (siehe dort).\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n> Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle\n> Typen an jeder Distribution.\n"
               },
               "properties": {
-                "type": {
-                  "type": "string",
-                  "title": "Typ",
-                  "description": "Beschreibt den Typ der Repräsentation",
+                "types": {
+                  "type": "array",
+                  "title": "Typen",
+                  "description": "Beschreibt die Typen der Repräsentation",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (lookup)\n\n- `vector` ↔ `gmd:MD_VectorSpatialRepresentation`\n- `grid` ↔ `gmd:MD_Georectified` (wenn `grid.rectified` gesetzt ist), `gmd:MD_Georeferenceable`\n  (wenn `grid.referenced` gesetzt ist), sonst `gmd:MD_GridSpatialRepresentation`\n\n> `text`, `tin`, `video` und `stereomodel` haben kein Gegenstück.\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n## Mapping (lookup)\n\nLetzter Pfadabschnitt der IRI aus\n`http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/`:\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich\n> `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,\n> `gmd:MD_Georectified` oder `gmd:MD_Georeferenceable` unter `gmd:spatialRepresentationInfo`, ohne\n> Dubletten.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n## Mapping (lookup)\n\nLetzter Pfadabschnitt der IRI aus\n`http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/`:\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein Wert je IRI, ohne Dubletten.\n"
                   },
-                  "enum": [
-                    "text",
-                    "vector",
-                    "tin",
-                    "video",
-                    "stereomodel",
-                    "grid"
-                  ]
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "vector",
+                      "tin",
+                      "video",
+                      "stereomodel",
+                      "grid"
+                    ]
+                  }
                 },
                 "vector": {
                   "type": "array",
@@ -1824,6 +1827,10 @@
                 "grid": {
                   "title": "Raster/Gitter",
                   "description": "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                  },
                   "properties": {
                     "axes": {
                       "type": "array",
@@ -3285,26 +3292,29 @@
               "type": "object",
               "title": "Digitale Repräsentation",
               "x-transform": {
-                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` je Eintrag; das Element darunter bestimmt `type` (siehe dort).\n",
-                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n> Lesen: ein Eintrag je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle\n> Typen an jeder Distribution.\n"
+                "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo`\n\n> Ein `gmd:spatialRepresentationInfo` für `vector` und eines für `grid` (jeweils wenn gesetzt); das\n> Element darunter ergibt sich aus `vector` bzw. `grid` (siehe dort).\n",
+                "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n> Lesen: ein Wert je unterschiedlicher Darstellungsart aller Distributionen. Schreiben: alle\n> Typen an jeder Distribution.\n"
               },
               "properties": {
-                "type": {
-                  "type": "string",
-                  "title": "Typ",
-                  "description": "Beschreibt den Typ der Repräsentation",
+                "types": {
+                  "type": "array",
+                  "title": "Typen",
+                  "description": "Beschreibt die Typen der Repräsentation",
                   "x-transform": {
-                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (lookup)\n\n- `vector` ↔ `gmd:MD_VectorSpatialRepresentation`\n- `grid` ↔ `gmd:MD_Georectified` (wenn `grid.rectified` gesetzt ist), `gmd:MD_Georeferenceable`\n  (wenn `grid.referenced` gesetzt ist), sonst `gmd:MD_GridSpatialRepresentation`\n\n> `text`, `tin`, `video` und `stereomodel` haben kein Gegenstück.\n",
-                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n## Mapping (lookup)\n\nLetzter Pfadabschnitt der IRI aus\n`http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/`:\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n"
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`\n\n## Mapping (lookup)\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich\n> `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,\n> `gmd:MD_Georectified` oder `gmd:MD_Georeferenceable` unter `gmd:spatialRepresentationInfo`, ohne\n> Dubletten.\n",
+                    "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/adms:representationTechnique`\n\n## Mapping (lookup)\n\nLetzter Pfadabschnitt der IRI aus\n`http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationType/`:\n\n- `vector` ↔ `vector`\n- `grid` ↔ `grid`\n- `text` ↔ `textTable`\n- `tin` ↔ `tin`\n- `stereomodel` ↔ `stereoModel`\n- `video` ↔ `video`\n\n> Ein Wert je IRI, ohne Dubletten.\n"
                   },
-                  "enum": [
-                    "text",
-                    "vector",
-                    "tin",
-                    "video",
-                    "stereomodel",
-                    "grid"
-                  ]
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "vector",
+                      "tin",
+                      "video",
+                      "stereomodel",
+                      "grid"
+                    ]
+                  }
                 },
                 "vector": {
                   "type": "array",
@@ -3343,6 +3353,10 @@
                 "grid": {
                   "title": "Raster/Gitter",
                   "description": "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?",
+                  "x-transform": {
+                    "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n",
+                    "dcat-ap": "Kein Gegenstück in DCAT-AP.\n"
+                  },
                   "properties": {
                     "axes": {
                       "type": "array",
