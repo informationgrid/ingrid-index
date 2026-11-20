@@ -12,6 +12,7 @@ description: |
   
 
 type: object
+unevaluatedProperties: false
 allOf:
   - $ref: ./parts/core.yaml
   - type: object
@@ -52,6 +53,7 @@ allOf:
             > `distributions`.
       opendata:
         type: object
+        unevaluatedProperties: false
         properties:
           landing_page:
             type: string
@@ -133,6 +135,7 @@ allOf:
                       `dcat:distribution/dct:license`
     
                       > Eine Lizenz je Distribution.
+                  unevaluatedProperties: false
                   properties:
                     url:
                       type: string

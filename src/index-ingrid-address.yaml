@@ -25,6 +25,7 @@ $defs:
     type: object
     title: Address
     required: [ contacts, address ]
+    unevaluatedProperties: false
     properties:
       id:
         x-transform:
@@ -87,6 +88,7 @@ $defs:
                 required: [ type, value ]
           required: [ role, communications ]
         items:
+          unevaluatedProperties: false
           properties:
             role:
               description: "`self` für den Eintrag der Adresse selbst."
@@ -171,6 +173,7 @@ $defs:
     description: |
       Angaben zur Adresse ohne Gegenstück in den "Root fields". `salutation`, `academic_title`,
       `first_name` und `last_name` nur bei `InGridPersonDoc`; dort ist `last_name` Pflicht.
+    unevaluatedProperties: false
     properties:
       document_type:
         type: string
@@ -240,6 +243,7 @@ $defs:
       - document_type
   Person:
     type: object
+    unevaluatedProperties: false
     properties:
       salutation:
         type: string

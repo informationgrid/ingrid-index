@@ -10,6 +10,7 @@ $defs:
     type: object
     title: Verknüpfung
     description: Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.
+    unevaluatedProperties: false
     properties:
       uuid:
         type: string
@@ -36,6 +37,7 @@ $defs:
           - OUT
   Temporal:
     type: object
+    unevaluatedProperties: true
     properties:
       data_temporal:
         type: array
@@ -79,6 +81,7 @@ $defs:
           $ref: "./shared-types.yaml#/$defs/TypedPeriodOfTime"
   TypedPeriodOfTime:
     type: object
+    unevaluatedProperties: false
     properties:
       date:
         type: string
@@ -88,6 +91,7 @@ $defs:
         type: object
         title: Zeitabschnitt
         description: Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ "date_range" unterstützt und optimiert abgefragt werden kann.
+        unevaluatedProperties: false
         properties:
           gte:
             type: string

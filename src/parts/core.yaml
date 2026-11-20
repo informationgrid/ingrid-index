@@ -129,6 +129,7 @@ properties:
 
         > Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.
     items:
+      unevaluatedProperties: false
       properties:
         role:
           type: string
@@ -202,6 +203,7 @@ properties:
               > Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein
               > Gegenstück.
           items:
+            unevaluatedProperties: false
             properties:
               type:
                 type: string
@@ -425,6 +427,7 @@ properties:
     items:
       type: object
       title: item
+      unevaluatedProperties: false
       properties:
         term:
           type: string
@@ -511,6 +514,7 @@ $defs:
   SpatialItem:
     title: Spatial Core
     type: object
+    unevaluatedProperties: false
     properties:
       name:
         type: string
@@ -613,6 +617,7 @@ $defs:
         minItems: 0
       administrative:
         type: object
+        unevaluatedProperties: false
         properties:
           state:
             type: array
@@ -644,6 +649,7 @@ $defs:
       - required: [ "administrative" ]
   Metadata:
     type: object
+    unevaluatedProperties: false
     properties:
       data_type:
         type: string
@@ -767,6 +773,7 @@ $defs:
           dcat-ap: |
             Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde
             (Kennung, Name, Art).
+        unevaluatedProperties: false
         properties:
           id:
             type: string
@@ -794,6 +801,7 @@ $defs:
       - modified
   ReferenceItem:
     type: object
+    unevaluatedProperties: false
     properties:
       url:
         type: string

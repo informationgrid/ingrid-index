@@ -248,6 +248,7 @@ $defs:
             items:
               type: object
               title: item
+              unevaluatedProperties: false
               properties:
                 type:
                   type: string
@@ -261,6 +262,7 @@ $defs:
                   description: "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet."
                   items:
                     title: item
+                    unevaluatedProperties: false
                     properties:
                       name:
                         type: [ "string", "null" ]
@@ -312,20 +314,20 @@ $defs:
                 type: array
                 title: "Typen"
                 description: "Beschreibt die Typen der Repräsentation"
-                x-transform:
-                  iso19139-2007: |
-                    # Lesen & schreiben
+                  x-transform:
+                    iso19139-2007: |
+                      # Lesen & schreiben
 
                     `gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`
 
-                    ## Mapping (lookup)
+                      ## Mapping (lookup)
 
-                    - `vector` ↔ `vector`
-                    - `grid` ↔ `grid`
-                    - `text` ↔ `textTable`
-                    - `tin` ↔ `tin`
-                    - `stereomodel` ↔ `stereoModel`
-                    - `video` ↔ `video`
+                      - `vector` ↔ `vector`
+                      - `grid` ↔ `grid`
+                      - `text` ↔ `textTable`
+                      - `tin` ↔ `tin`
+                      - `stereomodel` ↔ `stereoModel`
+                      - `video` ↔ `video`
 
                     > Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich
                     > `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,
@@ -352,6 +354,7 @@ $defs:
 
                     > Nur bei `gmd:MD_VectorSpatialRepresentation`; ein `gmd:MD_GeometricObjects` je Eintrag.
                 items:
+                  unevaluatedProperties: false
                   properties:
                     topology:
                       type: string
@@ -382,6 +385,7 @@ $defs:
               grid:
                 title: "Raster/Gitter"
                 description: "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?"
+                unevaluatedProperties: false
                 x-transform:
                   iso19139-2007: |
                     # Lesen & schreiben
@@ -406,6 +410,7 @@ $defs:
 
                         > Bei allen Raster-Elementen.
                     items:
+                      unevaluatedProperties: false
                       properties:
                         label:
                           type: string
@@ -471,6 +476,7 @@ $defs:
                     $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                   rectified:
                     title: "Georektifiziertes Raster"
+                    unevaluatedProperties: false
                     properties:
                       checkpoint_availability:
                         type: boolean
@@ -524,6 +530,7 @@ $defs:
                         $ref: ./parts/shared-types.yaml#/$defs/CodelistRefUri
                   referenced:
                     title: "Georeferenzierbares Raster"
+                    unevaluatedProperties: false
                     properties:
                       orientation_parameter_availability:
                         type: boolean
@@ -569,6 +576,7 @@ $defs:
 
                 > Nur Datensätze. Ein `gmd:MD_Resolution` enthält entweder `gmd:equivalentScale` oder
                 > `gmd:distance`. Schreiben: ein `gmd:MD_Resolution` je gesetztem Unterfeld.
+            unevaluatedProperties: false
             properties:
               scale:
                 type: integer
@@ -635,6 +643,7 @@ $defs:
                 `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage`
 
                 > Schreiben: im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`).
+            unevaluatedProperties: false
             properties:
               statement:
                 type: string
@@ -695,6 +704,7 @@ $defs:
                 > Ein Eintrag je `gmd:CI_Citation`. Schreiben: ein `gmd:portrayalCatalogueInfo` je Eintrag.
             items:
               type: object
+              unevaluatedProperties: false
               properties:
                 title:
                   type: string
@@ -735,6 +745,7 @@ $defs:
                 > Ein Eintrag je `gmd:CI_Citation`. Schreiben: alle in einem `gmd:MD_FeatureCatalogueDescription`.
             items:
               type: object
+              unevaluatedProperties: false
               properties:
                 title:
                   type: string
@@ -774,6 +785,7 @@ $defs:
 
           spatial:
             type: object
+            unevaluatedProperties: false
             properties:
               description:
                 type: string
@@ -787,6 +799,7 @@ $defs:
                 type: object
                 title: Vertikale Ausdehnung
                 description: Höhenbereich der beschriebenen Daten, z. B. für Höhenmodelle.
+                unevaluatedProperties: false
                 properties:
                   minimum:
                     type: number
@@ -869,6 +882,7 @@ $defs:
                 > (`gmd:DQ_DomainConsistency`) je Eintrag.
             items:
               title: item
+              unevaluatedProperties: false
               properties:
                 pass:
                   type: string
@@ -938,6 +952,7 @@ $defs:
                 > Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`
                 > für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =
                 > `gmd:hierarchyLevel` (siehe `ingrid.document_type`).
+            unevaluatedProperties: false
             properties:
               completeness_omission:
                 type: number
@@ -947,6 +962,7 @@ $defs:
 
                     `gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_CompletenessOmission/gmd:result/gmd:DQ_QuantitativeResult/gmd:value/gco:Record`
               positional_accuracy:
+                unevaluatedProperties: false
                 properties:
                   horizontal:
                     type: number
@@ -975,6 +991,7 @@ $defs:
                     > Ein Eintrag je Prüfbericht mit `gmd:DQ_QuantitativeResult`, dessen Element in `type` vorkommt.
                 items:
                   type: object
+                  unevaluatedProperties: false
                   properties:
                     type:
                       type: string
@@ -1063,6 +1080,7 @@ $defs:
                 `gmd:identificationInfo/*`
 
                 > Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).
+            unevaluatedProperties: false
             properties:
               type:
                 type: string
@@ -1102,6 +1120,7 @@ $defs:
 
                     > Ein Eintrag je `srv:SV_OperationMetadata`.
                 items:
+                  unevaluatedProperties: false
                   properties:
                     name:
                       type: string
@@ -1173,6 +1192,7 @@ $defs:
                 x-transform:
                   iso19139-2007: |
                     UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.
+                unevaluatedProperties: false
                 properties:
                   identifier:
                     type: string
@@ -1195,6 +1215,7 @@ $defs:
                 > Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
                 > `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource
                 > (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).
+            unevaluatedProperties: false
             properties:
               author:
                 type: string
@@ -1336,6 +1357,7 @@ $defs:
 
                 > Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit
                 > `gmd:hierarchyLevelName` `project`).
+            unevaluatedProperties: false
             properties:
               participants:
                 type: string
@@ -1379,6 +1401,7 @@ $defs:
 
                 > Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`
                 > mit `gmd:hierarchyLevelName` `database`).
+            unevaluatedProperties: false
             properties:
               catalog_categories:
                 type: array
@@ -1394,6 +1417,7 @@ $defs:
                     > `2006-05-01`, `gmd:dateType` `publication`), da `gmd:featureCatalogueCitation` Pflicht ist.
                 items:
                   type: object
+                  unevaluatedProperties: false
                   properties:
                     title:
                       type: string
@@ -1442,6 +1466,7 @@ $defs:
                     > selbst auf eine Klammer endet, ist ohne `more_info` nicht zu unterscheiden.
                 items:
                   type: object
+                  unevaluatedProperties: false
                   properties:
                     parameter:
                       type: string
@@ -1479,6 +1504,7 @@ $defs:
 
                 > Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),
                 > als `gmd:MD_DataIdentification`.
+            unevaluatedProperties: false
             properties:
               service_type:
                 type: string
@@ -1558,6 +1584,7 @@ $defs:
                     > zu unterscheiden.
                 items:
                   type: object
+                  unevaluatedProperties: false
                   properties:
                     name:
                       type: string
