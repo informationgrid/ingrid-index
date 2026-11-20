@@ -43,6 +43,7 @@
             "metadata": {
               "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "data_type": {
                   "type": "string",
@@ -142,6 +143,7 @@
                     "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                     "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "id": {
                       "type": "string",
@@ -219,6 +221,7 @@
                 "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer`\n\n## Mapping (logic)\n\n- je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt `role` (siehe dort)\n- `dcat:contactPoint` als `vcard:Kind`, alle anderen als `foaf:Agent`\n\n> Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.\n"
               },
               "items": {
+                "unevaluatedProperties": false,
                 "properties": {
                   "role": {
                     "type": "string",
@@ -241,6 +244,7 @@
                       "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint`\n\n## Mapping (logic)\n\n- `email` ↔ `vcard:hasEmail` (`foaf:mbox`)\n- `phone` ↔ `vcard:hasTelephone` (`foaf:phone`)\n- `website` ↔ `vcard:hasURL` (`foaf:homepage`)\n\n> In Klammern die Form bei `foaf:Agent`. E-Mail als `mailto:`-IRI, Telefon als `tel:`-IRI. Lesen:\n> Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein\n> Gegenstück.\n"
                     },
                     "items": {
+                      "unevaluatedProperties": false,
                       "properties": {
                         "type": {
                           "type": "string",
@@ -321,6 +325,7 @@
               "items": {
                 "type": "object",
                 "title": "Spatial Core",
+                "unevaluatedProperties": false,
                 "properties": {
                   "name": {
                     "type": "string",
@@ -597,6 +602,7 @@
                   },
                   "administrative": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "state": {
                         "type": "array",
@@ -661,6 +667,7 @@
               "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
               "$comment": "Ehemaliges Indexfeld: object_date",
               "type": "object",
+              "unevaluatedProperties": true,
               "properties": {
                 "data_temporal": {
                   "type": "array",
@@ -670,6 +677,7 @@
                   },
                   "items": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "date": {
                         "type": "string",
@@ -680,6 +688,7 @@
                         "type": "object",
                         "title": "Zeitabschnitt",
                         "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "gte": {
                             "type": "string",
@@ -740,6 +749,7 @@
               "items": {
                 "type": "object",
                 "title": "item",
+                "unevaluatedProperties": false,
                 "properties": {
                   "term": {
                     "type": "string",
@@ -777,6 +787,7 @@
               "items": {
                 "type": "object",
                 "title": "item",
+                "unevaluatedProperties": false,
                 "properties": {
                   "url": {
                     "type": "string",
@@ -837,6 +848,7 @@
             "SpatialItem": {
               "title": "Spatial Core",
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "name": {
                   "type": "string",
@@ -1113,6 +1125,7 @@
                 },
                 "administrative": {
                   "type": "object",
+                  "unevaluatedProperties": false,
                   "properties": {
                     "state": {
                       "type": "array",
@@ -1158,6 +1171,7 @@
             },
             "Metadata": {
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "data_type": {
                   "type": "string",
@@ -1257,6 +1271,7 @@
                     "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                     "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "id": {
                       "type": "string",
@@ -1293,6 +1308,7 @@
             },
             "ReferenceItem": {
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "url": {
                   "type": "string",
@@ -1354,6 +1370,7 @@
               "allOf": [
                 {
                   "type": "object",
+                  "unevaluatedProperties": false,
                   "properties": {
                     "data_type": {
                       "type": "string",
@@ -1453,6 +1470,7 @@
                         "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                         "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
                       },
+                      "unevaluatedProperties": false,
                       "properties": {
                         "id": {
                           "type": "string",
@@ -1523,6 +1541,7 @@
               "allOf": [
                 {
                   "type": "object",
+                  "unevaluatedProperties": true,
                   "properties": {
                     "data_temporal": {
                       "type": "array",
@@ -1532,6 +1551,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "date": {
                             "type": "string",
@@ -1542,6 +1562,7 @@
                             "type": "object",
                             "title": "Zeitabschnitt",
                             "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                            "unevaluatedProperties": false,
                             "properties": {
                               "gte": {
                                 "type": "string",
@@ -1703,6 +1724,7 @@
                   "items": {
                     "type": "object",
                     "title": "item",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "type": {
                         "type": "string",
@@ -1718,6 +1740,7 @@
                         "description": "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet.",
                         "items": {
                           "title": "item",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "name": {
                               "type": [
@@ -1794,6 +1817,7 @@
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects`\n\n> Nur bei `gmd:MD_VectorSpatialRepresentation`; ein `gmd:MD_GeometricObjects` je Eintrag.\n"
                       },
                       "items": {
+                        "unevaluatedProperties": false,
                         "properties": {
                           "topology": {
                             "type": "string",
@@ -1822,6 +1846,7 @@
                     "grid": {
                       "title": "Raster/Gitter",
                       "description": "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?",
+                      "unevaluatedProperties": false,
                       "x-transform": {
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n"
                       },
@@ -1832,6 +1857,7 @@
                             "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension`\n\n> Bei allen Raster-Elementen.\n"
                           },
                           "items": {
+                            "unevaluatedProperties": false,
                             "properties": {
                               "label": {
                                 "type": "string",
@@ -1887,6 +1913,7 @@
                         },
                         "rectified": {
                           "title": "Georektifiziertes Raster",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "checkpoint_availability": {
                               "type": "boolean",
@@ -1926,6 +1953,7 @@
                         },
                         "referenced": {
                           "title": "Georeferenzierbares Raster",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "orientation_parameter_availability": {
                               "type": "boolean",
@@ -1959,6 +1987,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution`\n\n> Nur Datensätze. Ein `gmd:MD_Resolution` enthält entweder `gmd:equivalentScale` oder\n> `gmd:distance`. Schreiben: ein `gmd:MD_Resolution` je gesetztem Unterfeld.\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "scale": {
                       "type": "integer",
@@ -1995,6 +2024,7 @@
                     "type": "object",
                     "title": "Verknüpfung",
                     "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "uuid": {
                         "type": "string",
@@ -2034,6 +2064,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage`\n\n> Schreiben: im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "statement": {
                       "type": "string",
@@ -2076,6 +2107,7 @@
                   },
                   "items": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "title": {
                         "type": "string",
@@ -2109,6 +2141,7 @@
                   },
                   "items": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "title": {
                         "type": "string",
@@ -2146,6 +2179,7 @@
                 },
                 "spatial": {
                   "type": "object",
+                  "unevaluatedProperties": false,
                   "properties": {
                     "description": {
                       "type": "string",
@@ -2158,6 +2192,7 @@
                       "type": "object",
                       "title": "Vertikale Ausdehnung",
                       "description": "Höhenbereich der beschriebenen Daten, z. B. für Höhenmodelle.",
+                      "unevaluatedProperties": false,
                       "properties": {
                         "minimum": {
                           "type": "number",
@@ -2224,6 +2259,7 @@
                   },
                   "items": {
                     "title": "item",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "pass": {
                         "type": "string",
@@ -2274,6 +2310,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `ingrid.document_type`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "completeness_omission": {
                       "type": "number",
@@ -2282,6 +2319,7 @@
                       }
                     },
                     "positional_accuracy": {
+                      "unevaluatedProperties": false,
                       "properties": {
                         "horizontal": {
                           "type": "number",
@@ -2304,6 +2342,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "type": {
                             "type": "string",
@@ -2373,6 +2412,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "type": {
                       "type": "string",
@@ -2411,6 +2451,7 @@
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata`\n\n> Ein Eintrag je `srv:SV_OperationMetadata`.\n"
                       },
                       "items": {
+                        "unevaluatedProperties": false,
                         "properties": {
                           "name": {
                             "type": "string",
@@ -2469,6 +2510,7 @@
                       "x-transform": {
                         "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                       },
+                      "unevaluatedProperties": false,
                       "properties": {
                         "identifier": {
                           "type": "string",
@@ -2491,6 +2533,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "author": {
                       "type": "string",
@@ -2602,6 +2645,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "participants": {
                       "type": "string",
@@ -2631,6 +2675,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "catalog_categories": {
                       "type": "array",
@@ -2639,6 +2684,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "title": {
                             "type": "string",
@@ -2671,6 +2717,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "parameter": {
                             "type": "string",
@@ -2704,6 +2751,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "service_type": {
                       "type": "string",
@@ -2765,6 +2813,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "name": {
                             "type": "string",
@@ -2816,6 +2865,7 @@
               "allOf": [
                 {
                   "type": "object",
+                  "unevaluatedProperties": false,
                   "properties": {
                     "data_type": {
                       "type": "string",
@@ -2915,6 +2965,7 @@
                         "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                         "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
                       },
+                      "unevaluatedProperties": false,
                       "properties": {
                         "id": {
                           "type": "string",
@@ -2985,6 +3036,7 @@
               "allOf": [
                 {
                   "type": "object",
+                  "unevaluatedProperties": true,
                   "properties": {
                     "data_temporal": {
                       "type": "array",
@@ -2994,6 +3046,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "date": {
                             "type": "string",
@@ -3004,6 +3057,7 @@
                             "type": "object",
                             "title": "Zeitabschnitt",
                             "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                            "unevaluatedProperties": false,
                             "properties": {
                               "gte": {
                                 "type": "string",
@@ -3165,6 +3219,7 @@
                   "items": {
                     "type": "object",
                     "title": "item",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "type": {
                         "type": "string",
@@ -3180,6 +3235,7 @@
                         "description": "Liste von Einschränkungen oder Nutzungsbedingungen abhängig vom Typ. Es wird die Codeliste 6500 für useConstraints, 6010 für accessConstraints und freie Werte für useLimitations verwendet.",
                         "items": {
                           "title": "item",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "name": {
                               "type": [
@@ -3256,6 +3312,7 @@
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:geometricObjects/gmd:MD_GeometricObjects`\n\n> Nur bei `gmd:MD_VectorSpatialRepresentation`; ein `gmd:MD_GeometricObjects` je Eintrag.\n"
                       },
                       "items": {
+                        "unevaluatedProperties": false,
                         "properties": {
                           "topology": {
                             "type": "string",
@@ -3284,6 +3341,7 @@
                     "grid": {
                       "title": "Raster/Gitter",
                       "description": "Enthält die Information über die Strukturelemente der Rasterdaten. Aktuell nicht im Portal angezeigt?",
+                      "unevaluatedProperties": false,
                       "x-transform": {
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*`\n\n## Mapping (logic)\n\n- `rectified` gesetzt ↔ `gmd:MD_Georectified`\n- `referenced` gesetzt ↔ `gmd:MD_Georeferenceable`\n- sonst ↔ `gmd:MD_GridSpatialRepresentation`\n\n> Ein `gmd:spatialRepresentationInfo`. Lesen: das erste Raster-Element.\n"
                       },
@@ -3294,6 +3352,7 @@
                             "iso19139-2007": "# Lesen & schreiben\n\n`gmd:spatialRepresentationInfo/*/gmd:axisDimensionProperties/gmd:MD_Dimension`\n\n> Bei allen Raster-Elementen.\n"
                           },
                           "items": {
+                            "unevaluatedProperties": false,
                             "properties": {
                               "label": {
                                 "type": "string",
@@ -3349,6 +3408,7 @@
                         },
                         "rectified": {
                           "title": "Georektifiziertes Raster",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "checkpoint_availability": {
                               "type": "boolean",
@@ -3388,6 +3448,7 @@
                         },
                         "referenced": {
                           "title": "Georeferenzierbares Raster",
+                          "unevaluatedProperties": false,
                           "properties": {
                             "orientation_parameter_availability": {
                               "type": "boolean",
@@ -3421,6 +3482,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/gmd:spatialResolution/gmd:MD_Resolution`\n\n> Nur Datensätze. Ein `gmd:MD_Resolution` enthält entweder `gmd:equivalentScale` oder\n> `gmd:distance`. Schreiben: ein `gmd:MD_Resolution` je gesetztem Unterfeld.\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "scale": {
                       "type": "integer",
@@ -3457,6 +3519,7 @@
                     "type": "object",
                     "title": "Verknüpfung",
                     "description": "Interne InGrid-Verknüpfung mit einem anderen Datensatz oder einer Adresse.",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "uuid": {
                         "type": "string",
@@ -3496,6 +3559,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:lineage/gmd:LI_Lineage`\n\n> Schreiben: im gemeinsamen `gmd:DQ_DataQuality` (siehe `ingrid.data_quality`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "statement": {
                       "type": "string",
@@ -3538,6 +3602,7 @@
                   },
                   "items": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "title": {
                         "type": "string",
@@ -3571,6 +3636,7 @@
                   },
                   "items": {
                     "type": "object",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "title": {
                         "type": "string",
@@ -3608,6 +3674,7 @@
                 },
                 "spatial": {
                   "type": "object",
+                  "unevaluatedProperties": false,
                   "properties": {
                     "description": {
                       "type": "string",
@@ -3620,6 +3687,7 @@
                       "type": "object",
                       "title": "Vertikale Ausdehnung",
                       "description": "Höhenbereich der beschriebenen Daten, z. B. für Höhenmodelle.",
+                      "unevaluatedProperties": false,
                       "properties": {
                         "minimum": {
                           "type": "number",
@@ -3686,6 +3754,7 @@
                   },
                   "items": {
                     "title": "item",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "pass": {
                         "type": "string",
@@ -3736,6 +3805,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:dataQualityInfo/gmd:DQ_DataQuality`\n\n> Lesen: Prüfberichte aller `gmd:DQ_DataQuality`. Schreiben: ein gemeinsames `gmd:DQ_DataQuality`\n> für `data_quality`, `conformance_result` und `lineage`, mit `gmd:scope/gmd:DQ_Scope/gmd:level` =\n> `gmd:hierarchyLevel` (siehe `ingrid.document_type`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "completeness_omission": {
                       "type": "number",
@@ -3744,6 +3814,7 @@
                       }
                     },
                     "positional_accuracy": {
+                      "unevaluatedProperties": false,
                       "properties": {
                         "horizontal": {
                           "type": "number",
@@ -3766,6 +3837,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "type": {
                             "type": "string",
@@ -3835,6 +3907,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei Diensten (`srv:SV_ServiceIdentification`, `ingrid.document_type` `InGridGeoService`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "type": {
                       "type": "string",
@@ -3873,6 +3946,7 @@
                         "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*/srv:containsOperations/srv:SV_OperationMetadata`\n\n> Ein Eintrag je `srv:SV_OperationMetadata`.\n"
                       },
                       "items": {
+                        "unevaluatedProperties": false,
                         "properties": {
                           "name": {
                             "type": "string",
@@ -3931,6 +4005,7 @@
                       "x-transform": {
                         "iso19139-2007": "UNKLAR: Kein eindeutiges Gegenstück in ISO 19139:2007.\n"
                       },
+                      "unevaluatedProperties": false,
                       "properties": {
                         "identifier": {
                           "type": "string",
@@ -3953,6 +4028,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridPublication` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `document`). Die meisten Angaben stehen im Zitat der Ressource\n> (`gmd:identificationInfo/*/gmd:citation/gmd:CI_Citation`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "author": {
                       "type": "string",
@@ -4064,6 +4140,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridProject` (`gmd:hierarchyLevel` `nonGeographicDataset` mit\n> `gmd:hierarchyLevelName` `project`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "participants": {
                       "type": "string",
@@ -4093,6 +4170,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`.`\n\n> Nur bei `ingrid.document_type` `InGridDataCollection` (`gmd:hierarchyLevel` `nonGeographicDataset`\n> mit `gmd:hierarchyLevelName` `database`).\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "catalog_categories": {
                       "type": "array",
@@ -4101,6 +4179,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "title": {
                             "type": "string",
@@ -4133,6 +4212,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "parameter": {
                             "type": "string",
@@ -4166,6 +4246,7 @@
                   "x-transform": {
                     "iso19139-2007": "# Lesen & schreiben\n\n`gmd:identificationInfo/*`\n\n> Nur bei `ingrid.document_type` `InGridInformationSystem` (`gmd:hierarchyLevel` `application`),\n> als `gmd:MD_DataIdentification`.\n"
                   },
+                  "unevaluatedProperties": false,
                   "properties": {
                     "service_type": {
                       "type": "string",
@@ -4227,6 +4308,7 @@
                       },
                       "items": {
                         "type": "object",
+                        "unevaluatedProperties": false,
                         "properties": {
                           "name": {
                             "type": "string",

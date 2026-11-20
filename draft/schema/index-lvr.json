@@ -27,6 +27,7 @@
         "metadata": {
           "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "data_type": {
               "type": "string",
@@ -95,6 +96,7 @@
               ]
             },
             "datasource": {
+              "unevaluatedProperties": false,
               "properties": {
                 "id": {
                   "type": "string",
@@ -152,6 +154,7 @@
         "contacts": {
           "type": "array",
           "items": {
+            "unevaluatedProperties": false,
             "properties": {
               "role": {
                 "type": "string"
@@ -162,6 +165,7 @@
               "communications": {
                 "type": "array",
                 "items": {
+                  "unevaluatedProperties": false,
                   "properties": {
                     "type": {
                       "type": "string",
@@ -210,6 +214,7 @@
           "items": {
             "type": "object",
             "title": "Spatial Core",
+            "unevaluatedProperties": false,
             "properties": {
               "name": {
                 "type": "string",
@@ -466,6 +471,7 @@
               },
               "administrative": {
                 "type": "object",
+                "unevaluatedProperties": false,
                 "properties": {
                   "state": {
                     "type": "array",
@@ -522,11 +528,13 @@
           "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
           "$comment": "Ehemaliges Indexfeld: object_date",
           "type": "object",
+          "unevaluatedProperties": true,
           "properties": {
             "data_temporal": {
               "type": "array",
               "items": {
                 "type": "object",
+                "unevaluatedProperties": false,
                 "properties": {
                   "date": {
                     "type": "string",
@@ -537,6 +545,7 @@
                     "type": "object",
                     "title": "Zeitabschnitt",
                     "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "gte": {
                         "type": "string",
@@ -593,6 +602,7 @@
           "items": {
             "type": "object",
             "title": "item",
+            "unevaluatedProperties": false,
             "properties": {
               "term": {
                 "type": "string",
@@ -626,6 +636,7 @@
           "items": {
             "type": "object",
             "title": "item",
+            "unevaluatedProperties": false,
             "properties": {
               "url": {
                 "type": "string",
@@ -682,6 +693,7 @@
         "SpatialItem": {
           "title": "Spatial Core",
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "name": {
               "type": "string",
@@ -938,6 +950,7 @@
             },
             "administrative": {
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "state": {
                   "type": "array",
@@ -979,6 +992,7 @@
         },
         "Metadata": {
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "data_type": {
               "type": "string",
@@ -1047,6 +1061,7 @@
               ]
             },
             "datasource": {
+              "unevaluatedProperties": false,
               "properties": {
                 "id": {
                   "type": "string",
@@ -1083,6 +1098,7 @@
         },
         "ReferenceItem": {
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "url": {
               "type": "string",

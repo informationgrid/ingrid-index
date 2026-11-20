@@ -4,6 +4,7 @@
   "title": "InGrid Index - OpenData",
   "description": "Schema for InGrid Index - OpenData\nHinweise:\n* Webseite als Reference\n* Qualitätssicherungsprozess URI als Reference\n* Schlagworte, HVD-Kategorien und Open Data Kategorien als keywords\n* ist HVD, sobald mindestens eine Open Data Kategorie vorhanden ist\n* \n",
   "type": "object",
+  "unevaluatedProperties": false,
   "allOf": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -36,6 +37,7 @@
         "metadata": {
           "description": "Enthält Metadaten über den Datensatz. Dies kann das Erstellungs- oder Änderungsdatum sein, oder aus welcher Quelle der Datensatz stammt.",
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "data_type": {
               "type": "string",
@@ -135,6 +137,7 @@
                 "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                 "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
               },
+              "unevaluatedProperties": false,
               "properties": {
                 "id": {
                   "type": "string",
@@ -212,6 +215,7 @@
             "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint | dct:publisher | dct:creator | dct:rightsHolder | dcatde:originator | dcatde:maintainer`\n\n## Mapping (logic)\n\n- je Kontakt ein Kontaktpunkt bzw. Agent; die Property bestimmt `role` (siehe dort)\n- `dcat:contactPoint` als `vcard:Kind`, alle anderen als `foaf:Agent`\n\n> Lesen: auch `prov:qualifiedAttribution/prov:agent`; gleiche Kontakte werden nicht zusammengeführt.\n"
           },
           "items": {
+            "unevaluatedProperties": false,
             "properties": {
               "role": {
                 "type": "string",
@@ -234,6 +238,7 @@
                   "dcat-ap": "# Lesen & schreiben\n\n`dcat:contactPoint`\n\n## Mapping (logic)\n\n- `email` ↔ `vcard:hasEmail` (`foaf:mbox`)\n- `phone` ↔ `vcard:hasTelephone` (`foaf:phone`)\n- `website` ↔ `vcard:hasURL` (`foaf:homepage`)\n\n> In Klammern die Form bei `foaf:Agent`. E-Mail als `mailto:`-IRI, Telefon als `tel:`-IRI. Lesen:\n> Telefon auch als `vcard:hasTelephone/vcard:hasValue`. `fax`, `social` und `other` haben kein\n> Gegenstück.\n"
                 },
                 "items": {
+                  "unevaluatedProperties": false,
                   "properties": {
                     "type": {
                       "type": "string",
@@ -314,6 +319,7 @@
           "items": {
             "type": "object",
             "title": "Spatial Core",
+            "unevaluatedProperties": false,
             "properties": {
               "name": {
                 "type": "string",
@@ -590,6 +596,7 @@
               },
               "administrative": {
                 "type": "object",
+                "unevaluatedProperties": false,
                 "properties": {
                   "state": {
                     "type": "array",
@@ -654,6 +661,7 @@
           "description": "Gültigkeitsdatumsbereich der beschriebenen Daten",
           "$comment": "Ehemaliges Indexfeld: object_date",
           "type": "object",
+          "unevaluatedProperties": true,
           "properties": {
             "data_temporal": {
               "type": "array",
@@ -663,6 +671,7 @@
               },
               "items": {
                 "type": "object",
+                "unevaluatedProperties": false,
                 "properties": {
                   "date": {
                     "type": "string",
@@ -673,6 +682,7 @@
                     "type": "object",
                     "title": "Zeitabschnitt",
                     "description": "Zeitabschnitt des Ereignis. Diese Angabe ist optimiert für die Verwendung in Elasticsearch, welches den Typ \"date_range\" unterstützt und optimiert abgefragt werden kann.",
+                    "unevaluatedProperties": false,
                     "properties": {
                       "gte": {
                         "type": "string",
@@ -733,6 +743,7 @@
           "items": {
             "type": "object",
             "title": "item",
+            "unevaluatedProperties": false,
             "properties": {
               "term": {
                 "type": "string",
@@ -770,6 +781,7 @@
           "items": {
             "type": "object",
             "title": "item",
+            "unevaluatedProperties": false,
             "properties": {
               "url": {
                 "type": "string",
@@ -830,6 +842,7 @@
         "SpatialItem": {
           "title": "Spatial Core",
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "name": {
               "type": "string",
@@ -1106,6 +1119,7 @@
             },
             "administrative": {
               "type": "object",
+              "unevaluatedProperties": false,
               "properties": {
                 "state": {
                   "type": "array",
@@ -1151,6 +1165,7 @@
         },
         "Metadata": {
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "data_type": {
               "type": "string",
@@ -1250,6 +1265,7 @@
                 "iso19139-2007": "Kein Gegenstück in ISO 19139:2007. Beschreibt die Datenquelle, aus der der Datensatz übernommen\nwurde (Kennung, Name, Art).\n",
                 "dcat-ap": "Kein Gegenstück in DCAT-AP. Beschreibt die Datenquelle, aus der der Datensatz übernommen wurde\n(Kennung, Name, Art).\n"
               },
+              "unevaluatedProperties": false,
               "properties": {
                 "id": {
                   "type": "string",
@@ -1286,6 +1302,7 @@
         },
         "ReferenceItem": {
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "url": {
               "type": "string",
@@ -1343,6 +1360,7 @@
         },
         "opendata": {
           "type": "object",
+          "unevaluatedProperties": false,
           "properties": {
             "landing_page": {
               "type": "string",
@@ -1399,6 +1417,7 @@
                     "x-transform": {
                       "dcat-ap": "# Lesen & schreiben\n\n`dcat:distribution/dct:license`\n\n> Eine Lizenz je Distribution.\n"
                     },
+                    "unevaluatedProperties": false,
                     "properties": {
                       "url": {
                         "type": "string",
