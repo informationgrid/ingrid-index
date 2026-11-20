@@ -314,20 +314,20 @@ $defs:
                 type: array
                 title: "Typen"
                 description: "Beschreibt die Typen der Repräsentation"
-                  x-transform:
-                    iso19139-2007: |
-                      # Lesen & schreiben
+                x-transform:
+                  iso19139-2007: |
+                    # Lesen & schreiben
 
                     `gmd:identificationInfo/*/gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode/@codeListValue`
 
-                      ## Mapping (lookup)
+                    ## Mapping (lookup)
 
-                      - `vector` ↔ `vector`
-                      - `grid` ↔ `grid`
-                      - `text` ↔ `textTable`
-                      - `tin` ↔ `tin`
-                      - `stereomodel` ↔ `stereoModel`
-                      - `video` ↔ `video`
+                    - `vector` ↔ `vector`
+                    - `grid` ↔ `grid`
+                    - `text` ↔ `textTable`
+                    - `tin` ↔ `tin`
+                    - `stereomodel` ↔ `stereoModel`
+                    - `video` ↔ `video`
 
                     > Ein `gmd:spatialRepresentationType` je Wert; nur bei `gmd:MD_DataIdentification`. Lesen: zusätzlich
                     > `vector` bei `gmd:MD_VectorSpatialRepresentation` und `grid` bei `gmd:MD_GridSpatialRepresentation`,
